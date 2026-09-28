@@ -1,14 +1,18 @@
-/* NEXUS online leaderboard client. Requires supabase-config.js + Supabase JS v2. */
+/* NEXUS leaderboard: Supabase Auth accounts keyed by nickname, no email collected. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
-  let client = null;
-  let channel = null;
+  let client = null, channel = null;
   const $ = id => document.getElementById(id);
   const status = (text, error = false) => {
     const el = $('sbStatus');
     if (el) { el.textContent = text; el.style.color = error ? '#ff8f8f' : 'var(--muted)'; }
   };
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const cleanAlias = value => String(value || '').trim().toLowerCase();
+  const validAlias = value => /^[a-z0-9][a-z0-9_.-]{2,19}$/.test(value);
+  // Supabase Auth requires an email or phone. A reserved .invalid address lets
+  // the UI use nicknames only; it is never a real inbox and is never displayed.
+  const authEmail = alias => cleanAlias(alias) + '@nexus.invalid';
 
   async function profile(user) {
     const { data, error } = await client.from('nexus_profiles')
@@ -19,8 +23,7 @@
   function renderAuth(user, p) {
     if ($('sbAuthBox')) $('sbAuthBox').hidden = !!user;
     if ($('sbUserBox')) $('sbUserBox').hidden = !user;
-    if ($('sbUserEmail')) $('sbUserEmail').textContent = user?.email || '';
-    if ($('sbDisplayName')) $('sbDisplayName').value = p?.display_name || user?.user_metadata?.display_name || '';
+    if ($('sbUserEmail')) $('sbUserEmail').textContent = user ? 'نام مستعار: ' + (p?.display_name || user.user_metadata?.display_name || 'کاربر NEXUS') : '';
     window.NEXUS_SUPABASE_USER = user || null;
   }
   async function renderLeaderboard() {
@@ -45,9 +48,11 @@
   function bind() {
     $('sbSignInForm')?.addEventListener('submit', async e => {
       e.preventDefault();
+      const alias = cleanAlias($('sbLoginName').value);
       try {
+        if (!validAlias(alias)) throw new Error('نام مستعار باید ۳ تا ۲۰ نویسه انگلیسی، عدد، نقطه، خط تیره یا زیرخط باشد.');
         const { error } = await client.auth.signInWithPassword({
-          email: $('sbLoginEmail').value.trim(), password: $('sbLoginPassword').value
+          email: authEmail(alias), password: $('sbLoginPassword').value
         });
         if (error) throw error;
         status('ورود موفق بود.');
@@ -55,34 +60,27 @@
     });
     $('sbSignUpForm')?.addEventListener('submit', async e => {
       e.preventDefault();
+      const alias = cleanAlias($('sbSignupName').value);
       try {
-        const name = $('sbSignupName').value.trim();
-        const email = $('sbSignupEmail').value.trim();
+        if (!validAlias(alias)) throw new Error('نام مستعار باید ۳ تا ۲۰ نویسه انگلیسی، عدد، نقطه، خط تیره یا زیرخط باشد.');
         const password = $('sbSignupPassword').value;
-        if (name.length < 2 || name.length > 24) throw new Error('نام نمایشی باید ۲ تا ۲۴ حرف باشد.');
-        if (password.length < 8) throw new Error('رمز عبور باید حداقل ۸ کاراکتر باشد.');
-        const { error } = await client.auth.signUp({
-          email, password, options: { data: { display_name: name }, emailRedirectTo: location.origin + location.pathname }
+        if (password.length < 8 || password.length > 72) throw new Error('رمز عبور باید ۸ تا ۷۲ کاراکتر باشد.');
+        const { data, error } = await client.auth.signUp({
+          email: authEmail(alias), password,
+          options: { data: { display_name: alias } }
         });
         if (error) throw error;
-        status('ثبت‌نام انجام شد. اگر تأیید ایمیل فعال است، ایمیلت را بررسی کن.');
-      } catch (err) { status('ثبت‌نام ناموفق: ' + err.message, true); }
+        if (!data.session) {
+          status('حساب درخواست شد، اما تأیید ایمیل هنوز فعال است. در Supabase تنظیم Confirm email را خاموش کن و دوباره تلاش کن.', true);
+          return;
+        }
+        status('حساب ساخته شد! نام مستعارت را برای ورود به خاطر بسپار.');
+        await refreshAuth(); await renderLeaderboard();
+      } catch (err) { status('ساخت حساب ناموفق: ' + err.message, true); }
     });
     $('sbSignOut')?.addEventListener('click', async () => {
       const { error } = await client.auth.signOut();
       status(error ? error.message : 'از حساب خارج شدی.', !!error);
-    });
-    $('sbSaveName')?.addEventListener('click', async () => {
-      try {
-        const name = $('sbDisplayName').value.trim();
-        if (name.length < 2 || name.length > 24) throw new Error('نام نمایشی باید ۲ تا ۲۴ حرف باشد.');
-        const { data: { user } } = await client.auth.getUser();
-        if (!user) throw new Error('ابتدا وارد حساب شو.');
-        const { error } = await client.from('nexus_profiles').update({ display_name: name }).eq('user_id', user.id);
-        if (error) throw error;
-        status('نام نمایشی ذخیره شد.');
-        await refreshAuth(); await renderLeaderboard();
-      } catch (err) { status('ذخیره نام ناموفق: ' + err.message, true); }
     });
     $('sbCompleteMission')?.addEventListener('click', async () => {
       try {
@@ -97,7 +95,7 @@
   }
   async function init() {
     if (!cfg?.url || cfg.url.includes('YOUR_PROJECT_REF') || !cfg?.anonKey || cfg.anonKey.includes('YOUR_SUPABASE')) {
-      status('ابتدا supabase-config.js را با اطلاعات پروژه Supabase تنظیم کن.', true); return;
+      status('برای فعال‌شدن لیدربورد، اطلاعات پروژه Supabase را در supabase-config.js قرار بده.', true); return;
     }
     if (!window.supabase?.createClient) { status('کتابخانه Supabase بارگذاری نشد؛ اینترنت را بررسی کن.', true); return; }
     client = window.supabase.createClient(cfg.url, cfg.anonKey, {
@@ -110,7 +108,7 @@
       .on('postgres_changes', { event: '*', schema: 'public', table: 'nexus_profiles' }, renderLeaderboard)
       .subscribe();
     client.auth.onAuthStateChange(() => { setTimeout(refreshAuth, 0); setTimeout(renderLeaderboard, 0); });
-    status('اتصال آنلاین برقرار است • لیدربورد زنده', false);
+    status('اتصال آنلاین برقرار است • لیدربورد زنده');
   }
   window.NEXUSLeaderboard = {
     refresh: renderLeaderboard,
