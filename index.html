@@ -88,29 +88,65 @@ function renderChatHistory(){
 }
 function normalizeFa(s){return String(s||'').toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,'').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).trim()}
 async function searchWikipedia(raw){
- const query=String(raw||'').trim().replace(/^(لطفاً|لطفا|میشه|میتونی|می‌تونی|بهم|برام)\s*/,'').slice(0,180);
- if(!query)return '';
- const search=async lang=>{
-  const url='https://'+lang+'.wikipedia.org/w/api.php?action=query&list=search&srsearch='+encodeURIComponent(query)+'&srlimit=3&format=json&origin=*';
-  const res=await fetch(url,{headers:{Accept:'application/json'}});
+ const original=String(raw||'').trim().replace(/[؟?!。，,؛;]+$/g,'').slice(0,220);
+ if(!original)return '';
+ const clean=original
+  .replace(/^(لطفاً|لطفا|میشه|می‌شه|میتونی|می‌تونی|میشه لطفا|بهم|برام|لطفا بهم)\s*/,'')
+  .replace(/\s+(چیست|چیه|کیست|کیه|یعنی چه|یعنی چی|را توضیح بده|رو توضیح بده|را تعریف کن|رو تعریف کن|را بگو|رو بگو|لطفا توضیح بده)\s*$/,'')
+  .replace(/[؟?!。，,؛;]+/g,' ').replace(/\s+/g,' ').trim();
+ const norm=s=>normalizeFa(String(s||'').replace(/<[^>]*>/g,' ').replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&#39;/g,"'"));
+ const tokens=s=>norm(s).split(/[^\p{L}\p{N}]+/u).filter(w=>w.length>1&&!['چیست','چیه','کیست','کیه','درباره','لطفا','میشه','میتونی','توضیح','بده','کن','را','رو','این','اون','برای','یک','the','what','who','how','is','are','tell','about','explain'].includes(w));
+ const terms=[...new Set(tokens(clean||original))];
+ const variants=[...new Set([clean,original].filter(q=>q&&q.length>1))].slice(0,2);
+ const searchOne=async(lang,q)=>{
+  const params=new URLSearchParams({action:'query',list:'search',srsearch:q,srwhat:'text',srlimit:'8',srprop:'snippet|timestamp',srinfo:'suggestion|rewrittenquery',srenablerewrites:'1',srnamespace:'0',format:'json',origin:'*'});
+  const res=await fetch('https://'+lang+'.wikipedia.org/w/api.php?'+params.toString(),{headers:{Accept:'application/json'}});
   if(!res.ok)throw new Error('Wikipedia search failed');
   const data=await res.json();
-  return (data.query&&data.query.search)||[];
+  return {lang,query:q,items:(data.query&&data.query.search)||[],info:(data.query&&data.query.searchinfo)||{}};
  };
- let hits=[];
- try{hits=await search('fa')}catch{}
- let lang='fa';
- if(!hits.length){try{hits=await search('en');lang='en'}catch{}}
- if(!hits.length)return '';
- const chosen=hits.slice(0,2);
- const ids=chosen.map(x=>x.pageid).join('|');
- const url='https://'+lang+'.wikipedia.org/w/api.php?action=query&pageids='+encodeURIComponent(ids)+'&prop=extracts&exintro=1&explaintext=1&format=json&origin=*';
- const res=await fetch(url,{headers:{Accept:'application/json'}});
- if(!res.ok)throw new Error('Wikipedia article failed');
- const data=await res.json();
- const pages=Object.values((data.query&&data.query.pages)||{}).filter(p=>p.extract);
- if(!pages.length)return '';
- return '🌐 این پاسخ را از ویکی‌پدیا پیدا کردم ('+(lang==='fa'?'فارسی':'انگلیسی')+'):\n\n'+pages.map(p=>'📚 '+p.title+'\n'+p.extract.slice(0,1100).trim()+(p.extract.length>1100?'…':'')+'\nمنبع: https://'+lang+'.wikipedia.org/wiki/'+encodeURIComponent(p.title.replace(/ /g,'_'))).join('\n\n')+'\n\nنکته: این خلاصه از مقاله‌های ویکی‌پدیاست؛ برای جزئیات بیشتر منبع را باز کن.';
+ let batches=[];
+ const responses=await Promise.allSettled(['fa','en'].flatMap(lang=>variants.map(q=>searchOne(lang,q))));
+ responses.forEach(r=>{if(r.status==='fulfilled')batches.push(r.value)});
+ const merged=new Map();
+ for(const batch of batches){
+  for(const hit of batch.items){
+   const key=batch.lang+':'+hit.pageid;
+   const title=norm(hit.title), snippet=norm(hit.snippet);
+   const titleHits=terms.filter(t=>title.includes(t)).length;
+   const bodyHits=terms.filter(t=>snippet.includes(t)).length;
+   const exact=norm(clean)===title?100:0;
+   const phrase=clean&&title.includes(norm(clean))?35:0;
+   const score=exact+phrase+(terms.length?titleHits/terms.length*45:0)+(terms.length?bodyHits/terms.length*20:0)+(batch.query===clean?3:0);
+   const prev=merged.get(key);
+   if(!prev||score>prev.score)merged.set(key,{...hit,lang:batch.lang,score,searchSnippet:hit.snippet||''});
+  }
+ }
+ const ranked=[...merged.values()].sort((a,b)=>b.score-a.score);
+ if(!ranked.length){
+  const suggestions=batches.map(b=>b.info&&b.info.suggestion).filter(Boolean);
+  return suggestions.length?'🔎 نتیجه دقیقی پیدا نشد. شاید منظورت این باشد: '+[...new Set(suggestions)].slice(0,3).join('، ')+'\n\nلطفاً نام موضوع یا سؤال را کوتاه‌تر و دقیق‌تر بنویس.':'';
+ }
+ const selected=ranked.slice(0,3);
+ const byLang={fa:selected.filter(x=>x.lang==='fa'),en:selected.filter(x=>x.lang==='en')};
+ const pagesByLang=await Promise.all(Object.entries(byLang).filter(([,arr])=>arr.length).map(async([lang,arr])=>{
+  const params=new URLSearchParams({action:'query',pageids:arr.map(x=>x.pageid).join('|'),prop:'extracts|info',exintro:'1',explaintext:'1',inprop:'url',exchars:'2200',redirects:'1',format:'json',origin:'*'});
+  const res=await fetch('https://'+lang+'.wikipedia.org/w/api.php?'+params.toString(),{headers:{Accept:'application/json'}});
+  if(!res.ok)throw new Error('Wikipedia article fetch failed');
+  const data=await res.json();
+  return {lang,pages:Object.values((data.query&&data.query.pages)||{})};
+ }));
+ const pages=new Map();
+ for(const group of pagesByLang)for(const p of group.pages)pages.set(group.lang+':'+p.pageid,{...p,lang:group.lang});
+ const output=selected.map(hit=>{
+  const p=pages.get(hit.lang+':'+hit.pageid);
+  const title=p&&p.title||hit.title;
+  const extract=p&&p.extract?String(p.extract).trim():'';
+  const snippet=String(hit.searchSnippet||'').replace(/<[^>]*>/g,' ').replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&#39;/g,"'");
+  const url=p&&p.fullurl||('https://'+hit.lang+'.wikipedia.org/wiki/'+encodeURIComponent(title.replace(/ /g,'_')));
+  return '📚 '+title+' ('+(hit.lang==='fa'?'ویکی‌پدیای فارسی':'ویکی‌پدیای انگلیسی')+')\n'+(extract?extract.slice(0,1500)+(extract.length>1500?'…':''):snippet)+'\nمنبع: '+url;
+ }).join('\n\n');
+ return '🔎 نتایج جست‌وجو در ویکی‌پدیا (فارسی و انگلیسی)\nنتایج بر اساس ارتباط عنوان و متن با واژه‌های سؤال مرتب شده‌اند؛ لطفاً عنوان و منبع را بررسی کن.\n\n'+output+'\n\n⚠️ این‌ها نتایج دانشنامه‌ای هستند، نه پاسخ تولیدشده توسط یک مدل هوش مصنوعی. برای موضوعات تخصصی یا حساس، منابع معتبر دیگر را هم بررسی کن.';
 }
 function nexusReply(raw){
  const s=normalizeFa(raw);
