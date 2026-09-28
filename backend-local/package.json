@@ -1,0 +1,8 @@
+{
+  "name": "nexus-local-groq-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local-only Groq API backend for testing NEXUS",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
