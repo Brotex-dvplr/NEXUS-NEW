@@ -83,7 +83,7 @@ function saveChatHistory(){try{localStorage.setItem(CHAT_HISTORY_KEY,JSON.string
 function renderChatHistory(){
  const box=$('#chatMessages');box.innerHTML='';
  if(!chatHistory.length){box.innerHTML='<div class="chat-welcome"><i data-lucide="message-circle"></i><strong>سلام! من دستیار اختصاصی NEXUS هستم.</strong><p>بدون API کار می‌کنم. از دکمه‌های پیشنهادی یا یک سؤال مشخص شروع کن.</p></div>';icons();return}
- chatHistory.forEach(m=>{const el=document.createElement('div');el.className='chat-msg '+(m.role==='user'?'user':'assistant');el.textContent=m.text;box.appendChild(el)});
+ chatHistory.forEach(m=>{const el=document.createElement('div');el.className='chat-msg '+(m.role==='user'?'user':'assistant');const parts=String(m.text||'').split(/(https:\/\/[^\s]+)/g);parts.forEach(part=>{if(/^https:\/\//i.test(part)){const cleanUrl=part.replace(/[),.؛،!?؟]+$/,'');const tail=part.slice(cleanUrl.length);try{const a=document.createElement('a');a.href=cleanUrl;a.target='_blank';a.rel='noopener noreferrer';a.textContent=cleanUrl;a.style.color='var(--accent,#8b7cff)';a.style.textDecoration='underline';el.appendChild(a);if(tail)el.appendChild(document.createTextNode(tail))}catch{el.appendChild(document.createTextNode(part))}}else el.appendChild(document.createTextNode(part))});box.appendChild(el)});
  box.scrollTop=box.scrollHeight;
 }
 function normalizeFa(s){return String(s||'').toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,'').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).trim()}
@@ -178,7 +178,7 @@ async function searchAdditionalSources(raw){
  for(const item of settled)if(item.status==='fulfilled')results.push(...item.value);
  const seen=new Set(),unique=results.filter(x=>{const k=x.url||x.title;if(!k||seen.has(k))return false;seen.add(k);return true}).slice(0,6);
  if(!unique.length)return '';
- return '📖 منابع تکمیلی مستقل (پژوهش‌ها و داده‌های ساخت‌یافته)\n'+unique.map(x=>'• '+x.title+(x.year?' ('+x.year+')':'')+'\nمنبع: '+x.source+(x.text?'\n'+x.text:'\nچکیده یا توضیح در این رکورد موجود نیست.')+'\nلینک: '+x.url).join('\n\n')+'\n\nیادآوری: OpenAlex و Crossref عمدتاً فرادادهٔ پژوهش‌ها را ارائه می‌کنند و ممکن است چکیده در دسترس نباشد؛ عنوان و ناشر/منبع را پیش از استناد بررسی کن.';
+ const googleUrl='https://www.google.com/search?q='+encodeURIComponent(q);\n return '🔍 جست‌وجوی مستقیم گوگل (باز کردن نتایج کامل در گوگل):\\n'+googleUrl+'\\n\\n📖 منابع تکمیلی مستقل (پژوهش‌ها و داده‌های ساخت‌یافته)\\n'+unique.map(x=>'• '+x.title+(x.year?' ('+x.year+')':'')+'\\nمنبع: '+x.source+(x.text?'\\n'+x.text:'\\nچکیده یا توضیح در این رکورد موجود نیست.')+'\\nلینک: '+x.url).join('\\n\\n')+'\\n\\nیادآوری: این پیوند نتایج زندهٔ گوگل را مستقیماً باز می‌کند. نمایش خودکار عناوین و خلاصه‌های گوگل داخل سایت به Google Programmable Search API و کلید API نیاز دارد. OpenAlex و Crossref ممکن است چکیده نداشته باشند؛ منبع را بررسی کن.';
 }
 function nexusReply(raw){
  const s=normalizeFa(raw);
