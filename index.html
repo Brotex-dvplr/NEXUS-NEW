@@ -46,7 +46,7 @@
  <div class="chat-messages" id="chatMessages" aria-live="polite"><div class="chat-welcome" id="chatWelcome"><i data-lucide="message-circle"></i><strong>سلام! من دستیار اختصاصی NEXUS هستم.</strong><p>بدون API و کلید مخفی کار می‌کنم. می‌توانم به پرسش‌های رایج پاسخ بدهم، محاسبه کنم و در موضوعات مشخص راهنمایی‌ات کنم.</p></div></div>
  <div class="chat-tools"><button class="btn" type="button" data-chat-prompt="برای طراحی یک وب‌سایت مدرن راهنمایی‌ام کن.">طراحی سایت</button><button class="btn" type="button" data-chat-prompt="یک ایده خلاقانه برای پروژه برنامه‌نویسی پیشنهاد بده.">ایده برنامه‌نویسی</button><button class="btn" type="button" data-chat-prompt="این متن را خلاصه کن: ">خلاصه‌سازی</button><button class="btn" type="button" id="clearChatBtn">گفت‌وگوی جدید</button></div>
  <form class="chat-composer" id="chatForm"><textarea class="field" id="chatInput" rows="1" maxlength="4000" placeholder="مثلاً: سلام، راهنمای سایت‌سازی، یا محاسبه ۱۲*۸" aria-label="پیام برای چت‌بات NEXUS"></textarea><button class="btn primary chat-send" id="chatSendBtn" type="submit" aria-label="ارسال پیام"><i data-lucide="send"></i></button></form>
- <div class="chat-note">این نسخه کاملاً سمت مرورگر اجرا می‌شود؛ API Key، بک‌اند یا هزینه مصرف توکن ندارد. پاسخ‌ها بر اساس قوانین و دانش ازپیش‌تعریف‌شده‌اند و مثل یک مدل زبانی آزاد، همه سؤال‌ها را نمی‌فهمد.</div>
+ <div class="chat-note">پاسخ‌های آماده بدون API Key کار می‌کنند؛ برای سؤال‌های ناشناخته، NEXUS با اینترنت ویکی‌پدیای فارسی و انگلیسی را جست‌وجو می‌کند. اتصال ویکی‌پدیا رایگان و بدون API Key است، اما برای این قابلیت اینترنت لازم است.</div>
 </div>
 <div class="sectionhead"><div><h2>Prompt Studio</h2><p>پرامپت خودت را بساز و کپی کن</p></div></div><div class="panel"><label>موضوع یا هدف</label><textarea id="promptInput" class="field" style="display:block;width:100%;margin:8px 0" rows="3" placeholder="مثلاً: طراحی لوگوی یک سرور ماینکرفت"></textarea><button class="btn primary" id="promptBtn">ساخت پرامپت</button><div class="toolout" id="promptOut">پرامپت تولیدشده اینجا نمایش داده می‌شود.</div></div></section>
 <section class="page" id="page-tools"><span class="eyebrow">UTILITY SYSTEM</span><h1>ابزارهای کاربردی</h1><p class="muted">ابزارهای سمت مرورگر، بدون نیاز به حساب کاربری.</p><div class="toolbar"><input class="field" id="toolSearch" placeholder="جستجوی ابزار..."></div><div class="grid" id="toolGrid"></div><div class="sectionhead"><div><h2 id="toolTitle">فضای ابزار</h2><p>ابزار انتخابی</p></div></div><div class="panel" id="toolPanel"><p class="empty">برای شروع، یکی از ابزارهای بالا را انتخاب کن.</p></div></section>
@@ -87,6 +87,31 @@ function renderChatHistory(){
  box.scrollTop=box.scrollHeight;
 }
 function normalizeFa(s){return String(s||'').toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,'').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).trim()}
+async function searchWikipedia(raw){
+ const query=String(raw||'').trim().replace(/^(لطفاً|لطفا|میشه|میتونی|می‌تونی|بهم|برام)\s*/,'').slice(0,180);
+ if(!query)return '';
+ const search=async lang=>{
+  const url='https://'+lang+'.wikipedia.org/w/api.php?action=query&list=search&srsearch='+encodeURIComponent(query)+'&srlimit=3&format=json&origin=*';
+  const res=await fetch(url,{headers:{Accept:'application/json'}});
+  if(!res.ok)throw new Error('Wikipedia search failed');
+  const data=await res.json();
+  return (data.query&&data.query.search)||[];
+ };
+ let hits=[];
+ try{hits=await search('fa')}catch{}
+ let lang='fa';
+ if(!hits.length){try{hits=await search('en');lang='en'}catch{}}
+ if(!hits.length)return '';
+ const chosen=hits.slice(0,2);
+ const ids=chosen.map(x=>x.pageid).join('|');
+ const url='https://'+lang+'.wikipedia.org/w/api.php?action=query&pageids='+encodeURIComponent(ids)+'&prop=extracts&exintro=1&explaintext=1&format=json&origin=*';
+ const res=await fetch(url,{headers:{Accept:'application/json'}});
+ if(!res.ok)throw new Error('Wikipedia article failed');
+ const data=await res.json();
+ const pages=Object.values((data.query&&data.query.pages)||{}).filter(p=>p.extract);
+ if(!pages.length)return '';
+ return '🌐 این پاسخ را از ویکی‌پدیا پیدا کردم ('+(lang==='fa'?'فارسی':'انگلیسی')+'):\n\n'+pages.map(p=>'📚 '+p.title+'\n'+p.extract.slice(0,1100).trim()+(p.extract.length>1100?'…':'')+'\nمنبع: https://'+lang+'.wikipedia.org/wiki/'+encodeURIComponent(p.title.replace(/ /g,'_'))).join('\n\n')+'\n\nنکته: این خلاصه از مقاله‌های ویکی‌پدیاست؛ برای جزئیات بیشتر منبع را باز کن.';
+}
 function nexusReply(raw){
  const s=normalizeFa(raw);
  const has=(...words)=>words.some(w=>s.includes(normalizeFa(w)));
@@ -169,7 +194,12 @@ $('#chatForm').onsubmit=async e=>{
  chatHistory.push({role:'user',text:message});saveChatHistory();renderChatHistory();input.value='';button.disabled=true;chatStatus('در حال پاسخ‌گویی…',true);
  const pending=document.createElement('div');pending.className='chat-msg assistant';pending.textContent='دارم بررسی می‌کنم…';pending.id='chatPending';$('#chatMessages').appendChild(pending);$('#chatMessages').scrollTop=$('#chatMessages').scrollHeight;
  try{
-   const reply=nexusReply(message);
+   let reply=nexusReply(message);
+   if(reply.startsWith('🤔 هنوز قانون یا پاسخ اختصاصی مناسبی')) {
+     chatStatus('در حال جست‌وجو در ویکی‌پدیا…',true);
+     try{const wikiReply=await searchWikipedia(message);if(wikiReply)reply=wikiReply;else reply+='\n\n🌐 در ویکی‌پدیای فارسی یا انگلیسی نتیجهٔ مناسبی پیدا نکردم. سؤال را کوتاه‌تر یا با نام دقیق موضوع امتحان کن.'}
+     catch{reply+='\n\n🌐 جست‌وجوی ویکی‌پدیا انجام نشد؛ اتصال اینترنت را بررسی کن و دوباره تلاش کن.'}
+   }
    await new Promise(resolve=>setTimeout(resolve,180));
    const p=$('#chatPending');if(p)p.remove();
    chatHistory.push({role:'assistant',text:reply});saveChatHistory();renderChatHistory();chatStatus('آماده پاسخ‌گویی',true);
