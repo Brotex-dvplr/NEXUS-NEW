@@ -39,16 +39,14 @@
 <div class="stats"><div class="stat"><div class="stathead">سطح فعلی <i data-lucide="zap"></i></div><strong id="level">1</strong><small id="xpText">0 / 300 XP</small><div class="progress"><span id="xpBar" style="width:0%"></span></div></div><div class="stat"><div class="stathead">دستاوردها <i data-lucide="trophy"></i></div><strong id="achCount">0</strong><small>نشان‌های بازشده</small></div><div class="stat"><div class="stathead">بازی‌های انجام‌شده <i data-lucide="gamepad-2"></i></div><strong id="gamesPlayed">0</strong><small>ادامه بده تا رکورد بسازی</small></div><div class="stat"><div class="stathead">امتیاز کل <i data-lucide="sparkles"></i></div><strong id="totalXp">0</strong><small>XP جمع‌آوری‌شده</small></div></div>
 <div class="sectionhead"><div><h2>دسترسی سریع</h2><p>قابلیت‌هایی برای همین الان</p></div><span class="muted">QUICK ACCESS</span></div><div class="grid"><article class="card" data-go="tools"><div class="cardicon"><i data-lucide="calculator"></i></div><h3>جعبه ابزار</h3><p>ماشین‌حساب، رمزساز، JSON، تبدیل واحد و ابزارهای دیگر.</p><span class="tag">11 ابزار</span></article><article class="card" data-go="games"><div class="cardicon"><i data-lucide="gamepad-2"></i></div><h3>Game Zone</h3><p>بازی‌های کوچک، سرگرم‌کننده و سازگار با موبایل.</p><span class="tag">4 بازی</span></article><article class="card" data-go="ai"><div class="cardicon"><i data-lucide="sparkles"></i></div><h3>AI Hub</h3><p>فضای آماده برای ایده‌پردازی، پرامپت و ابزارهای هوشمند.</p><span class="tag">AI workspace</span></article></div>
 <div class="sectionhead"><div><h2>آخرین فعالیت‌ها</h2><p>پیشرفت ذخیره‌شده روی همین دستگاه</p></div></div><div class="panel" id="activityList"><p class="empty">هنوز فعالیتی ثبت نشده؛ یکی از ابزارها یا بازی‌ها را امتحان کن.</p></div></section>
-<section class="page" id="page-ai"><span class="eyebrow">INTELLIGENCE HUB</span><h1>AI Hub</h1><p class="muted">فضای آماده برای ابزارهای هوش مصنوعی. برای قابلیت‌های واقعی آنلاین، اتصال API لازم است.</p><div class="grid" id="aiGrid"></div>
-<div class="sectionhead"><div><h2>گفت‌وگو با NEXUS AI</h2><p>چت‌بات فارسی متصل به OpenAI</p></div></div>
+<section class="page" id="page-ai"><span class="eyebrow">INTELLIGENCE HUB</span><h1>AI Hub</h1><p class="muted">ابزارهای کمکی و چت‌بات اختصاصی NEXUS؛ بدون API Key و بدون سرویس هوش مصنوعی خارجی.</p><div class="grid" id="aiGrid"></div>
+<div class="sectionhead"><div><h2>گفت‌وگو با NEXUS AI</h2><p>چت‌بات قانون‌محور اختصاصی · بدون API</p></div></div>
 <div class="chat-shell" id="geminiChat">
- <div class="chat-head"><div class="chat-orb"><i data-lucide="sparkles"></i></div><div><h2>NEXUS AI</h2><p>دستیار هوشمند شما · OpenAI</p></div><span class="chat-status" id="chatStatus">نیازمند اتصال</span></div>
- <div class="chat-messages" id="chatMessages" aria-live="polite"><div class="chat-welcome" id="chatWelcome"><i data-lucide="message-circle"></i><strong>سلام! من دستیار هوش مصنوعی NEXUS هستم.</strong><p>برای شروع، آدرس بک‌اند امن خود را پایین صفحه وارد کنید. بعد از اتصال می‌توانی به فارسی با من گفت‌وگو کنی.</p></div></div>
+ <div class="chat-head"><div class="chat-orb"><i data-lucide="sparkles"></i></div><div><h2>NEXUS AI</h2><p>دستیار هوشمند شما · OpenAI</p></div><span class="chat-status ready" id="chatStatus">آماده پاسخ‌گویی</span></div>
+ <div class="chat-messages" id="chatMessages" aria-live="polite"><div class="chat-welcome" id="chatWelcome"><i data-lucide="message-circle"></i><strong>سلام! من دستیار اختصاصی NEXUS هستم.</strong><p>بدون API و کلید مخفی کار می‌کنم. می‌توانم به پرسش‌های رایج پاسخ بدهم، محاسبه کنم و در موضوعات مشخص راهنمایی‌ات کنم.</p></div></div>
  <div class="chat-tools"><button class="btn" type="button" data-chat-prompt="برای طراحی یک وب‌سایت مدرن راهنمایی‌ام کن.">طراحی سایت</button><button class="btn" type="button" data-chat-prompt="یک ایده خلاقانه برای پروژه برنامه‌نویسی پیشنهاد بده.">ایده برنامه‌نویسی</button><button class="btn" type="button" data-chat-prompt="این متن را خلاصه کن: ">خلاصه‌سازی</button><button class="btn" type="button" id="clearChatBtn">گفت‌وگوی جدید</button></div>
- <form class="chat-composer" id="chatForm"><textarea class="field" id="chatInput" rows="1" maxlength="4000" placeholder="پیامت را برای NEXUS AI بنویس..." aria-label="پیام برای هوش مصنوعی"></textarea><button class="btn primary chat-send" id="chatSendBtn" type="submit" aria-label="ارسال پیام"><i data-lucide="send"></i></button></form>
- <div class="chat-config"><label for="chatEndpoint">آدرس بک‌اند امن</label><input class="field" id="chatEndpoint" type="url" placeholder="https://your-worker.workers.dev/chat" autocomplete="url"><button class="btn" type="button" id="saveChatEndpoint">ذخیره اتصال</button></div>
- <div class="chat-config"><label for="openaiTestKey">کلید API برای تست مستقیم (اختیاری)</label><input class="field" id="openaiTestKey" type="password" placeholder="کلید OpenAI را فقط برای تست اینجا وارد کن" autocomplete="off"><button class="btn" type="button" id="clearOpenaiTestKey">پاک‌کردن کلید</button></div>
- <div class="chat-note">اگر کلید تست وارد کنی، چت مستقیماً به OpenAI وصل می‌شود. کلید ذخیره نمی‌شود؛ با بستن یا تازه‌سازی صفحه پاک می‌شود. برای سایت عمومی، کلید را وارد یا منتشر نکن؛ از بک‌اند امن Render استفاده کن.</div>
+ <form class="chat-composer" id="chatForm"><textarea class="field" id="chatInput" rows="1" maxlength="4000" placeholder="مثلاً: سلام، راهنمای سایت‌سازی، یا محاسبه ۱۲*۸" aria-label="پیام برای چت‌بات NEXUS"></textarea><button class="btn primary chat-send" id="chatSendBtn" type="submit" aria-label="ارسال پیام"><i data-lucide="send"></i></button></form>
+ <div class="chat-note">این نسخه کاملاً سمت مرورگر اجرا می‌شود؛ API Key، بک‌اند یا هزینه مصرف توکن ندارد. پاسخ‌ها بر اساس قوانین و دانش ازپیش‌تعریف‌شده‌اند و مثل یک مدل زبانی آزاد، همه سؤال‌ها را نمی‌فهمد.</div>
 </div>
 <div class="sectionhead"><div><h2>Prompt Studio</h2><p>پرامپت خودت را بساز و کپی کن</p></div></div><div class="panel"><label>موضوع یا هدف</label><textarea id="promptInput" class="field" style="display:block;width:100%;margin:8px 0" rows="3" placeholder="مثلاً: طراحی لوگوی یک سرور ماینکرفت"></textarea><button class="btn primary" id="promptBtn">ساخت پرامپت</button><div class="toolout" id="promptOut">پرامپت تولیدشده اینجا نمایش داده می‌شود.</div></div></section>
 <section class="page" id="page-tools"><span class="eyebrow">UTILITY SYSTEM</span><h1>ابزارهای کاربردی</h1><p class="muted">ابزارهای سمت مرورگر، بدون نیاز به حساب کاربری.</p><div class="toolbar"><input class="field" id="toolSearch" placeholder="جستجوی ابزار..."></div><div class="grid" id="toolGrid"></div><div class="sectionhead"><div><h2 id="toolTitle">فضای ابزار</h2><p>ابزار انتخابی</p></div></div><div class="panel" id="toolPanel"><p class="empty">برای شروع، یکی از ابزارهای بالا را انتخاب کن.</p></div></section>
@@ -77,62 +75,60 @@ cards(tools,'#toolGrid','tool');$('#toolSearch').oninput=e=>$$('#toolGrid .card'
 const aiItems=[['chat','AI Chat','رابط گفت‌وگو؛ اتصال API لازم است','message-circle'],['summary','خلاصه‌ساز متن','آماده اتصال به مدل زبانی','file-text'],['ideas','ایده‌پرداز','کمک به ایده‌پردازی','lightbulb'],['prompt','Prompt Studio','ساخت پرامپت دقیق','wand-sparkles'],['translate','مترجم','رابط آماده ترجمه','languages'],['rewrite','بازنویسی متن','تنظیم لحن و ساختار','pen-line']];
 $('#aiGrid').innerHTML=aiItems.map(x=>'<article class="card"><div class="cardicon"><i data-lucide="'+x[3]+'"></i></div><h3>'+x[1]+'</h3><p>'+x[2]+'</p><span class="tag">API ready</span></article>').join('');
 
-const CHAT_ENDPOINT_KEY='nexus_gemini_endpoint_v1';
-const DEFAULT_CHAT_ENDPOINT='https://nexus-gemini-chat.onrender.com/chat';
-const CHAT_HISTORY_KEY='nexus_gemini_history_v1';
+const CHAT_HISTORY_KEY='nexus_rulebot_history_v1';
 let chatHistory=[];
 try{chatHistory=JSON.parse(localStorage.getItem(CHAT_HISTORY_KEY)||'[]');if(!Array.isArray(chatHistory))chatHistory=[]}catch{chatHistory=[]}
-$('#chatEndpoint').value=localStorage.getItem(CHAT_ENDPOINT_KEY)||DEFAULT_CHAT_ENDPOINT;
-chatStatus('آدرس تنظیم شده',true);
-function chatStatus(text,ready=false){const el=$('#chatStatus');el.textContent=text;el.classList.toggle('ready',ready)}
+function chatStatus(text,ready=true){const el=$('#chatStatus');el.textContent=text;el.classList.toggle('ready',ready)}
 function saveChatHistory(){try{localStorage.setItem(CHAT_HISTORY_KEY,JSON.stringify(chatHistory.slice(-24)))}catch{}}
 function renderChatHistory(){
  const box=$('#chatMessages');box.innerHTML='';
- if(!chatHistory.length){box.innerHTML='<div class="chat-welcome"><i data-lucide="message-circle"></i><strong>سلام! من دستیار هوش مصنوعی NEXUS هستم.</strong><p>پیامت را بنویس تا گفت‌وگو را شروع کنیم.</p></div>';icons();return}
+ if(!chatHistory.length){box.innerHTML='<div class="chat-welcome"><i data-lucide="message-circle"></i><strong>سلام! من دستیار اختصاصی NEXUS هستم.</strong><p>بدون API کار می‌کنم. از دکمه‌های پیشنهادی یا یک سؤال مشخص شروع کن.</p></div>';icons();return}
  chatHistory.forEach(m=>{const el=document.createElement('div');el.className='chat-msg '+(m.role==='user'?'user':'assistant');el.textContent=m.text;box.appendChild(el)});
  box.scrollTop=box.scrollHeight;
 }
-$('#saveChatEndpoint').onclick=()=>{
- const value=$('#chatEndpoint').value.trim();
- let parsed;
- try{parsed=new URL(value)}catch{chatStatus('آدرس نامعتبر');toast('آدرس واردشده معتبر نیست');return}
- const localHttp=parsed.protocol==='http:'&&['localhost','127.0.0.1'].includes(parsed.hostname);
- if(parsed.protocol!=='https:'&&!localHttp){chatStatus('آدرس نامعتبر');toast('از HTTPS استفاده کن؛ فقط localhost برای تست HTTP مجاز است');return}
- localStorage.setItem(CHAT_ENDPOINT_KEY,value);chatStatus('آدرس ذخیره شد',true);toast('آدرس بک‌اند ذخیره شد');
-};
-$('#clearChatBtn').onclick=()=>{chatHistory=[];saveChatHistory();renderChatHistory();chatStatus(localStorage.getItem(CHAT_ENDPOINT_KEY)?'آماده گفت‌وگو':'نیازمند اتصال',!!localStorage.getItem(CHAT_ENDPOINT_KEY))};
+function normalizeFa(s){return String(s||'').toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g,'').replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).trim()}
+function nexusReply(raw){
+ const s=normalizeFa(raw);
+ const has=(...words)=>words.some(w=>s.includes(normalizeFa(w)));
+ if(!s)return 'پیامت خالی است؛ یک سؤال بنویس.';
+ if(has('سلام','درود','صبح بخیر','عصر بخیر','شب بخیر','hi','hello'))return 'سلام! 👋 من چت‌بات اختصاصی NEXUS هستم. بدون API Key کار می‌کنم. می‌تونم در موضوعات رایج، سایت‌سازی، خود NEXUS و محاسبات کمکت کنم. چی می‌خوای بدونی؟';
+ if(has('اسم تو','نام تو','کی هستی','تو چی هستی','خودت را معرفی','معرفی کن'))return 'من NEXUS Bot هستم؛ یک چت‌بات قانون‌محور که با JavaScript داخل همین سایت اجرا می‌شود. پاسخ‌ها از قوانین و اطلاعات ازپیش‌تعریف‌شده می‌آیند، نه از یک مدل هوش مصنوعی آنلاین.';
+ if(has('api','کلید','رایگان','بدون اینترنت','چطور کار میکنی','چطور کار می‌کنی'))return 'این نسخه به API یا کلید مخفی نیاز ندارد. کد پاسخ‌گویی همراه سایت اجرا می‌شود؛ بنابراین رایگان است، اما توانایی‌اش محدود به الگوها و پاسخ‌هایی است که برایش تعریف کرده‌ایم.';
+ if(has('nexus','این سایت','این وبسایت','این وب‌سایت','امکانات سایت'))return 'NEXUS یک داشبورد شخصی شامل ابزارهای کاربردی، بازی‌های کوچک، پروفایل، دستاوردها و فضای چت است. برای دیدن بخش‌ها از منوی کناری یا نوار پایین موبایل استفاده کن.';
+ if(has('ساخت سایت','طراحی سایت','وبسایت','وب‌سایت','html','css','javascript','جاوااسکریپت','گیتهاب','گیت هاب','github','github pages'))return 'برای ساخت سایت، از HTML برای ساختار، CSS برای ظاهر و JavaScript برای تعامل استفاده کن. برای انتشار رایگان سایت ایستا می‌توانی از GitHub Pages استفاده کنی. یادت باشه هر چیزی که داخل HTML/JavaScript سمت مرورگر قرار می‌گیرد، برای بازدیدکننده قابل مشاهده است؛ پس رمز یا API Key را آنجا نگذار.';
+ if(has('ماینکرفت','minecraft','مود','forge','فورج'))return 'برای ماینکرفت جاوا، اول نسخه بازی و لودر مود مثل Forge را با نسخه مود هماهنگ کن. قبل از نصب مودها از پوشه دنیاها و فایل‌های مهمت پشتیبان بگیر.';
+ if(has('شوخی','جوک','لطیفه','بخند'))return 'چرا برنامه‌نویس از طبیعت خوشش میاد؟ چون پر از باگ‌های طبیعی نیست… معمولاً! 😄';
+ if(has('ممنون','مرسی','دمت گرم','سپاس','تشکر'))return 'خواهش می‌کنم! 🌟 هر وقت خواستی سؤال بعدی رو بپرس.';
+ if(has('کمک','چه کار','چیکار','قابلیت','راهنما','چی بپرسم'))return 'این‌ها رو امتحان کن:\n• «NEXUS چیه؟»\n• «برای ساخت سایت از کجا شروع کنم؟»\n• «۱۲*۸ را حساب کن»\n• «یک جوک بگو»\n• «چرا API لازم نداریم؟»\nمن قانون‌محورم؛ برای سؤال‌های خارج از این موارد ممکنه جواب دقیق نداشته باشم.';
+ const calc=raw.trim().replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+ const expr=calc.match(/(?:حساب کن|محاسبه کن|چقدر میشه|چقدر می‌شود|جواب|calculate|calc)?\s*([-+]?\d[\d\s().,+*/%\-]*\d|[-+]?\d)\s*\??$/i);
+ if(expr){const e=expr[1].replace(/,/g,'').trim();if(e.length<100&&/^[\d\s()+*/%.\-]+$/.test(e)){try{const result=Function('"use strict";return ('+e+')')();if(Number.isFinite(result))return 'نتیجه محاسبه: '+result}catch{}}}
+ if(has('ساعت','امروز چه روز','تاریخ امروز','امروز چندمه'))return 'تاریخ و زمان دستگاهت: '+new Date().toLocaleString('fa-IR')+'\nاین اطلاعات از ساعت دستگاه خودت خوانده می‌شود.';
+ if(has('هوا','آب و هوا','اخبار','قیمت امروز','قیمت دلار','اطلاعات جدید','زنده'))return 'برای اطلاعات زنده مثل آب‌وهوا، خبرها و قیمت‌های لحظه‌ای به منبع به‌روز نیاز است. این نسخه عمداً به اینترنت یا API خارجی برای تولید پاسخ وصل نمی‌شود، پس نمی‌توانم چنین اطلاعاتی را تأیید کنم.';
+ if(has('برنامه‌نویسی','برنامه نویسی','کدنویسی','کد نویسی','پایتون','python'))return 'برای شروع برنامه‌نویسی، یک پروژه کوچک انتخاب کن و مرحله‌به‌مرحله جلو برو. اگر بگویی از چه زبان یا ابزاری استفاده می‌کنی، می‌توانم با راهنمایی‌های ازپیش‌تعریف‌شده همین چت‌بات کمکت کنم.';
+ return 'هنوز پاسخ آماده‌ای برای این سؤال ندارم. 🤔\nچون من نسخه قانون‌محور و بدون API هستم، دانشم محدود است. سؤال را ساده‌تر بپرس یا «راهنما» را بنویس. می‌توانیم پاسخ‌های جدیدی هم به قوانین NEXUS اضافه کنیم.';
+}
+$('#clearChatBtn').onclick=()=>{chatHistory=[];saveChatHistory();renderChatHistory();chatStatus('آماده پاسخ‌گویی',true)};
 $$('[data-chat-prompt]').forEach(b=>b.onclick=()=>{$('#chatInput').value=b.dataset.chatPrompt;$('#chatInput').focus()});
-$('#clearOpenaiTestKey').onclick=()=>{$('#openaiTestKey').value='';toast('کلید تست پاک شد')};
 $('#chatForm').onsubmit=async e=>{
  e.preventDefault();
- const input=$('#chatInput'),button=$('#chatSendBtn'),message=input.value.trim(),endpoint=localStorage.getItem(CHAT_ENDPOINT_KEY)||DEFAULT_CHAT_ENDPOINT,apiKey=$('#openaiTestKey').value.trim();
+ const input=$('#chatInput'),button=$('#chatSendBtn'),message=input.value.trim();
  if(!message)return;
- if(!apiKey&&!endpoint){chatStatus('نیازمند اتصال');toast('کلید تست یا آدرس بک‌اند را وارد کن');return}
  if(button.disabled)return;
- chatHistory.push({role:'user',text:message});saveChatHistory();renderChatHistory();input.value='';button.disabled=true;chatStatus(apiKey?'در حال تست مستقیم OpenAI…':'در حال پاسخ‌گویی…');
- const pending=document.createElement('div');pending.className='chat-msg assistant';pending.textContent='دارم فکر می‌کنم…';pending.id='chatPending';$('#chatMessages').appendChild(pending);$('#chatMessages').scrollTop=$('#chatMessages').scrollHeight;
+ chatHistory.push({role:'user',text:message});saveChatHistory();renderChatHistory();input.value='';button.disabled=true;chatStatus('در حال پاسخ‌گویی…',true);
+ const pending=document.createElement('div');pending.className='chat-msg assistant';pending.textContent='دارم بررسی می‌کنم…';pending.id='chatPending';$('#chatMessages').appendChild(pending);$('#chatMessages').scrollTop=$('#chatMessages').scrollHeight;
  try{
-   let response,data,reply;
-   if(apiKey){
-     response=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'gpt-4o-mini',messages:chatHistory.slice(-20).map(m=>({role:m.role==='assistant'?'assistant':'user',content:m.text}))})});
-     data=await response.json().catch(()=>({}));
-     if(!response.ok)throw new Error(data.error?.message||'OpenAI خطا داد ('+response.status+')');
-     reply=data.choices?.[0]?.message?.content;
-   }else{
-     response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:chatHistory.slice(-20).map(m=>({role:m.role==='assistant'?'model':'user',text:m.text}))})});
-     data=await response.json().catch(()=>({}));
-     if(!response.ok)throw new Error(data.error||'پاسخ سرور دریافت نشد ('+response.status+')');
-     reply=data.reply;
-   }
-   if(typeof reply!=='string'||!reply.trim())throw new Error('پاسخ معتبر از سرویس دریافت نشد');
-   chatHistory.push({role:'assistant',text:reply.trim()});saveChatHistory();renderChatHistory();chatStatus(apiKey?'تست مستقیم OpenAI موفق بود':'پاسخ از OpenAI دریافت شد',true);
+   const reply=nexusReply(message);
+   await new Promise(resolve=>setTimeout(resolve,180));
+   const p=$('#chatPending');if(p)p.remove();
+   chatHistory.push({role:'assistant',text:reply});saveChatHistory();renderChatHistory();chatStatus('آماده پاسخ‌گویی',true);
  }catch(err){
    const p=$('#chatPending');if(p)p.remove();
-   const error=document.createElement('div');error.className='chat-msg assistant error';error.textContent='اتصال ناموفق بود: '+(err.message||'خطای ناشناخته')+'\nدر تست مستقیم، اعتبار کلید و دسترسی مرورگر به api.openai.com را بررسی کن. در حالت بک‌اند، Render و تنظیم CORS را بررسی کن.';$('#chatMessages').appendChild(error);$('#chatMessages').scrollTop=$('#chatMessages').scrollHeight;chatStatus('خطای اتصال');
+   const error=document.createElement('div');error.className='chat-msg assistant error';error.textContent='مشکلی پیش آمد. لطفاً دوباره تلاش کن.';$('#chatMessages').appendChild(error);chatStatus('خطای داخلی',false);
  }finally{button.disabled=false;input.focus()}
 };
 renderChatHistory();
-if(localStorage.getItem(CHAT_ENDPOINT_KEY))chatStatus('آدرس ذخیره شده',true);
+chatStatus('آماده پاسخ‌گویی',true);
 
 $('#promptBtn').onclick=()=>{$('#promptOut').textContent='به‌عنوان یک متخصص حرفه‌ای، درباره موضوع زیر پاسخ دقیق و ساختاریافته تولید کن: '+$('#promptInput').value.trim()+'\n\nپاسخ را مرحله‌به‌مرحله، کاربردی و به زبان فارسی بنویس.';award(5,'ساخت پرامپت')};
 function openTool(id){const p=$('#toolPanel');$('#toolTitle').textContent=tools.find(t=>t[0]===id)[1];const shell=(s)=>p.innerHTML=s;const field=(id,ph='',type='text')=>'<input class="field" id="'+id+'" type="'+type+'" placeholder="'+ph+'" style="width:100%;margin:6px 0">';const btn=(id,txt)=>'<button class="btn primary" id="'+id+'">'+txt+'</button>';
