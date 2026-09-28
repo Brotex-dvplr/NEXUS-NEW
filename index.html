@@ -148,6 +148,38 @@ async function searchWikipedia(raw){
  }).join('\n\n');
  return '🔎 نتایج جست‌وجو در ویکی‌پدیا (فارسی و انگلیسی)\nنتایج بر اساس ارتباط عنوان و متن با واژه‌های سؤال مرتب شده‌اند؛ لطفاً عنوان و منبع را بررسی کن.\n\n'+output+'\n\n⚠️ این‌ها نتایج دانشنامه‌ای هستند، نه پاسخ تولیدشده توسط یک مدل هوش مصنوعی. برای موضوعات تخصصی یا حساس، منابع معتبر دیگر را هم بررسی کن.';
 }
+async function searchAdditionalSources(raw){
+ const q=String(raw||'').trim().replace(/[؟?!。，,؛;]+$/g,'').slice(0,180);
+ if(!q)return '';
+ const clean=s=>String(s||'').replace(/<[^>]*>/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&#39;/g,"'").replace(/\s+/g,' ').trim();
+ const jobs=[
+  (async()=>{
+   const u='https://api.openalex.org/works?search='+encodeURIComponent(q)+'&per_page=3&select=id,doi,title,publication_year,authorships,primary_location,open_access,abstract_inverted_index';
+   const r=await fetch(u,{headers:{Accept:'application/json'}});if(!r.ok)throw 0;const d=await r.json();
+   return (d.results||[]).map(x=>{
+    let abstract='';
+    if(x.abstract_inverted_index){const words=[];for(const [word,positions] of Object.entries(x.abstract_inverted_index))for(const pos of positions)words[pos]=word;abstract=words.filter(Boolean).join(' ')}
+    return {source:'OpenAlex · پژوهش علمی',title:clean(x.title)||'مقاله علمی',text:abstract.slice(0,850),url:x.doi||x.id,year:x.publication_year};
+   });
+  })(),
+  (async()=>{
+   const u='https://api.crossref.org/works?query.bibliographic='+encodeURIComponent(q)+'&rows=3&select=title,author,published,DOI,URL,abstract,type';
+   const r=await fetch(u,{headers:{Accept:'application/json'}});if(!r.ok)throw 0;const d=await r.json();
+   return ((d.message&&d.message.items)||[]).map(x=>({source:'Crossref · فرادادهٔ انتشارات علمی',title:clean((x.title||[])[0])||'رکورد علمی',text:clean(x.abstract||'').slice(0,850),url:x.URL||(x.DOI?'https://doi.org/'+x.DOI:''),year:((x.published&&x.published['date-parts']||[])[0]||[])[0]})).filter(x=>x.title&&x.url);
+  })(),
+  (async()=>{
+   const u='https://www.wikidata.org/w/api.php?action=wbsearchentities&search='+encodeURIComponent(q)+'&language=fa&uselang=fa&type=item&limit=3&format=json&origin=*';
+   const r=await fetch(u,{headers:{Accept:'application/json'}});if(!r.ok)throw 0;const d=await r.json();
+   return (d.search||[]).map(x=>({source:'Wikidata · داده‌های ساخت‌یافته',title:clean(x.label)||'موجودیت',text:clean(x.description||''),url:x.concepturi||('https://www.wikidata.org/wiki/'+x.id)}));
+  })()
+ ];
+ const settled=await Promise.allSettled(jobs);
+ const results=[];
+ for(const item of settled)if(item.status==='fulfilled')results.push(...item.value);
+ const seen=new Set(),unique=results.filter(x=>{const k=x.url||x.title;if(!k||seen.has(k))return false;seen.add(k);return true}).slice(0,6);
+ if(!unique.length)return '';
+ return '📖 منابع تکمیلی مستقل (پژوهش‌ها و داده‌های ساخت‌یافته)\n'+unique.map(x=>'• '+x.title+(x.year?' ('+x.year+')':'')+'\nمنبع: '+x.source+(x.text?'\n'+x.text:'\nچکیده یا توضیح در این رکورد موجود نیست.')+'\nلینک: '+x.url).join('\n\n')+'\n\nیادآوری: OpenAlex و Crossref عمدتاً فرادادهٔ پژوهش‌ها را ارائه می‌کنند و ممکن است چکیده در دسترس نباشد؛ عنوان و ناشر/منبع را پیش از استناد بررسی کن.';
+}
 function nexusReply(raw){
  const s=normalizeFa(raw);
  const has=(...words)=>words.some(w=>s.includes(normalizeFa(w)));
@@ -233,7 +265,7 @@ $('#chatForm').onsubmit=async e=>{
    let reply=nexusReply(message);
    if(reply.startsWith('🤔 هنوز قانون یا پاسخ اختصاصی مناسبی')) {
      chatStatus('در حال جست‌وجو در ویکی‌پدیا…',true);
-     try{const wikiReply=await searchWikipedia(message);if(wikiReply)reply=wikiReply;else reply+='\n\n🌐 در ویکی‌پدیای فارسی یا انگلیسی نتیجهٔ مناسبی پیدا نکردم. سؤال را کوتاه‌تر یا با نام دقیق موضوع امتحان کن.'}
+     const results=await Promise.allSettled([searchWikipedia(message),searchAdditionalSources(message)]);const wikiReply=results[0].status==='fulfilled'?results[0].value:'';const extraReply=results[1].status==='fulfilled'?results[1].value:'';reply=[wikiReply,extraReply].filter(Boolean).join('\n\n━━━━━━━━━━━━━━━━\n\n');if(!reply)reply='🌐 در منابع متصل نتیجهٔ مناسبی پیدا نکردم. سؤال را کوتاه‌تر یا با نام دقیق موضوع امتحان کن.'
      catch{reply+='\n\n🌐 جست‌وجوی ویکی‌پدیا انجام نشد؛ اتصال اینترنت را بررسی کن و دوباره تلاش کن.'}
    }
    await new Promise(resolve=>setTimeout(resolve,180));
