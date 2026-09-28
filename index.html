@@ -265,7 +265,7 @@ $('#chatForm').onsubmit=async e=>{
    let reply=nexusReply(message);
    if(reply.startsWith('🤔 هنوز قانون یا پاسخ اختصاصی مناسبی')) {
      chatStatus('در حال جست‌وجو در ویکی‌پدیا…',true);
-     const results=await Promise.allSettled([searchWikipedia(message),searchAdditionalSources(message)]);const wikiReply=results[0].status==='fulfilled'?results[0].value:'';const extraReply=results[1].status==='fulfilled'?results[1].value:'';reply=[wikiReply,extraReply].filter(Boolean).join('\n\n━━━━━━━━━━━━━━━━\n\n');if(!reply)reply='🌐 در منابع متصل نتیجهٔ مناسبی پیدا نکردم. سؤال را کوتاه‌تر یا با نام دقیق موضوع امتحان کن.'
+     const results=await Promise.allSettled([searchWikipedia(message),searchAdditionalSources(message)]);const wikiReply=results[0].status==='fulfilled'?results[0].value:'';const extraReply=results[1].status==='fulfilled'?results[1].value:'';reply=[wikiReply,extraReply].filter(Boolean).join('\n\n━━━━━━━━━━━━━━━━\n\n');if(!reply)reply='🌐 در منابع متصل نتیجهٔ مناسبی پیدا نکردم. سؤال را کوتاه‌تر یا با نام دقیق موضوع امتحان کن.'}
      catch{reply+='\n\n🌐 جست‌وجوی ویکی‌پدیا انجام نشد؛ اتصال اینترنت را بررسی کن و دوباره تلاش کن.'}
    }
    await new Promise(resolve=>setTimeout(resolve,180));
