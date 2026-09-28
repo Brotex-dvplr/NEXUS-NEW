@@ -94,8 +94,10 @@ function renderChatHistory(){
 }
 $('#saveChatEndpoint').onclick=()=>{
  const value=$('#chatEndpoint').value.trim();
- if(!/^https:\/\//i.test(value)){chatStatus('آدرس HTTPS وارد کن');toast('آدرس بک‌اند باید با https:// شروع شود');return}
- try{new URL(value)}catch{chatStatus('آدرس نامعتبر');toast('آدرس واردشده معتبر نیست');return}
+ let parsed;
+ try{parsed=new URL(value)}catch{chatStatus('آدرس نامعتبر');toast('آدرس واردشده معتبر نیست');return}
+ const localHttp=parsed.protocol==='http:'&&['localhost','127.0.0.1'].includes(parsed.hostname);
+ if(parsed.protocol!=='https:'&&!localHttp){chatStatus('آدرس نامعتبر');toast('از HTTPS استفاده کن؛ فقط localhost برای تست HTTP مجاز است');return}
  localStorage.setItem(CHAT_ENDPOINT_KEY,value);chatStatus('آدرس ذخیره شد',true);toast('آدرس بک‌اند ذخیره شد');
 };
 $('#clearChatBtn').onclick=()=>{chatHistory=[];saveChatHistory();renderChatHistory();chatStatus(localStorage.getItem(CHAT_ENDPOINT_KEY)?'آماده گفت‌وگو':'نیازمند اتصال',!!localStorage.getItem(CHAT_ENDPOINT_KEY))};
