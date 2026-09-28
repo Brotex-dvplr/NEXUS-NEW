@@ -8,7 +8,9 @@ services:
     startCommand: npm start
     healthCheckPath: /health
     envVars:
-      - key: GEMINI_API_KEY
+      - key: OPENAI_API_KEY
         sync: false
       - key: ALLOWED_ORIGIN
         value: https://brotex-dvplr.github.io
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
