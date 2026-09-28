@@ -96,7 +96,7 @@ $('#saveChatEndpoint').onclick=()=>{
  localStorage.setItem(CHAT_ENDPOINT_KEY,value);chatStatus('آدرس ذخیره شد',true);toast('آدرس بک‌اند ذخیره شد');
 };
 $('#clearChatBtn').onclick=()=>{chatHistory=[];saveChatHistory();renderChatHistory();chatStatus(localStorage.getItem(CHAT_ENDPOINT_KEY)?'آماده گفت‌وگو':'نیازمند اتصال',!!localStorage.getItem(CHAT_ENDPOINT_KEY))};
-$('[data-chat-prompt]').forEach(b=>b.onclick=()=>{$('#chatInput').value=b.dataset.chatPrompt;$('#chatInput').focus()});
+$$('[data-chat-prompt]').forEach(b=>b.onclick=()=>{$('#chatInput').value=b.dataset.chatPrompt;$('#chatInput').focus()});
 $('#chatForm').onsubmit=async e=>{
  e.preventDefault();
  const input=$('#chatInput'),button=$('#chatSendBtn'),message=input.value.trim(),endpoint=localStorage.getItem(CHAT_ENDPOINT_KEY)||'';
@@ -143,9 +143,9 @@ const ach=[['first','اولین قدم','اولین ابزار یا بازی ر�
 function renderAchievements(){$('#achGrid').innerHTML=ach.map(a=>'<article class="card"><div class="cardicon"><i data-lucide="'+a[3]+'"></i></div><h3>'+a[1]+'</h3><p>'+a[2]+'</p><span class="tag">'+(state.achievements.includes(a[0])?'باز شده':'قفل')+'</span></article>').join('');icons()}
 $('#saveProfile').onclick=()=>{state.name=$('#nameInput').value.trim()||'Nexus User';state.bio=$('#bioInput').value;save();toast('پروفایل ذخیره شد')};
 $('#themeBtn').onclick=$('#themeSetting').onclick=()=>{state.theme=state.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=state.theme;save();icons()};
-function setAccent(color){if(!/^#[0-9a-fA-F]{6}$/.test(color))return;state.accent=color;document.documentElement.style.setProperty('--accent',color);$('#customAccent').value=color;$('[data-accent]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.accent.toLowerCase()===color.toLowerCase())));save()}
+function setAccent(color){if(!/^#[0-9a-fA-F]{6}$/.test(color))return;state.accent=color;document.documentElement.style.setProperty('--accent',color);$('#customAccent').value=color;$$('[data-accent]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.accent.toLowerCase()===color.toLowerCase())));save()}
 $('#paletteBtn').onclick=()=>{$('#paletteMenu').hidden=!$('#paletteMenu').hidden};
-$('[data-accent]').forEach(b=>b.onclick=()=>{setAccent(b.dataset.accent);toast('رنگ قالب تغییر کرد')});
+$$('[data-accent]').forEach(b=>b.onclick=()=>{setAccent(b.dataset.accent);toast('رنگ قالب تغییر کرد')});
 $('#customAccent').oninput=e=>setAccent(e.target.value);
 document.addEventListener('click',e=>{if(!e.target.closest('#paletteMenu')&&!e.target.closest('#paletteBtn'))$('#paletteMenu').hidden=true});
 $('#resetBtn').onclick=()=>{if(confirm('تمام پیشرفت محلی حذف شود؟')){state={...defaults};save();renderActivity();toast('پیشرفت بازنشانی شد')}};
