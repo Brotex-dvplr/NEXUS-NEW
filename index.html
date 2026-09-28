@@ -83,10 +83,41 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 <section class="page" id="page-games"><span class="eyebrow">NEXUS PLAYGROUND</span><h1>Game Zone</h1><p class="muted">بازی کن، رکورد بساز و XP جمع کن. مار با کلیدهای جهت یا دکمه‌های لمسی کنترل می‌شود.</p><div class="grid" id="gameGrid"></div><div class="sectionhead"><div><h2 id="gameTitle">زمین بازی</h2><p>بازی انتخابی</p></div></div><div class="panel" id="gamePanel"><p class="empty">یک بازی را انتخاب کن تا شروع شود.</p></div></section>
 <section class="page" id="page-profile"><span class="eyebrow">YOUR SPACE</span><h1>پروفایل کاربری</h1><p class="muted">اطلاعات نمایشی و پیشرفت محلی تو.</p><div class="panel profileform"><label>نام نمایشی<input id="nameInput" class="field" value="Nexus User"></label><label>درباره من<input id="bioInput" class="field" placeholder="چند کلمه درباره خودت"></label><button class="btn primary" id="saveProfile">ذخیره پروفایل</button><p class="empty">اطلاعات فقط در حافظه محلی همین مرورگر ذخیره می‌شود.</p></div></section>
 <section class="page" id="page-achievements"><span class="eyebrow">MILESTONES</span><h1>دستاوردها</h1><p class="muted">با استفاده از ابزارها و بازی‌ها نشان باز کن.</p><div class="grid" id="achGrid"></div></section>
-<section class="page" id="page-leaderboard"><span class="eyebrow">LOCAL RANKING</span><h1>جدول برترین‌ها</h1><p class="muted">این جدول فقط امتیاز محلی همین دستگاه را نشان می‌دهد و رتبه‌بندی آنلاین نیست.</p><div class="panel"><div class="listrow"><div class="avatar">1</div><span><b id="rankName">Nexus User</b><small>پروفایل فعلی</small></span><strong id="rankXp">0 XP</strong></div><p class="empty">برای جدول آنلاین چندکاربره، به بک‌اند و پایگاه داده نیاز است.</p></div></section>
+<section class="page" id="page-leaderboard">
+<span class="eyebrow">NEXUS GLOBAL RANKING</span><h1>جدول برترین‌های آنلاین 🏆</h1>
+<p class="muted">رتبه‌بندی جهانی براساس XP فعالیت‌ها و مأموریت‌ها؛ داده‌ها بین دستگاه‌ها همگام می‌شوند.</p>
+<div class="panel profileform" id="sbAuthBox">
+<h2>حساب NEXUS</h2><p class="empty">برای ذخیره XP و حضور در رتبه‌بندی جهانی، ثبت‌نام کن یا وارد حسابت شو.</p>
+<form id="sbSignUpForm" class="profileform">
+<label>نام نمایشی<input class="field" id="sbSignupName" minlength="2" maxlength="24" required placeholder="مثلاً NexusMaster"></label>
+<label>ایمیل<input class="field" id="sbSignupEmail" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+<label>رمز عبور<input class="field" id="sbSignupPassword" type="password" minlength="8" required autocomplete="new-password" placeholder="حداقل ۸ کاراکتر"></label>
+<button class="btn primary" type="submit">ساخت حساب</button>
+</form>
+<div style="height:1px;background:var(--line);margin:6px 0"></div>
+<form id="sbSignInForm" class="profileform">
+<label>ایمیل حساب<input class="field" id="sbLoginEmail" type="email" required autocomplete="email"></label>
+<label>رمز عبور<input class="field" id="sbLoginPassword" type="password" required autocomplete="current-password"></label>
+<button class="btn" type="submit">ورود به حساب</button>
+</form>
+</div>
+<div class="panel profileform" id="sbUserBox" hidden>
+<h2>حساب من</h2><p id="sbUserEmail" class="muted"></p>
+<label>نام نمایشی<input class="field" id="sbDisplayName" minlength="2" maxlength="24"></label>
+<div class="actions"><button class="btn" id="sbSaveName" type="button">ذخیره نام</button><button class="btn" id="sbSignOut" type="button">خروج</button></div>
+<button class="btn primary" id="sbCompleteMission" type="button">🎯 ثبت مأموریت روزانه (+20 XP)</button>
+<p class="empty">هر مأموریت روزانه فقط یک‌بار امتیاز می‌دهد. برای جلوگیری از تقلب، امتیاز از سمت دیتابیس تعیین می‌شود.</p>
+</div>
+<div class="panel" style="margin-top:16px"><div class="sectionhead" style="margin-top:0"><div><h2>رتبه‌بندی جهانی</h2><p>۱۰۰ نفر برتر · به‌روزرسانی زنده</p></div><button class="btn" type="button" id="sbRefresh" onclick="window.NEXUSLeaderboard?.refresh()">تازه‌سازی</button></div>
+<div id="sbLeaderboardRows"><p class="empty">در حال اتصال به دیتابیس…</p></div></div>
+<p class="empty" id="sbStatus" role="status" aria-live="polite">در انتظار راه‌اندازی Supabase…</p>
+</section>
 <section class="page" id="page-settings"><span class="eyebrow">PREFERENCES</span><h1>تنظیمات</h1><p class="muted">شخصی‌سازی تجربه NEXUS</p><div class="panel profileform"><div class="listrow"><span><b>حالت نمایش</b><small>روشن یا تاریک</small></span><button class="btn" id="themeSetting">تغییر پوسته</button></div><div class="listrow"><span><b>ذخیره‌سازی محلی</b><small>اطلاعات روی همین مرورگر باقی می‌ماند.</small></span><i data-lucide="database"></i></div><div class="listrow"><span><b>بازنشانی پیشرفت</b><small>امتیازها و فعالیت‌های ذخیره‌شده حذف می‌شوند.</small></span><button class="btn" id="resetBtn">بازنشانی</button></div><p class="empty">دسترسی‌پذیری: قابل استفاده با صفحه‌کلید، اندازه‌پذیر برای موبایل و پشتیبانی از کاهش حرکت.</p></div></section>
 <section class="page admin-page" id="page-admin" hidden><span class="eyebrow">NEXUS / ADMIN CONTROL</span><h1>پنل مدیریت سایت</h1><p class="muted">مدیریت ظاهری و رنگ‌بندی بخش‌های سایت روی همین مرورگر.</p><div class="panel admin-warning"><i data-lucide="shield-alert"></i><span><b>توجه امنیتی</b><small>این پنل فقط یک قابلیت نمایشی سمت مرورگر است؛ نام admin123admin احراز هویت امن نیست و برای مدیریت واقعی یا داده‌های حساس باید ورود امن سمت سرور اضافه شود.</small></span></div><div class="panel profileform"><h2>رنگ‌بندی اختصاصی بخش‌ها</h2><p class="empty">برای هر بخش رنگ تأکیدی و رنگ پس‌زمینه جداگانه انتخاب کن. تغییرات روی همین مرورگر ذخیره می‌شوند.</p><div id="sectionColorControls" class="section-color-grid"></div><div class="actions"><button class="btn" id="resetSectionColors">بازگردانی رنگ‌های بخش‌ها</button><button class="btn primary" id="saveSectionColors">ذخیره رنگ‌بندی</button></div></div></section>
 </main></div><nav class="mobilebar" id="mobileNav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>خانه</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="ai"><i data-lucide="sparkles"></i>AI</button><button data-page="profile"><i data-lucide="user-round"></i>پروفایل</button><button data-page="admin" id="adminMobileNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>مدیریت</button></nav><div id="toast" class="toast" hidden role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="js/supabase-leaderboard.js"></script>
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const defaults={name:'Nexus User',bio:'',xp:0,level:1,totalXp:0,gamesPlayed:0,achievements:[],activities:[],theme:'dark',accent:'#9b7cff',sectionColors:{}};
