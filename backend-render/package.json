@@ -1,0 +1,13 @@
+{
+  "name": "nexus-gemini-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Secure Gemini API backend for NEXUS hosted on Render",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
