@@ -178,7 +178,8 @@ async function searchAdditionalSources(raw){
  for(const item of settled)if(item.status==='fulfilled')results.push(...item.value);
  const seen=new Set(),unique=results.filter(x=>{const k=x.url||x.title;if(!k||seen.has(k))return false;seen.add(k);return true}).slice(0,6);
  if(!unique.length)return '';
- const googleUrl='https://www.google.com/search?q='+encodeURIComponent(q);\n return '🔍 جست‌وجوی مستقیم گوگل (باز کردن نتایج کامل در گوگل):\\n'+googleUrl+'\\n\\n📖 منابع تکمیلی مستقل (پژوهش‌ها و داده‌های ساخت‌یافته)\\n'+unique.map(x=>'• '+x.title+(x.year?' ('+x.year+')':'')+'\\nمنبع: '+x.source+(x.text?'\\n'+x.text:'\\nچکیده یا توضیح در این رکورد موجود نیست.')+'\\nلینک: '+x.url).join('\\n\\n')+'\\n\\nیادآوری: این پیوند نتایج زندهٔ گوگل را مستقیماً باز می‌کند. نمایش خودکار عناوین و خلاصه‌های گوگل داخل سایت به Google Programmable Search API و کلید API نیاز دارد. OpenAlex و Crossref ممکن است چکیده نداشته باشند؛ منبع را بررسی کن.';
+ const googleUrl='https://www.google.com/search?q='+encodeURIComponent(q);
+ return '🔍 جست‌وجوی مستقیم گوگل (باز کردن نتایج کامل در گوگل):\n'+googleUrl+'\n\n📖 منابع تکمیلی مستقل (پژوهش‌ها و داده‌های ساخت‌یافته)\n'+unique.map(x=>'• '+x.title+(x.year?' ('+x.year+')':'')+'\nمنبع: '+x.source+(x.text?'\n'+x.text:'\nچکیده یا توضیح در این رکورد موجود نیست.')+'\nلینک: '+x.url).join('\n\n')+'\n\nیادآوری: این پیوند نتایج زندهٔ گوگل را مستقیماً باز می‌کند. نمایش خودکار عناوین و خلاصه‌های گوگل داخل سایت به Google Programmable Search API و کلید API نیاز دارد. OpenAlex و Crossref ممکن است چکیده نداشته باشند؛ منبع را بررسی کن.';
 }
 function nexusReply(raw){
  const s=normalizeFa(raw);
