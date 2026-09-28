@@ -87,16 +87,15 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 <span class="eyebrow">NEXUS GLOBAL RANKING</span><h1>جدول برترین‌های آنلاین 🏆</h1>
 <p class="muted">رتبه‌بندی جهانی براساس XP فعالیت‌ها و مأموریت‌ها؛ داده‌ها بین دستگاه‌ها همگام می‌شوند.</p>
 <div class="panel profileform" id="sbAuthBox">
-<h2>حساب NEXUS</h2><p class="empty">برای ذخیره XP و حضور در رتبه‌بندی جهانی، ثبت‌نام کن یا وارد حسابت شو.</p>
+<h2>حساب NEXUS</h2><p class="empty">فقط یک نام مستعار و رمز عبور بساز؛ ایمیل لازم نیست. نام مستعار برای ورود یکتا است.</p>
 <form id="sbSignUpForm" class="profileform">
-<label>نام نمایشی<input class="field" id="sbSignupName" minlength="2" maxlength="24" required placeholder="مثلاً NexusMaster"></label>
-<label>ایمیل<input class="field" id="sbSignupEmail" type="email" required autocomplete="email" placeholder="you@example.com"></label>
-<label>رمز عبور<input class="field" id="sbSignupPassword" type="password" minlength="8" required autocomplete="new-password" placeholder="حداقل ۸ کاراکتر"></label>
+<label>نام مستعار (۳ تا ۲۰ نویسه انگلیسی)<input class="field" id="sbSignupName" minlength="3" maxlength="20" pattern="[A-Za-z0-9][A-Za-z0-9_.-]{2,19}" required autocomplete="username" placeholder="مثلاً NexusMaster"></label>
+<label>رمز عبور<input class="field" id="sbSignupPassword" type="password" minlength="8" maxlength="72" required autocomplete="new-password" placeholder="حداقل ۸ کاراکتر"></label>
 <button class="btn primary" type="submit">ساخت حساب</button>
 </form>
 <div style="height:1px;background:var(--line);margin:6px 0"></div>
 <form id="sbSignInForm" class="profileform">
-<label>ایمیل حساب<input class="field" id="sbLoginEmail" type="email" required autocomplete="email"></label>
+<label>نام مستعار<input class="field" id="sbLoginName" minlength="3" maxlength="20" required autocomplete="username" placeholder="نام مستعاری که ثبت کردی"></label>
 <label>رمز عبور<input class="field" id="sbLoginPassword" type="password" required autocomplete="current-password"></label>
 <button class="btn" type="submit">ورود به حساب</button>
 </form>
