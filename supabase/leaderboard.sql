@@ -13,7 +13,7 @@ create table if not exists public.nexus_activity_events (
  points integer not null check (points between 1 and 100),
  event_date date not null default (timezone('utc', now()))::date,
  created_at timestamptz not null default now(),
- unique(user_id, activity_key, event_date)
+
 );
 create index if not exists nexus_profiles_rank_idx on public.nexus_profiles(total_xp desc, updated_at asc);
 alter table public.nexus_profiles enable row level security;
@@ -58,12 +58,16 @@ begin
   else null end;
  if pts is null then raise exception 'Unknown activity' using errcode = '22023'; end if;
  insert into public.nexus_profiles(user_id,display_name) values(uid,'Nexus Explorer') on conflict(user_id) do nothing;
- insert into public.nexus_activity_events(user_id,activity_key,points,event_date) values(uid,p_activity_key,pts,today_utc)
- on conflict(user_id,activity_key,event_date) do nothing;
- if not found then
+ -- The daily mission remains limited to once per UTC day; games/tools can award XP repeatedly.
+ if p_activity_key = 'daily_mission' and exists (
+  select 1 from public.nexus_activity_events e
+  where e.user_id = uid and e.activity_key = p_activity_key and e.event_date = today_utc
+ ) then
   return query select 0,p.total_xp,true from public.nexus_profiles p where p.user_id=uid;
   return;
  end if;
+ insert into public.nexus_activity_events(user_id,activity_key,points,event_date)
+ values(uid,p_activity_key,pts,today_utc);
  update public.nexus_profiles p set total_xp=p.total_xp+pts, updated_at=now()
  where p.user_id=uid returning p.total_xp into new_total;
  return query select pts,new_total,false;
