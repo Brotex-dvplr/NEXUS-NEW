@@ -4,7 +4,8 @@ create table if not exists public.nexus_profiles (
  display_name text not null default 'Nexus Explorer' check (char_length(display_name) between 2 and 24),
  total_xp bigint not null default 0 check (total_xp >= 0),
  created_at timestamptz not null default now(),
- updated_at timestamptz not null default now()
+ updated_at timestamptz not null default now(),
+ avatar_url text
 );
 create table if not exists public.nexus_activity_events (
  id bigint generated always as identity primary key,
@@ -15,11 +16,12 @@ create table if not exists public.nexus_activity_events (
  created_at timestamptz not null default now()
 );
 create index if not exists nexus_profiles_rank_idx on public.nexus_profiles(total_xp desc, updated_at asc);
+alter table public.nexus_profiles add column if not exists avatar_url text;
 alter table public.nexus_profiles enable row level security;
 alter table public.nexus_activity_events enable row level security;
 revoke all on public.nexus_profiles from anon, authenticated;
 grant select on public.nexus_profiles to anon, authenticated;
-grant update(display_name) on public.nexus_profiles to authenticated;
+grant update(display_name, avatar_url) on public.nexus_profiles to authenticated;
 -- Keep this setup script safe to re-run from the Supabase SQL Editor.
 drop policy if exists "Public leaderboard profiles" on public.nexus_profiles;
 drop policy if exists "Users update own display name" on public.nexus_profiles;
@@ -77,6 +79,6 @@ grant execute on function public.nexus_award_activity(text) to authenticated;
 
 create or replace view public.nexus_leaderboard with (security_invoker = true) as
 select row_number() over(order by total_xp desc, updated_at asc, user_id asc) as rank,
- user_id, display_name, total_xp, updated_at
+ user_id, display_name, total_xp, avatar_url, updated_at
 from public.nexus_profiles;
 grant select on public.nexus_leaderboard to anon, authenticated;
