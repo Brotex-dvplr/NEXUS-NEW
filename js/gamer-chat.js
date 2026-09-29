@@ -35,7 +35,17 @@
     const body = document.createElement('p');
     body.textContent = row.message || '';
     head.append(name, time);
+    article.dataset.messageId = String(row.id);
     article.append(head, body);
+    if (current && current.id !== row.user_id) {
+      const reportButton = document.createElement('button');
+      reportButton.type = 'button';
+      reportButton.className = 'chat-report-btn';
+      reportButton.textContent = '⚑ گزارش پیام';
+      reportButton.setAttribute('aria-label', 'گزارش پیام ' + (row.sender_name || 'گیمر'));
+      reportButton.addEventListener('click', () => reportMessage(row, reportButton));
+      article.append(reportButton);
+    }
     host.append(article);
     if (scroll) host.scrollTop = host.scrollHeight;
   }
@@ -108,9 +118,131 @@
       setStatus('برای ورود به گروه چت، ابتدا وارد حساب NEXUS شو.');
     }
   }
+  function moderationStatus(message, error = false) {
+    const el = $('chatModerationStatus');
+    if (el) { el.textContent = message; el.style.color = error ? '#ff8f8f' : 'var(--muted)'; }
+  }
+  async function reportMessage(row, button) {
+    const db = client();
+    if (!db || !user()) { setStatus('برای گزارش پیام ابتدا وارد حساب شو.', true); return; }
+    const reason = window.prompt('دلیل گزارش را کوتاه بنویس (اختیاری):', 'پیام نامناسب یا اسپم');
+    if (reason === null) return;
+    if (reason.trim().length > 300) { setStatus('دلیل گزارش حداکثر ۳۰۰ نویسه است.', true); return; }
+    if (button) button.disabled = true;
+    try {
+      const { error } = await db.rpc('nexus_report_chat_message', {
+        p_message_id: Number(row.id),
+        p_reason: reason.trim() || null
+      });
+      if (error) throw error;
+      setStatus('گزارش پیام ثبت شد؛ ممنون که به امن‌تر شدن NEXUS کمک می‌کنی.');
+      if (button) { button.textContent = 'گزارش شد'; button.disabled = true; }
+    } catch (error) {
+      setStatus(error.message?.includes('already reported') ? 'این پیام را قبلاً گزارش کرده‌ای.' : 'ثبت گزارش ناموفق بود: ' + error.message, true);
+      if (button) button.disabled = false;
+    }
+  }
+  function removeMessageFromRoom(messageId) {
+    const host = $('chatRoomMessages');
+    const item = host?.querySelector('[data-message-id="' + String(messageId) + '"]');
+    if (item) item.remove();
+    knownIds.delete(Number(messageId));
+    if (host && !host.children.length) {
+      const empty = document.createElement('p');
+      empty.className = 'empty chat-room-welcome';
+      empty.textContent = 'پیامی در اتاق نیست؛ اولین پیام را بفرست! 👋';
+      host.append(empty);
+    }
+  }
+  async function loadAdminReports() {
+    const db = client();
+    if (!db || !user()) return;
+    const list = $('chatReportList');
+    if (!list) return;
+    moderationStatus('در حال بارگذاری گزارش‌ها…');
+    list.replaceChildren();
+    try {
+      const { data, error } = await db.rpc('nexus_admin_list_chat_reports');
+      if (error) throw error;
+      if (!data || !data.length) {
+        moderationStatus('گزارش بازی برای نمایش وجود ندارد. گزارش‌های جدید اینجا ظاهر می‌شوند.');
+        return;
+      }
+      data.forEach(report => {
+        const card = document.createElement('article');
+        card.className = 'chat-report-card';
+        const meta = document.createElement('div');
+        meta.className = 'chat-report-meta';
+        const fields = [
+          'گزارش‌دهنده: ' + (report.reporter_name || 'گیمر'),
+          'فرستنده پیام: ' + (report.message_sender_name || 'گیمر'),
+          'وضعیت: ' + (report.status === 'open' ? 'در انتظار بررسی' : report.status === 'resolved' ? 'رسیدگی‌شده' : 'ردشده'),
+          'شناسه پیام: ' + report.message_id
+        ];
+        fields.forEach(value => { const span = document.createElement('span'); span.textContent = value; meta.append(span); });
+        const messageLabel = document.createElement('b'); messageLabel.textContent = 'متن پیام گزارش‌شده';
+        const message = document.createElement('p'); message.textContent = report.message_text || '[متن در دسترس نیست]';
+        const reasonLabel = document.createElement('b'); reasonLabel.textContent = 'دلیل گزارش';
+        const reason = document.createElement('p'); reason.textContent = report.reason || 'دلیلی وارد نشده است.';
+        card.append(meta, messageLabel, message, reasonLabel, reason);
+        if (report.admin_note) { const note = document.createElement('p'); note.textContent = 'یادداشت مدیر: ' + report.admin_note; card.append(note); }
+        if (report.status === 'open') {
+          const actions = document.createElement('div'); actions.className = 'chat-report-actions';
+          const resolve = document.createElement('button'); resolve.type = 'button'; resolve.className = 'btn primary'; resolve.textContent = 'علامت‌گذاری به‌عنوان رسیدگی‌شده';
+          resolve.addEventListener('click', () => reviewReport(report.report_id, 'resolved'));
+          const dismiss = document.createElement('button'); dismiss.type = 'button'; dismiss.className = 'btn'; dismiss.textContent = 'رد گزارش';
+          dismiss.addEventListener('click', () => reviewReport(report.report_id, 'dismissed'));
+          const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'btn'; remove.textContent = 'حذف پیام';
+          remove.addEventListener('click', () => deleteReportedMessage(report.message_id));
+          actions.append(resolve, dismiss, remove); card.append(actions);
+        }
+        list.append(card);
+      });
+      moderationStatus('تعداد گزارش‌های نمایش‌داده‌شده: ' + data.length + ' (حداکثر ۲۰۰ مورد اخیر).');
+    } catch (error) {
+      moderationStatus('بارگذاری گزارش‌ها ناموفق بود: ' + error.message, true);
+    }
+  }
+  async function reviewReport(reportId, status) {
+    const db = client();
+    try {
+      const note = status === 'dismissed' ? (window.prompt('یادداشت مدیر (اختیاری):', '') || '').trim() : '';
+      const { error } = await db.rpc('nexus_admin_review_chat_report', {
+        p_report_id: Number(reportId), p_status: status, p_note: note || null
+      });
+      if (error) throw error;
+      await loadAdminReports();
+    } catch (error) { moderationStatus('به‌روزرسانی گزارش ناموفق بود: ' + error.message, true); }
+  }
+  async function deleteReportedMessage(messageId) {
+    if (!window.confirm('پیام از اتاق چت حذف شود؟ گزارش برای سابقه باقی می‌ماند.')) return;
+    const db = client();
+    try {
+      const { error } = await db.rpc('nexus_admin_delete_chat_message', { p_message_id: Number(messageId) });
+      if (error) throw error;
+      removeMessageFromRoom(messageId);
+      await loadAdminReports();
+      setStatus('پیام حذف شد و سابقه گزارش حفظ شد.');
+    } catch (error) { moderationStatus('حذف پیام ناموفق بود: ' + error.message, true); }
+  }
+  async function checkAdminAccess() {
+    const db = client(), panel = $('chatModerationPanel');
+    if (!panel) return;
+    if (!db || !user()) { panel.hidden = true; return; }
+    try {
+      const { data, error } = await db.rpc('nexus_chat_is_admin');
+      if (error) throw error;
+      panel.hidden = data !== true;
+      if (data === true) await loadAdminReports();
+    } catch (error) {
+      panel.hidden = true;
+      console.warn('NEXUS moderation access check failed:', error.message);
+    }
+  }
   function bind() {
     $('chatRoomSend')?.addEventListener('click', sendMessage);
     $('chatRoomRefresh')?.addEventListener('click', loadMessages);
+    $('chatModerationRefresh')?.addEventListener('click', loadAdminReports);
     $('chatRoomInput')?.addEventListener('keydown', event => {
       if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); }
     });
@@ -119,9 +251,11 @@
     bind();
     authUi();
     if (user()) { loadMessages(); subscribe(); }
+    checkAdminAccess();
     window.addEventListener('nexus-auth-change', () => {
       authUi();
       if (user()) { loadMessages(); subscribe(); }
+      checkAdminAccess();
     });
     const db = client();
     if (db) db.auth.onAuthStateChange(() => setTimeout(() => {
