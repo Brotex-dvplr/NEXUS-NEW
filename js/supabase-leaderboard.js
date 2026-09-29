@@ -16,7 +16,7 @@
 
   async function profile(user) {
     const { data, error } = await client.from('nexus_profiles')
-      .select('user_id,display_name,total_xp,avatar_url').eq('user_id', user.id).maybeSingle();
+      .select('user_id,display_name,total_xp').eq('user_id', user.id).maybeSingle();
     if (error) throw error;
     return data;
   }
