@@ -37,7 +37,15 @@
     head.append(name, time);
     article.dataset.messageId = String(row.id);
     article.append(head, body);
-    if (current && current.id !== row.user_id) {
+    if (own) {
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.className = 'chat-report-btn';
+      deleteButton.textContent = '🗑️ حذف پیام';
+      deleteButton.setAttribute('aria-label', 'حذف پیام خودت');
+      deleteButton.addEventListener('click', () => deleteOwnMessage(row, deleteButton));
+      article.append(deleteButton);
+    } else if (current && current.id !== row.user_id) {
       const reportButton = document.createElement('button');
       reportButton.type = 'button';
       reportButton.className = 'chat-report-btn';
@@ -124,6 +132,28 @@
   function moderationStatus(message, error = false) {
     const el = $('chatModerationStatus');
     if (el) { el.textContent = message; el.style.color = error ? '#ff8f8f' : 'var(--muted)'; }
+  }
+  async function deleteOwnMessage(row, button) {
+    if (!row || !user() || user().id !== row.user_id) {
+      setStatus('فقط می‌توانی پیام‌های خودت را حذف کنی.', true);
+      return;
+    }
+    if (!window.confirm('پیام خودت از گروه چت حذف شود؟')) return;
+    const db = client();
+    if (!db) { setStatus('اتصال به دیتابیس برقرار نیست.', true); return; }
+    if (button) button.disabled = true;
+    try {
+      const { data, error } = await db.rpc('nexus_delete_own_chat_message', {
+        p_message_id: Number(row.id)
+      });
+      if (error) throw error;
+      if (data !== true) throw new Error('پیام حذف نشد.');
+      removeMessageFromRoom(row.id);
+      setStatus('پیامت حذف شد.');
+    } catch (error) {
+      setStatus('حذف پیام ناموفق بود: ' + error.message, true);
+      if (button) button.disabled = false;
+    }
   }
   async function reportMessage(row, button) {
     const db = client();
