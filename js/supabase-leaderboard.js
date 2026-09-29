@@ -24,6 +24,7 @@
     if ($('sbAuthBox')) $('sbAuthBox').hidden = !!user;
     if ($('sbUserBox')) $('sbUserBox').hidden = !user;
     if ($('sbUserEmail')) $('sbUserEmail').textContent = user ? 'نام مستعار: ' + (p?.display_name || user.user_metadata?.display_name || 'کاربر NEXUS') : '';
+    if ($('sbDisplayName')) $('sbDisplayName').value = user ? (p?.display_name || user.user_metadata?.display_name || '') : '';
     window.NEXUS_SUPABASE_USER = user || null;
   }
   async function renderLeaderboard() {
@@ -77,6 +78,19 @@
         status('حساب ساخته شد! نام مستعارت را برای ورود به خاطر بسپار.');
         await refreshAuth(); await renderLeaderboard();
       } catch (err) { status('ساخت حساب ناموفق: ' + err.message, true); }
+    });
+    $('sbSaveName')?.addEventListener('click', async () => {
+      try {
+        const user = window.NEXUS_SUPABASE_USER;
+        if (!user) throw new Error('ابتدا وارد حساب شو.');
+        const name = String($('sbDisplayName')?.value || '').trim();
+        if (name.length < 2 || name.length > 24) throw new Error('نام نمایشی باید بین ۲ تا ۲۴ نویسه باشد.');
+        const { error } = await client.from('nexus_profiles').update({ display_name: name }).eq('user_id', user.id);
+        if (error) throw error;
+        status('نام نمایشی ذخیره شد.');
+        await refreshAuth();
+        await renderLeaderboard();
+      } catch (err) { status('ذخیره نام ناموفق: ' + err.message, true); }
     });
     $('sbSignOut')?.addEventListener('click', async () => {
       const { error } = await client.auth.signOut();
