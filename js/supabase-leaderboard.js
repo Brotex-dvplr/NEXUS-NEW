@@ -251,6 +251,7 @@
         if (error) throw error;
         const row = Array.isArray(data) ? data[0] : data;
         status(row?.already_awarded ? 'امتیاز مأموریت امروز قبلاً ثبت شده.' : '+' + row?.awarded + ' XP ثبت شد!');
+        if (row?.total_xp != null) renderRank(row.total_xp);
         await renderLeaderboard();
       } catch (err) { status('ثبت مأموریت ناموفق: ' + err.message, true); }
     });
@@ -284,8 +285,10 @@
       if (!client) throw new Error('Supabase هنوز پیکربندی نشده است.');
       const { data, error } = await client.rpc('nexus_award_activity', { p_activity_key: activityKey });
       if (error) throw error;
+      const row = Array.isArray(data) ? data[0] : data;
+      if (row?.total_xp != null) renderRank(row.total_xp);
       await renderLeaderboard();
-      return Array.isArray(data) ? data[0] : data;
+      return row;
     }
   };
   document.addEventListener('DOMContentLoaded', () => init().catch(e => status('راه‌اندازی ناموفق: ' + e.message, true)));
