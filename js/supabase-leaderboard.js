@@ -28,17 +28,19 @@
     window.NEXUS_SUPABASE_USER = user || null;
   }
   async function renderLeaderboard() {
-    if (!client || !$('sbLeaderboardRows')) return;
+    if (!client || (!$('sbLeaderboardRows') && !$('homeLeaderboardRows'))) return;
     const { data, error } = await client.from('nexus_leaderboard')
-      .select('rank,user_id,display_name,total_xp').order('rank', { ascending: true }).limit(100);
+      .select('rank,user_id,display_name,total_xp').order('rank', { ascending: true }).limit(3);
     if (error) { status('خطا در دریافت رتبه‌ها: ' + error.message, true); return; }
-    $('sbLeaderboardRows').innerHTML = !data?.length
+    const rowsHtml = !data?.length
       ? '<p class="empty">هنوز کسی در لیدربورد ثبت نشده است. اولین نفر باش! 🚀</p>'
       : data.map(r => '<div class="listrow"><div class="avatar">' +
         (Number(r.rank) <= 3 ? ['🥇','🥈','🥉'][Number(r.rank)-1] : Number(r.rank)) +
         '</div><span><b>' + esc(r.display_name) + '</b><small>' +
         (Number(r.rank) === 1 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
         '</small></span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>').join('');
+    if ($('sbLeaderboardRows')) $('sbLeaderboardRows').innerHTML = rowsHtml;
+    if ($('homeLeaderboardRows')) $('homeLeaderboardRows').innerHTML = rowsHtml;
   }
   async function refreshAuth() {
     const { data: { user } } = await client.auth.getUser();
