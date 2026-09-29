@@ -86,7 +86,7 @@
         (r.avatar_url
           ? '<img src="' + esc(r.avatar_url) + '" alt="عکس پروفایل" loading="lazy" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:12px">'
           : (Number(r.rank) <= 3 ? ['🥇','🥈','🥉'][Number(r.rank)-1] : Number(r.rank))) +
-        '</div><span><b>' + esc(r.display_name) + '</b><small>'
+        '</div><span><b>' + esc(r.display_name) + '</b><small>' +
         (Number(r.rank) === 1 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
         '</small></span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>').join('');
     if ($('sbLeaderboardRows')) $('sbLeaderboardRows').innerHTML = rowsHtml;
