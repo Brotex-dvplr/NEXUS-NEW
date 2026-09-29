@@ -461,7 +461,7 @@ if(id==='whack'){
  $('#moleStart').onclick=()=>{clearInterval(tick);clearInterval(moveTick);score=0;left=20;active=true;$('#moleScore').textContent='امتیاز: 0';$('#moleTime').textContent='۲۰ ثانیه باقی مانده';$('#moleStart').textContent='در حال بازی…';choose();tick=setInterval(()=>{left--;$('#moleTime').textContent=left+' ثانیه باقی مانده';if(left<=0)end()},1000);moveTick=setInterval(choose,750)};return
 }
 
-
+}
 
 const ach=[['first','اولین قدم','اولین ابزار یا بازی را استفاده کن','footprints'],['level','در مسیر رشد','به سطح جدید برس','trending-up'],['game','گیمر','یک بازی انجام بده','gamepad-2'],['xp','جمع‌آورنده XP','حداقل 100 XP جمع کن','zap'],['tool','جعبه ابزار','از یک ابزار استفاده کن','wrench'],['explorer','کاوشگر','بخش‌های NEXUS را ببین','compass']];
 function renderAchievements(){$('#achGrid').innerHTML=ach.map(a=>'<article class="card"><div class="cardicon"><i data-lucide="'+a[3]+'"></i></div><h3>'+a[1]+'</h3><p>'+a[2]+'</p><span class="tag">'+(state.achievements.includes(a[0])?'باز شده':'قفل')+'</span></article>').join('');icons()}
