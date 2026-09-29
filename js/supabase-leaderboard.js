@@ -1,4 +1,4 @@
-/* NEXUS v1.8.0 · Cyberpunk permanent XP ranks and profile cosmetics. */
+/* NEXUS v1.9.0 · Cyberpunk permanent XP ranks and profile cosmetics. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -39,6 +39,7 @@
     const host = $('sbRankCard');
     if (!host) return;
     const rank = getRank(totalXp);
+    host.dataset.rank = rank.name.toLowerCase().replace(/\s+/g, '-');
     host.style.setProperty('--rank-color', rank.color);
     $('sbRankEmblem').textContent = rank.emblem;
     $('sbRankName').textContent = rank.name;
