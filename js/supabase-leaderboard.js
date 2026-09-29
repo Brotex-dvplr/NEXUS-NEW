@@ -26,6 +26,7 @@
     if ($('sbUserEmail')) $('sbUserEmail').textContent = user ? 'نام مستعار: ' + (p?.display_name || user.user_metadata?.display_name || 'کاربر NEXUS') : '';
     if ($('sbDisplayName')) $('sbDisplayName').value = user ? (p?.display_name || user.user_metadata?.display_name || '') : '';
     window.NEXUS_SUPABASE_USER = user || null;
+    window.dispatchEvent(new CustomEvent('nexus-auth-change', { detail: { user: user || null } }));
   }
   async function renderLeaderboard() {
     if (!client || (!$('sbLeaderboardRows') && !$('homeLeaderboardRows'))) return;
