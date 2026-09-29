@@ -110,7 +110,7 @@ begin
   if uid is null then raise exception 'Authentication required' using errcode = '28000'; end if;
   select ch.* into c from public.nexus_challenges ch where ch.id = p_challenge_id for update;
   if not found then raise exception 'Challenge not found' using errcode = 'P0002'; end if;
-  if uid <> c.creator_id and uid <> c.opponent_id then
+  if uid is distinct from c.creator_id and uid is distinct from c.opponent_id then
     raise exception 'You are not a participant in this challenge' using errcode = '42501';
   end if;
   if c.status = 'completed' then
