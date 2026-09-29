@@ -120,9 +120,13 @@
     await renderLeaderboard();
     channel = client.channel('nexus-leaderboard-live')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'nexus_profiles' }, renderLeaderboard)
-      .subscribe();
+      .subscribe((state, err) => {
+        if (state === 'SUBSCRIBED') status('اتصال آنلاین برقرار است • لیدربورد زنده');
+        else if (state === 'CHANNEL_ERROR' || state === 'TIMED_OUT') {
+          status('به‌روزرسانی زنده برقرار نشد؛ دکمه تازه‌سازی را امتحان کن.' + (err?.message ? ' ' + err.message : ''), true);
+        }
+      });
     client.auth.onAuthStateChange(() => { setTimeout(refreshAuth, 0); setTimeout(renderLeaderboard, 0); });
-    status('اتصال آنلاین برقرار است • لیدربورد زنده');
   }
   window.NEXUSLeaderboard = {
     refresh: renderLeaderboard,
