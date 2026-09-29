@@ -174,6 +174,7 @@
     bind();
     updateAuth();
     refreshChallenges();
+    window.addEventListener('nexus-auth-change', () => setTimeout(() => { updateAuth(); refreshChallenges(); }, 0));
     const db = client();
     if (db) db.auth.onAuthStateChange(() => setTimeout(() => { updateAuth(); refreshChallenges(); }, 0));
   }
