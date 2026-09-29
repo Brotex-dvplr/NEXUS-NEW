@@ -67,6 +67,8 @@ as $$
 declare
   uid uuid := (select auth.uid());
   challenge_row public.nexus_challenges%rowtype;
+  creator_xp bigint := 0;
+  opponent_xp bigint := 0;
   accepted_time timestamptz := pg_catalog.now();
   expiry_time timestamptz;
 begin
@@ -100,8 +102,6 @@ as $$
 declare
   uid uuid := (select auth.uid());
   c public.nexus_challenges%rowtype;
-  creator_xp bigint := 0;
-  opponent_xp bigint := 0;
   creator_gain bigint := 0;
   opponent_gain bigint := 0;
   winner uuid := null;
