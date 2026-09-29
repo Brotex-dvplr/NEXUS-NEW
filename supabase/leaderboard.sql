@@ -21,6 +21,9 @@ alter table public.nexus_activity_events enable row level security;
 revoke all on public.nexus_profiles from anon, authenticated;
 grant select on public.nexus_profiles to anon, authenticated;
 grant update(display_name) on public.nexus_profiles to authenticated;
+-- Keep this setup script safe to re-run from the Supabase SQL Editor.
+drop policy if exists "Public leaderboard profiles" on public.nexus_profiles;
+drop policy if exists "Users update own display name" on public.nexus_profiles;
 create policy "Public leaderboard profiles" on public.nexus_profiles for select to anon, authenticated using (true);
 create policy "Users update own display name" on public.nexus_profiles for update to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 revoke all on public.nexus_activity_events from anon, authenticated;
