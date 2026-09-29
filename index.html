@@ -180,7 +180,7 @@ html[data-minecraft="true"] .cardicon{background:#55b83b30;color:#9be564}
 html[data-minecraft="true"] .progress span{background:linear-gradient(90deg,#39852c,#9be564)}
 html[data-minecraft="true"] .site-version{color:#e6d8b8}
 
-/* NEXUS v1.8.0 · Account avatar editor */
+/* NEXUS v1.9.0 · Account avatar editor */
 .nexus-avatar-editor{display:flex;align-items:center;gap:18px;padding:16px;border:1px solid var(--line);background:var(--panel2);border-radius:18px;margin:8px 0 14px}
 .nexus-avatar-preview{width:104px;height:104px;flex:none;display:grid;place-items:center;overflow:hidden;border-radius:50%;border:3px solid var(--accent);background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 35%,var(--panel)),var(--panel));color:var(--text);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 12%,transparent)}
 .nexus-avatar-preview img{width:100%;height:100%;object-fit:cover}
@@ -199,7 +199,7 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
 .listrow .avatar{overflow:hidden;flex:none;border-radius:50%;width:42px;height:42px;background:var(--panel2);border:1px solid var(--line)}
 .listrow .avatar img{display:block;width:100%;height:100%;object-fit:cover}
 @media(max-width:440px){.nexus-avatar-picker{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.nexus-avatar-option{padding:8px 4px}}
-/* NEXUS v1.8.0 · Universal quick launcher */
+/* NEXUS v1.9.0 · Universal quick launcher */
 .command-launcher{position:fixed;right:18px;bottom:18px;z-index:80;display:flex;align-items:center;gap:8px;box-shadow:0 10px 34px #0004}
 .command-launcher kbd{font:inherit;font-size:10px;padding:2px 5px;border:1px solid currentColor;border-radius:5px;opacity:.75}
 .command-overlay{position:fixed;inset:0;z-index:1000;background:#080a12b8;backdrop-filter:blur(10px);display:none;align-items:flex-start;justify-content:center;padding:12vh 16px 24px}
@@ -223,7 +223,7 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
 @media(max-width:600px){.command-launcher{right:12px;bottom:76px}.command-launcher kbd{display:none}.command-overlay{padding:8vh 10px 16px}.command-box{border-radius:16px}.command-result{padding:10px}.command-results{max-height:68vh}}
 
 
-/* NEXUS v1.8.0 · Cyberpunk permanent rank cosmetics */
+/* NEXUS v1.9.0 · Cyberpunk permanent rank cosmetics */
 .nexus-rank-card{position:relative;overflow:hidden;border:1px solid #8b7cff66;border-radius:18px;padding:16px;background:radial-gradient(ellipse at 0 0,#a78bfa20,transparent 55%),linear-gradient(135deg,#111522,#17132b);box-shadow:inset 0 0 26px #8b5cf612,0 10px 32px #0002;color:#f7f5ff}
 .nexus-rank-card:after{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,#53d9e8,#a78bfa,#ff5db1)}
 .nexus-rank-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.nexus-rank-emblem{width:54px;height:54px;flex:none;display:grid;place-items:center;border-radius:16px;border:1px solid var(--rank-color,#b8a3ff);color:var(--rank-color,#b8a3ff);font-size:25px;font-weight:900;background:color-mix(in srgb,var(--rank-color,#b8a3ff) 13%,#101321);box-shadow:0 0 22px color-mix(in srgb,var(--rank-color,#b8a3ff) 20%,transparent),inset 0 0 12px color-mix(in srgb,var(--rank-color,#b8a3ff) 10%,transparent)}
@@ -231,6 +231,68 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
 .nexus-rank-track{height:8px;background:#ffffff12;border-radius:99px;overflow:hidden;margin-top:17px}.nexus-rank-track span{display:block;width:0;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--rank-color,#b8a3ff),#53d9e8);box-shadow:0 0 14px var(--rank-color,#b8a3ff);transition:width .35s ease}.nexus-rank-foot{display:flex;justify-content:space-between;gap:8px;margin-top:8px;color:#b9bad5;font-size:10px}.nexus-rank-foot span:last-child{font-weight:800;color:var(--rank-color,#b8a3ff);letter-spacing:.7px}.nexus-rank-unlock{font-size:11px;line-height:1.8;color:#aeb0ce;margin:12px 0 0}
 .rank-chip{display:inline-flex;align-items:center;gap:4px;margin-top:5px;padding:2px 7px;border:1px solid color-mix(in srgb,var(--rank-color,#b8a3ff) 55%,transparent);border-radius:7px;background:color-mix(in srgb,var(--rank-color,#b8a3ff) 12%,transparent);color:var(--rank-color,#b8a3ff);font-size:9px;font-weight:800;letter-spacing:.5px;white-space:nowrap}.listrow .avatar{flex:none;overflow:hidden;border:1px solid color-mix(in srgb,var(--rank-color,#b8a3ff) 70%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--rank-color,#b8a3ff) 20%,transparent)}.listrow .avatar img{width:100%;height:100%;object-fit:cover}
 @media(max-width:520px){.nexus-rank-card{padding:13px}.nexus-rank-emblem{width:47px;height:47px}.nexus-rank-copy h3{font-size:16px}.nexus-rank-xp{font-size:11px}}
+
+
+/* NEXUS v1.9.0 · Rank-specific cosmetics */
+.nexus-rank-card[data-rank="bronze"] {
+  border-color: #d99a6c;
+  box-shadow: 0 0 18px #d99a6c25, inset 0 0 22px #d99a6c0a;
+}
+.nexus-rank-card[data-rank="silver"] {
+  border-color: #c7d6e8;
+  box-shadow: 0 0 22px #c7d6e833, inset 0 0 22px #c7d6e80a;
+}
+.nexus-rank-card[data-rank="gold"] {
+  border-color: #ffd166;
+  box-shadow: 0 0 28px #ffd16640, inset 0 0 24px #ffd16612;
+}
+.nexus-rank-card[data-rank="gold"] .nexus-rank-emblem {
+  box-shadow: 0 0 28px #ffd16666, inset 0 0 12px #ffd16622;
+}
+.nexus-rank-card[data-rank="diamond"] {
+  border-color: #45d9ff;
+  background: radial-gradient(ellipse at 0 0, #45d9ff20, transparent 58%), linear-gradient(135deg,#101923,#101c2b);
+  animation: nexusDiamondGlow 2.8s ease-in-out infinite;
+}
+.nexus-rank-card[data-rank="master"] {
+  border-color: #ff5d78;
+  background: radial-gradient(ellipse at 0 0, #ff5d7822, transparent 58%), linear-gradient(135deg,#21101b,#17132b);
+  animation: nexusMasterGlow 2s ease-in-out infinite;
+}
+.nexus-rank-card[data-rank="nexus-god"] {
+  border-color: #ba9bff;
+  background: radial-gradient(ellipse at 15% 10%, #ba9bff35, transparent 55%), linear-gradient(135deg,#17102b,#101522);
+  animation: nexusGodGlow 2.5s ease-in-out infinite;
+}
+.nexus-rank-card[data-rank="nexus-god"] .nexus-rank-emblem {
+  box-shadow: 0 0 20px #ba9bff88, 0 0 42px #ba9bff44, inset 0 0 14px #ba9bff22;
+}
+
+/* Match the account avatar frame to the user's current rank */
+#sbRankCard[data-rank="bronze"] ~ .nexus-avatar-editor .nexus-avatar-preview { border-color:#d99a6c; box-shadow:0 0 18px #d99a6c55; }
+#sbRankCard[data-rank="silver"] ~ .nexus-avatar-editor .nexus-avatar-preview { border-color:#c7d6e8; box-shadow:0 0 18px #c7d6e855; }
+#sbRankCard[data-rank="gold"] ~ .nexus-avatar-editor .nexus-avatar-preview { border-color:#ffd166; box-shadow:0 0 22px #ffd16666; }
+#sbRankCard[data-rank="diamond"] ~ .nexus-avatar-editor .nexus-avatar-preview { border-color:#45d9ff; box-shadow:0 0 24px #45d9ff77; }
+#sbRankCard[data-rank="master"] ~ .nexus-avatar-editor .nexus-avatar-preview { border-color:#ff5d78; box-shadow:0 0 25px #ff5d7880; }
+#sbRankCard[data-rank="nexus-god"] ~ .nexus-avatar-editor .nexus-avatar-preview { border-color:#ba9bff; box-shadow:0 0 18px #ba9bff99, 0 0 38px #ba9bff55; }
+
+@keyframes nexusDiamondGlow {
+  0%,100% { box-shadow:0 0 12px #45d9ff22, inset 0 0 20px #45d9ff08; }
+  50% { box-shadow:0 0 30px #45d9ff66, inset 0 0 25px #45d9ff16; }
+}
+@keyframes nexusMasterGlow {
+  0%,100% { box-shadow:0 0 14px #ff5d7822, inset 0 0 20px #ff5d7808; }
+  50% { box-shadow:0 0 32px #ff5d7866, inset 0 0 26px #ff5d7818; }
+}
+@keyframes nexusGodGlow {
+  0%,100% { box-shadow:0 0 18px #ba9bff33, inset 0 0 24px #ba9bff0a; }
+  50% { box-shadow:0 0 38px #ba9bff88, inset 0 0 32px #ba9bff20; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nexus-rank-card[data-rank="diamond"],
+  .nexus-rank-card[data-rank="master"],
+  .nexus-rank-card[data-rank="nexus-god"] { animation:none; }
+}
 
 </style></head>
 <body><div class="layout"><aside class="side"><div class="brand"><div class="logo"><i data-lucide="orbit"></i></div><div><b>NEXUS</b><small style="display:block">PERSONAL OS</small></div></div><div class="navlabel">WORKSPACE</div><nav class="nav" id="nav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>داشبورد</button><button data-page="ai"><i data-lucide="sparkles"></i>AI Hub</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="achievements"><i data-lucide="trophy"></i>دستاوردها</button><button data-page="leaderboard"><i data-lucide="medal"></i>جدول برترین‌ها</button><button data-page="friends"><i data-lucide="swords"></i>چالش دوستانه</button><button data-page="chat"><i data-lucide="messages-square"></i>گروه چت</button><button data-page="settings"><i data-lucide="settings-2"></i>تنظیمات</button><button data-page="admin" id="adminNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>پنل مدیریت</button></nav><div class="sidebottom"><div class="user"><div class="avatar" id="avatar">N</div><div><b id="sideName">Nexus User</b><small id="sideLevel">Level 1 · Explorer</small></div></div></div></aside>
@@ -369,7 +431,7 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
   <div class="command-results" id="commandResults"></div>
   <div class="command-footer"><span>برای اجرا روی نتیجه بزن</span><span><kbd>ESC</kbd> بستن · <kbd>Ctrl K</kbd> بازکردن</span></div>
  </div>
-</div><div class="site-version" aria-label="نسخه سایت">NEXUS v1.8.0</div>
+</div><div class="site-version" aria-label="نسخه سایت">NEXUS v1.9.0</div>
 <nav class="mobilebar" id="mobileNav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>خانه</button><button data-page="friends"><i data-lucide="swords"></i>چالش</button><button data-page="chat"><i data-lucide="messages-square"></i>چت</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="ai"><i data-lucide="sparkles"></i>AI</button><button data-page="leaderboard"><i data-lucide="medal"></i>رتبه‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="admin" id="adminMobileNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>مدیریت</button></nav><div id="toast" class="toast" hidden role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
@@ -718,7 +780,7 @@ $('#resetSectionColors').onclick=()=>{state.sectionColors={};renderSectionColorC
 $('#dailyMissionBtn').onclick=()=>{go('games');toast('چالش شروع شد؛ یک بازی انتخاب کن و رکورد بزن!')};
 updateMinecraftTheme();updateAdminAccess();renderSectionColorControls();applySectionColors();document.documentElement.dataset.theme=state.theme;document.documentElement.style.setProperty('--accent',state.accent||'#9b7cff');renderStats();renderActivity();if(location.hash.slice(1)&&$('#page-'+location.hash.slice(1)))go(location.hash.slice(1));icons();
 
-/* NEXUS v1.8.0 · Quick launcher */
+/* NEXUS v1.9.0 · Quick launcher */
 (function initNexusLauncher(){
  const overlay=$('#commandOverlay'),input=$('#commandSearch'),results=$('#commandResults'),launcher=$('#commandLauncher');
  if(!overlay||!input||!results||!launcher)return;
