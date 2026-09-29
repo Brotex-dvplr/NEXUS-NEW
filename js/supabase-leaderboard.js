@@ -1,4 +1,4 @@
-/* NEXUS v1.6.0 · Supabase auth, avatars and leaderboard photos. */
+/* NEXUS v1.7.0 · Consistent profile avatars in leaderboard. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -105,21 +105,13 @@
   async function renderLeaderboard() {
     if (!client || (!$('sbLeaderboardRows') && !$('homeLeaderboardRows'))) return;
     const { data, error } = await client.from('nexus_leaderboard')
-      .select('rank,user_id,display_name,total_xp').order('rank', { ascending: true }).limit(3);
+      .select('rank,user_id,display_name,total_xp,avatar_url').order('rank', { ascending: true }).limit(3);
     if (error) { status('خطا در دریافت رتبه‌ها: ' + error.message, true); return; }
-    let avatarByUser = {};
-    try {
-      const ids = (data || []).map(r => r.user_id).filter(Boolean);
-      if (ids.length) {
-        const { data: profiles, error: avatarError } = await client.from('nexus_profiles')
-          .select('user_id,avatar_url').in('user_id', ids);
-        if (!avatarError) (profiles || []).forEach(p => { avatarByUser[p.user_id] = p.avatar_url || ''; });
-      }
-    } catch (_) {}
+    // The leaderboard view now returns avatar_url with each public profile row.
     const rowsHtml = !data?.length
       ? '<p class="empty">هنوز کسی در لیدربورد ثبت نشده است. اولین نفر باش! 🚀</p>'
       : data.map(r => {
-        const avatarUrl = avatarByUser[r.user_id] || '';
+        const avatarUrl = r.avatar_url || '';
         const avatarHtml = avatarUrl
           ? '<img src="' + esc(avatarUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
           : '<i data-lucide="user-round" aria-hidden="true"></i>';
