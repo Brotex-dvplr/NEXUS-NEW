@@ -179,6 +179,30 @@ html[data-minecraft="true"] .nav button.active{box-shadow:inset -3px 0 #8fe35b}
 html[data-minecraft="true"] .cardicon{background:#55b83b30;color:#9be564}
 html[data-minecraft="true"] .progress span{background:linear-gradient(90deg,#39852c,#9be564)}
 html[data-minecraft="true"] .site-version{color:#e6d8b8}
+
+/* NEXUS v1.1.0 · Universal quick launcher */
+.command-launcher{position:fixed;right:18px;bottom:18px;z-index:80;display:flex;align-items:center;gap:8px;box-shadow:0 10px 34px #0004}
+.command-launcher kbd{font:inherit;font-size:10px;padding:2px 5px;border:1px solid currentColor;border-radius:5px;opacity:.75}
+.command-overlay{position:fixed;inset:0;z-index:1000;background:#080a12b8;backdrop-filter:blur(10px);display:none;align-items:flex-start;justify-content:center;padding:12vh 16px 24px}
+.command-overlay.open{display:flex}
+.command-box{width:min(640px,100%);max-height:76vh;overflow:hidden;border:1px solid var(--line);border-radius:20px;background:var(--panel);box-shadow:0 24px 90px #0007;animation:commandIn .16s ease-out}
+@keyframes commandIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.command-search{display:flex;align-items:center;gap:12px;padding:17px 18px;border-bottom:1px solid var(--line)}
+.command-search i{color:var(--accent);flex:none}
+.command-search input{min-width:0;width:100%;border:0;outline:0;background:transparent;color:var(--text);font:inherit;font-size:16px}
+.command-search input::placeholder{color:var(--muted)}
+.command-results{padding:8px;overflow:auto;max-height:calc(76vh - 132px)}
+.command-group-label{padding:9px 10px 5px;color:var(--muted);font-size:11px;letter-spacing:.04em}
+.command-result{width:100%;display:flex;align-items:center;gap:12px;text-align:right;padding:11px 12px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--text);cursor:pointer;font:inherit}
+.command-result:hover,.command-result:focus-visible{outline:none;background:color-mix(in srgb,var(--accent) 13%,transparent);border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
+.command-result-icon{width:38px;height:38px;display:grid;place-items:center;flex:none;border-radius:11px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.command-result-copy{flex:1;min-width:0}.command-result-copy strong{display:block;font-size:13px}.command-result-copy small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.command-kind{font-size:10px;color:var(--muted);border:1px solid var(--line);padding:3px 7px;border-radius:7px}
+.command-empty{padding:28px 12px;text-align:center;color:var(--muted)}
+.command-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
+.command-footer kbd{padding:2px 5px;border:1px solid var(--line);border-radius:5px}
+@media(max-width:600px){.command-launcher{right:12px;bottom:76px}.command-launcher kbd{display:none}.command-overlay{padding:8vh 10px 16px}.command-box{border-radius:16px}.command-result{padding:10px}.command-results{max-height:68vh}}
+
 </style></head>
 <body><div class="layout"><aside class="side"><div class="brand"><div class="logo"><i data-lucide="orbit"></i></div><div><b>NEXUS</b><small style="display:block">PERSONAL OS</small></div></div><div class="navlabel">WORKSPACE</div><nav class="nav" id="nav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>داشبورد</button><button data-page="ai"><i data-lucide="sparkles"></i>AI Hub</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>پروفایل</button><button data-page="achievements"><i data-lucide="trophy"></i>دستاوردها</button><button data-page="leaderboard"><i data-lucide="medal"></i>جدول برترین‌ها</button><button data-page="friends"><i data-lucide="swords"></i>چالش دوستانه</button><button data-page="chat"><i data-lucide="messages-square"></i>گروه چت</button><button data-page="settings"><i data-lucide="settings-2"></i>تنظیمات</button><button data-page="admin" id="adminNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>پنل مدیریت</button></nav><div class="sidebottom"><div class="user"><div class="avatar" id="avatar">N</div><div><b id="sideName">Nexus User</b><small id="sideLevel">Level 1 · Explorer</small></div></div></div></aside>
 <main class="main"><header class="top"><div><h2 id="pageTitle">مرکز فرماندهی شخصی</h2><p>مرکز فرماندهی دیجیتال تو؛ سریع‌تر کار کن، بازی کن و پیشرفتت را بساز.</p></div><div class="top-actions"><button class="iconbtn" id="searchBtn" aria-label="جستجو" title="جستجو (Ctrl+K)"><i data-lucide="search"></i></button><button class="iconbtn" id="themeBtn" aria-label="تغییر پوسته"><i data-lucide="sun-moon"></i></button><button class="iconbtn" id="paletteBtn" aria-label="انتخاب رنگ قالب" title="انتخاب رنگ قالب"><i data-lucide="palette"></i></button><div class="palette-menu" id="paletteMenu" hidden><strong>رنگ قالب سایت</strong><div class="swatches"><button class="swatch" style="background:#9b7cff" data-accent="#9b7cff" aria-label="بنفش" aria-pressed="true"></button><button class="swatch" style="background:#3b82f6" data-accent="#3b82f6" aria-label="آبی" aria-pressed="false"></button><button class="swatch" style="background:#10b981" data-accent="#10b981" aria-label="سبز" aria-pressed="false"></button><button class="swatch" style="background:#ec4899" data-accent="#ec4899" aria-label="صورتی" aria-pressed="false"></button><button class="swatch" style="background:#f97316" data-accent="#f97316" aria-label="نارنجی" aria-pressed="false"></button><button class="swatch" style="background:#ef4444" data-accent="#ef4444" aria-label="قرمز" aria-pressed="false"></button><button class="swatch" style="background:#06b6d4" data-accent="#06b6d4" aria-label="فیروزه‌ای" aria-pressed="false"></button><button class="swatch" style="background:#eab308" data-accent="#eab308" aria-label="زرد" aria-pressed="false"></button></div><label class="custom-color">انتخاب رنگ دلخواه<input id="customAccent" type="color" value="#9b7cff" aria-label="انتخاب رنگ دلخواه"></label></div><button class="btn primary wide" data-go="tools"><i data-lucide="plus"></i>شروع سریع</button></div></header>
@@ -279,7 +303,14 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
 </section>
 <section class="page" id="page-settings"><span class="eyebrow">PREFERENCES</span><h1>تنظیمات</h1><p class="muted">شخصی‌سازی تجربه NEXUS</p><div class="panel profileform"><div class="listrow"><span><b>حالت نمایش</b><small>روشن یا تاریک</small></span><button class="btn" id="themeSetting">تغییر پوسته</button></div><div class="listrow"><span><b>ذخیره‌سازی محلی</b><small>اطلاعات روی همین مرورگر باقی می‌ماند.</small></span><i data-lucide="database"></i></div><div class="listrow"><span><b>بازنشانی پیشرفت</b><small>امتیازها و فعالیت‌های ذخیره‌شده حذف می‌شوند.</small></span><button class="btn" id="resetBtn">بازنشانی</button></div><p class="empty">دسترسی‌پذیری: قابل استفاده با صفحه‌کلید، اندازه‌پذیر برای موبایل و پشتیبانی از کاهش حرکت.</p></div></section>
 <section class="page admin-page" id="page-admin" hidden><span class="eyebrow">NEXUS / ADMIN CONTROL</span><h1>پنل مدیریت سایت</h1><p class="muted">مدیریت ظاهری و رنگ‌بندی بخش‌های سایت روی همین مرورگر.</p><div class="panel admin-warning"><i data-lucide="shield-alert"></i><span><b>توجه امنیتی</b><small>این پنل فقط یک قابلیت نمایشی سمت مرورگر است؛ نام admin123admin احراز هویت امن نیست و برای مدیریت واقعی یا داده‌های حساس باید ورود امن سمت سرور اضافه شود.</small></span></div><div class="panel profileform"><h2>رنگ‌بندی اختصاصی بخش‌ها</h2><p class="empty">برای هر بخش رنگ تأکیدی و رنگ پس‌زمینه جداگانه انتخاب کن. تغییرات روی همین مرورگر ذخیره می‌شوند.</p><div id="sectionColorControls" class="section-color-grid"></div><div class="actions"><button class="btn" id="resetSectionColors">بازگردانی رنگ‌های بخش‌ها</button><button class="btn primary" id="saveSectionColors">ذخیره رنگ‌بندی</button></div></div></section>
-</main></div><div class="site-version" aria-label="نسخه سایت">NEXUS v1.0.6</div>
+</main></div><button class="btn primary command-launcher" id="commandLauncher" type="button" aria-haspopup="dialog" aria-controls="commandOverlay"><i data-lucide="command"></i><span>لانچر سریع</span><kbd>Ctrl K</kbd></button>
+<div class="command-overlay" id="commandOverlay" role="dialog" aria-modal="true" aria-label="لانچر سریع NEXUS">
+ <div class="command-box">
+  <div class="command-search"><i data-lucide="search"></i><input id="commandSearch" type="search" autocomplete="off" placeholder="جست‌وجوی صفحه، ابزار یا بازی..." aria-label="جست‌وجو در NEXUS"><button class="btn" id="commandClose" type="button" aria-label="بستن لانچر"><i data-lucide="x"></i></button></div>
+  <div class="command-results" id="commandResults"></div>
+  <div class="command-footer"><span>برای اجرا روی نتیجه بزن</span><span><kbd>ESC</kbd> بستن · <kbd>Ctrl K</kbd> بازکردن</span></div>
+ </div>
+</div><div class="site-version" aria-label="نسخه سایت">NEXUS v1.1.0</div>
 <nav class="mobilebar" id="mobileNav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>خانه</button><button data-page="friends"><i data-lucide="swords"></i>چالش</button><button data-page="chat"><i data-lucide="messages-square"></i>چت</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="ai"><i data-lucide="sparkles"></i>AI</button><button data-page="leaderboard"><i data-lucide="medal"></i>رتبه‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>پروفایل</button><button data-page="admin" id="adminMobileNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>مدیریت</button></nav><div id="toast" class="toast" hidden role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
@@ -627,4 +658,63 @@ $('#saveSectionColors').onclick=()=>{applySectionColorsFromControls(true);toast(
 $('#resetSectionColors').onclick=()=>{state.sectionColors={};renderSectionColorControls();applySectionColors();save();toast('رنگ‌بندی بخش‌ها بازنشانی شد')};
 $('#dailyMissionBtn').onclick=()=>{go('games');toast('چالش شروع شد؛ یک بازی انتخاب کن و رکورد بزن!')};
 updateMinecraftTheme();updateAdminAccess();renderSectionColorControls();applySectionColors();document.documentElement.dataset.theme=state.theme;document.documentElement.style.setProperty('--accent',state.accent||'#9b7cff');renderStats();renderActivity();if(location.hash.slice(1)&&$('#page-'+location.hash.slice(1)))go(location.hash.slice(1));icons();
+
+/* NEXUS v1.1.0 · Quick launcher */
+(function initNexusLauncher(){
+ const overlay=$('#commandOverlay'),input=$('#commandSearch'),results=$('#commandResults'),launcher=$('#commandLauncher');
+ if(!overlay||!input||!results||!launcher)return;
+ let activeIndex=0,filtered=[];
+ const pageItems=[
+  ['dashboard','خانه و داشبورد','layout-dashboard'],['ai','مرکز هوش مصنوعی','sparkles'],['tools','ابزارها','wrench'],
+  ['games','بازی‌ها','gamepad-2'],['profile','پروفایل کاربری','user-round'],['achievements','دستاوردها','trophy'],
+  ['leaderboard','جدول برترین‌ها','medal'],['friends','چالش دوستانه','swords'],['chat','گروه چت','messages-square'],
+  ['settings','تنظیمات','settings'],['admin','پنل مدیریت','shield-check']
+ ];
+ function collect(q){
+  const term=q.trim().toLocaleLowerCase('fa');
+  const rows=[];
+  pageItems.forEach(x=>{if((x[1]+' '+x[0]).toLocaleLowerCase('fa').includes(term))rows.push({type:'page',id:x[0],title:x[1],desc:'رفتن به صفحه',icon:x[2],kind:'صفحه'})});
+  (Array.isArray(tools)?tools:[]).forEach(x=>{if((x[1]+' '+x[2]+' '+x[0]).toLocaleLowerCase('fa').includes(term))rows.push({type:'tool',id:x[0],title:x[1],desc:x[2],icon:x[3]||'wrench',kind:'ابزار'})});
+  (Array.isArray(games)?games:[]).forEach(x=>{if((x[1]+' '+x[2]+' '+x[0]).toLocaleLowerCase('fa').includes(term))rows.push({type:'game',id:x[0],title:x[1],desc:x[2],icon:x[3]||'gamepad-2',kind:'بازی'})});
+  return rows.slice(0,35);
+ }
+ function render(){
+  filtered=collect(input.value);activeIndex=Math.min(activeIndex,Math.max(0,filtered.length-1));
+  if(!filtered.length){results.innerHTML='<div class="command-empty">چیزی پیدا نشد؛ عبارت دیگری امتحان کن 🔎</div>';return}
+  let html='',last='';
+  filtered.forEach((x,i)=>{
+   if(x.kind!==last){html+='<div class="command-group-label">'+x.kind+'‌ها</div>';last=x.kind}
+   html+='<button type="button" class="command-result" data-command-index="'+i+'"><span class="command-result-icon"><i data-lucide="'+x.icon+'"></i></span><span class="command-result-copy"><strong>'+x.title+'</strong><small>'+x.desc+'</small></span><span class="command-kind">'+x.kind+'</span></button>';
+  });
+  results.innerHTML=html;
+  results.querySelectorAll('[data-command-index]').forEach(b=>b.addEventListener('click',()=>run(+b.dataset.commandIndex)));
+  icons();
+ }
+ function open(){
+  overlay.classList.add('open');input.value='';render();document.body.style.overflow='hidden';
+  setTimeout(()=>input.focus(),30);
+ }
+ function close(){
+  overlay.classList.remove('open');document.body.style.overflow='';launcher.focus();
+ }
+ function run(i){
+  const x=filtered[i];if(!x)return;close();
+  if(x.type==='page'){go(x.id);return}
+  if(x.type==='tool'){go('tools');openTool(x.id);return}
+  if(x.type==='game'){go('games');openGame(x.id);return}
+ }
+ launcher.addEventListener('click',open);
+ $('#commandClose').addEventListener('click',close);
+ input.addEventListener('input',()=>{activeIndex=0;render()});
+ overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+ document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();overlay.classList.contains('open')?close():open();return}
+  if(!overlay.classList.contains('open'))return;
+  if(e.key==='Escape'){e.preventDefault();close()}
+  else if(e.key==='ArrowDown'){e.preventDefault();activeIndex=Math.min(activeIndex+1,filtered.length-1);const b=results.querySelector('[data-command-index="'+activeIndex+'"]');b?.scrollIntoView({block:'nearest'});results.querySelectorAll('.command-result').forEach((el,j)=>el.style.background=j===activeIndex?'color-mix(in srgb,var(--accent) 13%,transparent)':'')}
+  else if(e.key==='ArrowUp'){e.preventDefault();activeIndex=Math.max(0,activeIndex-1);const b=results.querySelector('[data-command-index="'+activeIndex+'"]');b?.scrollIntoView({block:'nearest'});results.querySelectorAll('.command-result').forEach((el,j)=>el.style.background=j===activeIndex?'color-mix(in srgb,var(--accent) 13%,transparent)':'')}
+  else if(e.key==='Enter'){e.preventDefault();run(activeIndex)}
+ });
+})();
+
 </script></body></html>
