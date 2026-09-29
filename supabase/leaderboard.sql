@@ -12,8 +12,7 @@ create table if not exists public.nexus_activity_events (
  activity_key text not null,
  points integer not null check (points between 1 and 100),
  event_date date not null default (timezone('utc', now()))::date,
- created_at timestamptz not null default now(),
-
+ created_at timestamptz not null default now()
 );
 create index if not exists nexus_profiles_rank_idx on public.nexus_profiles(total_xp desc, updated_at asc);
 alter table public.nexus_profiles enable row level security;
