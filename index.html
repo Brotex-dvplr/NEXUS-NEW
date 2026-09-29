@@ -180,7 +180,7 @@ html[data-minecraft="true"] .cardicon{background:#55b83b30;color:#9be564}
 html[data-minecraft="true"] .progress span{background:linear-gradient(90deg,#39852c,#9be564)}
 html[data-minecraft="true"] .site-version{color:#e6d8b8}
 
-/* NEXUS v1.4.2 · Account avatar editor */
+/* NEXUS v1.4.3 · Account avatar editor */
 .nexus-avatar-editor{display:flex;align-items:center;gap:18px;padding:16px;border:1px solid var(--line);background:var(--panel2);border-radius:18px;margin:8px 0 14px}
 .nexus-avatar-preview{width:104px;height:104px;flex:none;display:grid;place-items:center;overflow:hidden;border-radius:50%;border:3px solid var(--accent);background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 35%,var(--panel)),var(--panel));color:var(--text);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 12%,transparent)}
 .nexus-avatar-preview img{width:100%;height:100%;object-fit:cover}
@@ -190,7 +190,7 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
 .nexus-avatar-controls label{margin:0;cursor:pointer}
  .visually-hidden-file{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 @media(max-width:520px){.nexus-avatar-editor{align-items:flex-start;flex-direction:column}.nexus-avatar-preview{width:88px;height:88px}}
-/* NEXUS v1.4.2 · Universal quick launcher */
+/* NEXUS v1.4.3 · Universal quick launcher */
 .command-launcher{position:fixed;right:18px;bottom:18px;z-index:80;display:flex;align-items:center;gap:8px;box-shadow:0 10px 34px #0004}
 .command-launcher kbd{font:inherit;font-size:10px;padding:2px 5px;border:1px solid currentColor;border-radius:5px;opacity:.75}
 .command-overlay{position:fixed;inset:0;z-index:1000;background:#080a12b8;backdrop-filter:blur(10px);display:none;align-items:flex-start;justify-content:center;padding:12vh 16px 24px}
@@ -334,7 +334,7 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
   <div class="command-results" id="commandResults"></div>
   <div class="command-footer"><span>برای اجرا روی نتیجه بزن</span><span><kbd>ESC</kbd> بستن · <kbd>Ctrl K</kbd> بازکردن</span></div>
  </div>
-</div><div class="site-version" aria-label="نسخه سایت">NEXUS v1.4.2</div>
+</div><div class="site-version" aria-label="نسخه سایت">NEXUS v1.4.3</div>
 <nav class="mobilebar" id="mobileNav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>خانه</button><button data-page="friends"><i data-lucide="swords"></i>چالش</button><button data-page="chat"><i data-lucide="messages-square"></i>چت</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="ai"><i data-lucide="sparkles"></i>AI</button><button data-page="leaderboard"><i data-lucide="medal"></i>رتبه‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="admin" id="adminMobileNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>مدیریت</button></nav><div id="toast" class="toast" hidden role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
@@ -683,7 +683,7 @@ $('#resetSectionColors').onclick=()=>{state.sectionColors={};renderSectionColorC
 $('#dailyMissionBtn').onclick=()=>{go('games');toast('چالش شروع شد؛ یک بازی انتخاب کن و رکورد بزن!')};
 updateMinecraftTheme();updateAdminAccess();renderSectionColorControls();applySectionColors();document.documentElement.dataset.theme=state.theme;document.documentElement.style.setProperty('--accent',state.accent||'#9b7cff');renderStats();renderActivity();if(location.hash.slice(1)&&$('#page-'+location.hash.slice(1)))go(location.hash.slice(1));icons();
 
-/* NEXUS v1.4.2 · Quick launcher */
+/* NEXUS v1.4.3 · Quick launcher */
 (function initNexusLauncher(){
  const overlay=$('#commandOverlay'),input=$('#commandSearch'),results=$('#commandResults'),launcher=$('#commandLauncher');
  if(!overlay||!input||!results||!launcher)return;
