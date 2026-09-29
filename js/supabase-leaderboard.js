@@ -1,4 +1,4 @@
-/* NEXUS v1.4.3 · Supabase auth, avatars and leaderboard photos. */
+/* NEXUS v1.5.0 · Supabase auth, avatars and leaderboard photos. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -16,7 +16,7 @@
 
   async function profile(user) {
     const { data, error } = await client.from('nexus_profiles')
-      .select('user_id,display_name,total_xp').eq('user_id', user.id).maybeSingle();
+      .select('user_id,display_name,total_xp,avatar_url').eq('user_id', user.id).maybeSingle();
     if (error) throw error;
     return data;
   }
@@ -35,35 +35,29 @@
   }
   function renderAvatar(url) {
     const host = $('sbAvatarPreview');
-    if (!host) return;
-    host.innerHTML = url
-      ? '<img src="' + esc(url) + '" alt="عکس پروفایل" referrerpolicy="no-referrer">'
-      : '<i data-lucide="user-round"></i>';
-    if (window.lucide) window.lucide.createIcons({ root: host });
-  }
-  async function uploadAvatar(file) {
-    if (!client || !window.NEXUS_SUPABASE_USER) throw new Error('ابتدا وارد حساب شو.');
-    if (!file) return;
-    if (!['image/jpeg','image/png','image/webp'].includes(file.type)) throw new Error('فقط عکس JPG، PNG یا WebP مجاز است.');
-    if (file.size > 2 * 1024 * 1024) throw new Error('حجم عکس باید حداکثر ۲ مگابایت باشد.');
-    const user = window.NEXUS_SUPABASE_USER;
-    const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg';
-    const path = user.id + '/avatar-' + Date.now() + '.' + ext;
-    status('در حال بارگذاری عکس…');
-    const { error: uploadError } = await client.storage.from('avatars').upload(path, file, {
-      cacheControl: '3600', upsert: true, contentType: file.type
+    if (host) {
+      host.innerHTML = url
+        ? '<img src="' + esc(url) + '" alt="آواتار پروفایل" referrerpolicy="no-referrer">'
+        : '<i data-lucide="user-round"></i>';
+      if (window.lucide) window.lucide.createIcons({ root: host });
+    }
+    document.querySelectorAll('[data-avatar-url]').forEach(button => {
+      button.setAttribute('aria-pressed', button.dataset.avatarUrl === (url || '') ? 'true' : 'false');
     });
-    if (uploadError) throw uploadError;
-    const { data } = client.storage.from('avatars').getPublicUrl(path);
-    const url = data?.publicUrl;
-    if (!url) throw new Error('لینک عکس ساخته نشد.');
+  }
+  async function selectAvatar(url) {
+    const user = window.NEXUS_SUPABASE_USER;
+    if (!client || !user) throw new Error('ابتدا وارد حساب شو.');
+    if (!url || !url.startsWith('https://api.dicebear.com/9.x/')) throw new Error('آواتار انتخاب‌شده معتبر نیست.');
+    status('در حال ذخیره آواتار…');
     const { error: profileError } = await client.from('nexus_profiles')
       .update({ avatar_url: url }).eq('user_id', user.id);
     if (profileError) throw profileError;
     const { error: metaError } = await client.auth.updateUser({ data: { avatar_url: url } });
     if (metaError) throw metaError;
     renderAvatar(url);
-    status('عکس پروفایل ذخیره شد! 💜');
+    await renderLeaderboard();
+    status('آواتار جدید ذخیره شد! 🎮');
   }
   async function removeAvatar() {
     if (!window.NEXUS_SUPABASE_USER) throw new Error('ابتدا وارد حساب شو.');
@@ -74,20 +68,35 @@
     const { error } = await client.auth.updateUser({ data: { avatar_url: null } });
     if (error) throw error;
     renderAvatar('');
-    status('عکس پروفایل حذف شد.');
+    await renderLeaderboard();
+    status('آواتار پیش‌فرض فعال شد.');
   }
   async function renderLeaderboard() {
     if (!client || (!$('sbLeaderboardRows') && !$('homeLeaderboardRows'))) return;
     const { data, error } = await client.from('nexus_leaderboard')
       .select('rank,user_id,display_name,total_xp').order('rank', { ascending: true }).limit(3);
     if (error) { status('خطا در دریافت رتبه‌ها: ' + error.message, true); return; }
+    let avatarByUser = {};
+    try {
+      const ids = (data || []).map(r => r.user_id).filter(Boolean);
+      if (ids.length) {
+        const { data: profiles, error: avatarError } = await client.from('nexus_profiles')
+          .select('user_id,avatar_url').in('user_id', ids);
+        if (!avatarError) (profiles || []).forEach(p => { avatarByUser[p.user_id] = p.avatar_url || ''; });
+      }
+    } catch (_) {}
     const rowsHtml = !data?.length
       ? '<p class="empty">هنوز کسی در لیدربورد ثبت نشده است. اولین نفر باش! 🚀</p>'
-      : data.map(r => '<div class="listrow"><div class="avatar">' +
-        '<i data-lucide="user-round" aria-hidden="true"></i>' +
-        '</div><span><b>' + esc(r.display_name) + '</b><small>' +
-        (Number(r.rank) === 1 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
-        '</small></span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>').join('');
+      : data.map(r => {
+        const avatarUrl = avatarByUser[r.user_id] || '';
+        const avatarHtml = avatarUrl
+          ? '<img src="' + esc(avatarUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
+          : '<i data-lucide="user-round" aria-hidden="true"></i>';
+        return '<div class="listrow"><div class="avatar">' + avatarHtml +
+          '</div><span><b>' + esc(r.display_name) + '</b><small>' +
+          (Number(r.rank) === 1 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
+          '</small></span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>';
+      }).join('');
     if ($('sbLeaderboardRows')) $('sbLeaderboardRows').innerHTML = rowsHtml;
     if ($('homeLeaderboardRows')) $('homeLeaderboardRows').innerHTML = rowsHtml;
     if (window.lucide) {
@@ -102,12 +111,11 @@
     catch (e) { status('پروفایل بارگذاری نشد: ' + e.message, true); }
   }
   function bind() {
-    $('sbAvatarFile')?.addEventListener('change', async e => {
-      const file = e.target.files?.[0];
-      e.target.value = '';
-      if (!file) return;
-      try { await uploadAvatar(file); }
-      catch (err) { status('ذخیره عکس ناموفق: ' + err.message + ' — بررسی کن که در Supabase یک Public Storage bucket با نام avatars ساخته شده باشد.', true); }
+    $('sbAvatarPicker')?.addEventListener('click', async e => {
+      const button = e.target.closest('[data-avatar-url]');
+      if (!button) return;
+      try { await selectAvatar(button.dataset.avatarUrl); }
+      catch (err) { status('ذخیره آواتار ناموفق: ' + err.message, true); }
     });
     $('sbAvatarRemove')?.addEventListener('click', async () => {
       try { await removeAvatar(); }
