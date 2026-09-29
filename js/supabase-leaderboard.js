@@ -1,4 +1,4 @@
-/* NEXUS v1.3.0 · Supabase auth and account avatars. */
+/* NEXUS v1.3.1 · Supabase auth and account avatars. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
