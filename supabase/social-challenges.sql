@@ -75,7 +75,7 @@ begin
   if uid is null then raise exception 'Authentication required' using errcode = '28000'; end if;
   select c.* into challenge_row
   from public.nexus_challenges c
-  where c.invite_code = pg_catalog.lower(pg_catalog.trim(p_invite_code))
+  where c.invite_code = pg_catalog.lower(pg_catalog.btrim(p_invite_code))
   for update;
   if not found then raise exception 'Invite link not found' using errcode = 'P0002'; end if;
   if challenge_row.creator_id = uid then raise exception 'You cannot accept your own challenge' using errcode = '22023'; end if;
@@ -128,8 +128,8 @@ begin
   end if;
   select p.total_xp into creator_xp from public.nexus_profiles p where p.user_id = c.creator_id;
   select p.total_xp into opponent_xp from public.nexus_profiles p where p.user_id = c.opponent_id;
-  creator_gain := pg_catalog.greatest(coalesce(creator_xp, 0) - c.creator_start_xp, 0);
-  opponent_gain := pg_catalog.greatest(coalesce(opponent_xp, 0) - coalesce(c.opponent_start_xp, 0), 0);
+  creator_gain := greatest(coalesce(creator_xp, 0) - c.creator_start_xp, 0);
+  opponent_gain := greatest(coalesce(opponent_xp, 0) - coalesce(c.opponent_start_xp, 0), 0);
   if creator_gain > opponent_gain then winner := c.creator_id;
   elsif opponent_gain > creator_gain then winner := c.opponent_id;
   end if;
