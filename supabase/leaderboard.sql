@@ -53,6 +53,8 @@ begin
   when 'daily_mission' then 20 when 'tool_calculator' then 3 when 'tool_json' then 3
   when 'tool_password' then 3 when 'tool_unit' then 2 when 'game_snake' then 5
   when 'game_memory_win' then 20 when 'game_ttt_win' then 10 when 'game_reaction' then 5
+  when 'game_2048_win' then 30 when 'game_clicker' then 5 when 'game_whack' then 5
+  when 'game_c4_win' then 20 when 'game_rps_win' then 5 when 'game_guess_win' then 15 when 'game_hangman_win' then 15
   else null end;
  if pts is null then raise exception 'Unknown activity' using errcode = '22023'; end if;
  insert into public.nexus_profiles(user_id,display_name) values(uid,'Nexus Explorer') on conflict(user_id) do nothing;
