@@ -136,6 +136,49 @@ html,body{max-width:100%;overflow-x:clip}
 
 .site-version{position:fixed;left:8px;bottom:5px;z-index:30;font:400 9px/1.2 Vazirmatn,sans-serif;color:var(--muted);opacity:.62;pointer-events:none;user-select:none;padding:2px 5px;border-radius:5px;background:color-mix(in srgb,var(--bg) 72%,transparent)}
 @media(max-width:600px){.site-version{bottom:68px;left:5px;font-size:8px}}
+
+/* Hidden Minecraft Easter egg theme */
+html[data-minecraft="true"]{
+  --bg:#493522;--panel:#30291f;--panel2:#3c3325;--text:#f5f0df;
+  --muted:#c7b99b;--line:#6b5637;--accent:#55b83b;--cyan:#9be564;
+  --shadow:0 10px 0 #2a2118,0 14px 28px #160f0b66;
+}
+html[data-minecraft="true"] body{
+  background:linear-gradient(to bottom,#39852c 0%,#4b9b32 24%,#684329 24%,#49301f 100%) fixed;
+}
+html[data-minecraft="true"] .side,
+html[data-minecraft="true"] .mobilebar{
+  background:color-mix(in srgb,#2f281e 94%,transparent);
+  border-color:#6b5637;
+}
+html[data-minecraft="true"] .logo,
+html[data-minecraft="true"] .btn.primary{
+  background:linear-gradient(180deg,#65c846 0%,#39852c 48%,#684329 49%,#49301f 100%);
+  border:2px solid #8d744b;color:#fffbe8;border-radius:5px;
+  box-shadow:inset 0 2px #ffffff30,0 3px #21190f;
+}
+html[data-minecraft="true"] .card,
+html[data-minecraft="true"] .panel,
+html[data-minecraft="true"] .stat,
+html[data-minecraft="true"] .field,
+html[data-minecraft="true"] .hero,
+html[data-minecraft="true"] .user{
+  border-radius:5px;border-color:#76603d;
+}
+html[data-minecraft="true"] .hero{
+  background:linear-gradient(180deg,#39852c 0%,#2e7024 28%,#49301f 28%,#30291f 100%);
+  border:2px solid #8d744b;
+}
+html[data-minecraft="true"] .eyebrow,
+html[data-minecraft="true"] .tag{color:#a8f078}
+html[data-minecraft="true"] .nav button.active,
+html[data-minecraft="true"] .nav button:hover{
+  background:#4c7830;border-color:#8d744b;
+}
+html[data-minecraft="true"] .nav button.active{box-shadow:inset -3px 0 #8fe35b}
+html[data-minecraft="true"] .cardicon{background:#55b83b30;color:#9be564}
+html[data-minecraft="true"] .progress span{background:linear-gradient(90deg,#39852c,#9be564)}
+html[data-minecraft="true"] .site-version{color:#e6d8b8}
 </style></head>
 <body><div class="layout"><aside class="side"><div class="brand"><div class="logo"><i data-lucide="orbit"></i></div><div><b>NEXUS</b><small style="display:block">PERSONAL OS</small></div></div><div class="navlabel">WORKSPACE</div><nav class="nav" id="nav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>داشبورد</button><button data-page="ai"><i data-lucide="sparkles"></i>AI Hub</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>پروفایل</button><button data-page="achievements"><i data-lucide="trophy"></i>دستاوردها</button><button data-page="leaderboard"><i data-lucide="medal"></i>جدول برترین‌ها</button><button data-page="friends"><i data-lucide="swords"></i>چالش دوستانه</button><button data-page="chat"><i data-lucide="messages-square"></i>گروه چت</button><button data-page="settings"><i data-lucide="settings-2"></i>تنظیمات</button><button data-page="admin" id="adminNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>پنل مدیریت</button></nav><div class="sidebottom"><div class="user"><div class="avatar" id="avatar">N</div><div><b id="sideName">Nexus User</b><small id="sideLevel">Level 1 · Explorer</small></div></div></div></aside>
 <main class="main"><header class="top"><div><h2 id="pageTitle">مرکز فرماندهی شخصی</h2><p>مرکز فرماندهی دیجیتال تو؛ سریع‌تر کار کن، بازی کن و پیشرفتت را بساز.</p></div><div class="top-actions"><button class="iconbtn" id="searchBtn" aria-label="جستجو" title="جستجو (Ctrl+K)"><i data-lucide="search"></i></button><button class="iconbtn" id="themeBtn" aria-label="تغییر پوسته"><i data-lucide="sun-moon"></i></button><button class="iconbtn" id="paletteBtn" aria-label="انتخاب رنگ قالب" title="انتخاب رنگ قالب"><i data-lucide="palette"></i></button><div class="palette-menu" id="paletteMenu" hidden><strong>رنگ قالب سایت</strong><div class="swatches"><button class="swatch" style="background:#9b7cff" data-accent="#9b7cff" aria-label="بنفش" aria-pressed="true"></button><button class="swatch" style="background:#3b82f6" data-accent="#3b82f6" aria-label="آبی" aria-pressed="false"></button><button class="swatch" style="background:#10b981" data-accent="#10b981" aria-label="سبز" aria-pressed="false"></button><button class="swatch" style="background:#ec4899" data-accent="#ec4899" aria-label="صورتی" aria-pressed="false"></button><button class="swatch" style="background:#f97316" data-accent="#f97316" aria-label="نارنجی" aria-pressed="false"></button><button class="swatch" style="background:#ef4444" data-accent="#ef4444" aria-label="قرمز" aria-pressed="false"></button><button class="swatch" style="background:#06b6d4" data-accent="#06b6d4" aria-label="فیروزه‌ای" aria-pressed="false"></button><button class="swatch" style="background:#eab308" data-accent="#eab308" aria-label="زرد" aria-pressed="false"></button></div><label class="custom-color">انتخاب رنگ دلخواه<input id="customAccent" type="color" value="#9b7cff" aria-label="انتخاب رنگ دلخواه"></label></div><button class="btn primary wide" data-go="tools"><i data-lucide="plus"></i>شروع سریع</button></div></header>
@@ -562,8 +605,9 @@ const ach=[['first','اولین قدم','اولین ابزار یا بازی ر�
 function renderAchievements(){$('#achGrid').innerHTML=ach.map(a=>'<article class="card"><div class="cardicon"><i data-lucide="'+a[3]+'"></i></div><h3>'+a[1]+'</h3><p>'+a[2]+'</p><span class="tag">'+(state.achievements.includes(a[0])?'باز شده':'قفل')+'</span></article>').join('');icons()}
 function isAdminName(name){return String(name||'').trim()==='admin123admin'}
 function updateAdminAccess(){const show=isAdminName(state.name);['#adminNav','#adminMobileNav'].forEach(sel=>{const el=$(sel);if(el)el.hidden=!show});if(!show&&location.hash==='#admin')go('dashboard')}
-$('#saveProfile').onclick=()=>{state.name=$('#nameInput').value.trim()||'Nexus User';state.bio=$('#bioInput').value;save();updateAdminAccess();toast('پروفایل ذخیره شد');if(isAdminName(state.name)){go('admin');toast('پنل مدیریت ظاهری باز شد')}};
+$('#saveProfile').onclick=()=>{state.name=$('#nameInput').value.trim()||'Nexus User';state.bio=$('#bioInput').value;updateMinecraftTheme();save();updateAdminAccess();toast(state.name.trim().toLowerCase()==='minecraft'?'تم مخفی Minecraft فعال شد! ⛏️':'پروفایل ذخیره شد');if(isAdminName(state.name)){go('admin');toast('پنل مدیریت ظاهری باز شد')}};
 $('#themeBtn').onclick=$('#themeSetting').onclick=()=>{state.theme=state.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=state.theme;save();icons()};
+function updateMinecraftTheme(){document.documentElement.dataset.minecraft=String(String(state.name||'').trim().toLowerCase()==='minecraft')}
 function setAccent(color){if(!/^#[0-9a-fA-F]{6}$/.test(color))return;state.accent=color;document.documentElement.style.setProperty('--accent',color);$('#customAccent').value=color;$$('[data-accent]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.accent.toLowerCase()===color.toLowerCase())));save()}
 $('#paletteBtn').onclick=()=>{$('#paletteMenu').hidden=!$('#paletteMenu').hidden};
 $$('[data-accent]').forEach(b=>b.onclick=()=>{setAccent(b.dataset.accent);toast('رنگ قالب تغییر کرد')});
@@ -581,5 +625,5 @@ function applySectionColors(){Object.keys(sectionLabels).forEach(id=>{const page
 $('#saveSectionColors').onclick=()=>{applySectionColorsFromControls(true);toast('رنگ‌بندی بخش‌ها ذخیره شد')};
 $('#resetSectionColors').onclick=()=>{state.sectionColors={};renderSectionColorControls();applySectionColors();save();toast('رنگ‌بندی بخش‌ها بازنشانی شد')};
 $('#dailyMissionBtn').onclick=()=>{go('games');toast('چالش شروع شد؛ یک بازی انتخاب کن و رکورد بزن!')};
-updateAdminAccess();renderSectionColorControls();applySectionColors();document.documentElement.dataset.theme=state.theme;document.documentElement.style.setProperty('--accent',state.accent||'#9b7cff');renderStats();renderActivity();if(location.hash.slice(1)&&$('#page-'+location.hash.slice(1)))go(location.hash.slice(1));icons();
+updateMinecraftTheme();updateAdminAccess();renderSectionColorControls();applySectionColors();document.documentElement.dataset.theme=state.theme;document.documentElement.style.setProperty('--accent',state.accent||'#9b7cff');renderStats();renderActivity();if(location.hash.slice(1)&&$('#page-'+location.hash.slice(1)))go(location.hash.slice(1));icons();
 </script></body></html>
