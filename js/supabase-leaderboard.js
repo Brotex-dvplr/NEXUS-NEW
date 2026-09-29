@@ -1,4 +1,4 @@
-/* NEXUS v1.4.1 · Supabase auth, avatars and leaderboard photos. */
+/* NEXUS v1.4.2 · Supabase auth, avatars and leaderboard photos. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -85,12 +85,16 @@
       : data.map(r => '<div class="listrow"><div class="avatar">' +
         (r.avatar_url
           ? '<img src="' + esc(r.avatar_url) + '" alt="عکس پروفایل" loading="lazy" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:12px">'
-          : (Number(r.rank) <= 3 ? ['🥇','🥈','🥉'][Number(r.rank)-1] : Number(r.rank))) +
+          : '<i data-lucide="user-round" aria-hidden="true"></i>') +
         '</div><span><b>' + esc(r.display_name) + '</b><small>' +
         (Number(r.rank) === 1 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
         '</small></span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>').join('');
     if ($('sbLeaderboardRows')) $('sbLeaderboardRows').innerHTML = rowsHtml;
     if ($('homeLeaderboardRows')) $('homeLeaderboardRows').innerHTML = rowsHtml;
+    if (window.lucide) {
+      if ($('sbLeaderboardRows')) window.lucide.createIcons({ root: $('sbLeaderboardRows') });
+      if ($('homeLeaderboardRows')) window.lucide.createIcons({ root: $('homeLeaderboardRows') });
+    }
   }
   async function refreshAuth() {
     const { data: { user } } = await client.auth.getUser();
