@@ -1,4 +1,4 @@
-/* NEXUS v1.5.0 · Supabase auth, avatars and leaderboard photos. */
+/* NEXUS v1.6.0 · Supabase auth, avatars and leaderboard photos. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -27,8 +27,10 @@
     if ($('sbDisplayName')) $('sbDisplayName').value = user ? (p?.display_name || user.user_metadata?.display_name || '') : '';
     renderAvatar(p?.avatar_url || user?.user_metadata?.avatar_url || '');
     const fileInput = $('sbAvatarFile');
+    const chooseFileButton = $('sbAvatarChooseFile');
     const removeButton = $('sbAvatarRemove');
     if (fileInput) fileInput.disabled = !user;
+    if (chooseFileButton) chooseFileButton.disabled = !user;
     if (removeButton) removeButton.disabled = !user;
     window.NEXUS_SUPABASE_USER = user || null;
     window.dispatchEvent(new CustomEvent('nexus-auth-change', { detail: { user: user || null } }));
@@ -58,6 +60,35 @@
     renderAvatar(url);
     await renderLeaderboard();
     status('آواتار جدید ذخیره شد! 🎮');
+  }
+  async function uploadAvatar(file) {
+    const user = window.NEXUS_SUPABASE_USER;
+    if (!client || !user) throw new Error('ابتدا وارد حساب شو.');
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      throw new Error('فقط عکس JPG، PNG یا WebP مجاز است.');
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      throw new Error('حجم عکس باید حداکثر ۲ مگابایت باشد.');
+    }
+    const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg';
+    const path = user.id + '/avatar-' + Date.now() + '.' + ext;
+    status('در حال آپلود عکس…');
+    const { error: uploadError } = await client.storage.from('avatars').upload(path, file, {
+      cacheControl: '3600', upsert: false, contentType: file.type
+    });
+    if (uploadError) throw uploadError;
+    const { data } = client.storage.from('avatars').getPublicUrl(path);
+    const url = data?.publicUrl;
+    if (!url) throw new Error('لینک عمومی عکس ساخته نشد؛ تنظیم Public bucket را بررسی کن.');
+    const { error: profileError } = await client.from('nexus_profiles')
+      .update({ avatar_url: url }).eq('user_id', user.id);
+    if (profileError) throw profileError;
+    const { error: metaError } = await client.auth.updateUser({ data: { avatar_url: url } });
+    if (metaError) throw metaError;
+    renderAvatar(url);
+    await renderLeaderboard();
+    status('عکس پروفایل آپلود و ذخیره شد! 🎉');
   }
   async function removeAvatar() {
     if (!window.NEXUS_SUPABASE_USER) throw new Error('ابتدا وارد حساب شو.');
@@ -111,6 +142,20 @@
     catch (e) { status('پروفایل بارگذاری نشد: ' + e.message, true); }
   }
   function bind() {
+    $('sbAvatarChooseFile')?.addEventListener('click', () => {
+      const fileInput = $('sbAvatarFile');
+      if (fileInput && !fileInput.disabled) fileInput.click();
+      else status('برای انتخاب عکس ابتدا وارد حساب شو.', true);
+    });
+    $('sbAvatarFile')?.addEventListener('change', async e => {
+      const file = e.target.files?.[0];
+      e.target.value = '';
+      if (!file) return;
+      try { await uploadAvatar(file); }
+      catch (err) {
+        status('آپلود عکس ناموفق: ' + err.message + ' — Bucket به نام avatars و Policy آپلود را بررسی کن.', true);
+      }
+    });
     $('sbAvatarPicker')?.addEventListener('click', async e => {
       const button = e.target.closest('[data-avatar-url]');
       if (!button) return;
