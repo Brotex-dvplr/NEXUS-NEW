@@ -20,6 +20,10 @@
 .chat-room-compose{display:flex;align-items:flex-end;gap:9px;padding:13px;border-top:1px solid var(--line)}.chat-room-compose textarea{flex:1;resize:vertical;min-height:48px;max-height:150px;line-height:1.7}.chat-room-compose button{min-height:48px;flex:none}.chat-room-hint{font-size:11px;color:var(--muted);padding:0 14px 14px;margin:0;line-height:1.8}
 @media(max-width:600px){.chat-room-head{padding:12px;gap:9px}.chat-room-head .btn{padding:9px}.chat-room-head .btn span{display:none}.chat-room-messages{height:48vh;min-height:280px;padding:11px}.room-message{max-width:95%}.chat-room-compose{padding:10px;gap:7px}.chat-room-compose button span{display:none}.chat-room-compose button{width:48px;padding:0}.chat-room-hint{padding:0 11px 12px}}
 
+
+/* NEXUS chat reporting and secure moderation */
+.chat-report-btn{display:inline-flex;align-items:center;gap:5px;margin-top:8px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:8px;padding:5px 8px;font-size:11px}.chat-report-btn:hover{color:#fca5a5;border-color:#f87171}.chat-moderation{margin:18px 0;border-color:#f59e0b66}.chat-moderation-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.chat-report-list{display:grid;gap:12px;margin-top:14px}.chat-report-card{border:1px solid var(--line);background:var(--panel2);border-radius:14px;padding:14px}.chat-report-card p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}.chat-report-meta{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:11px}.chat-report-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.chat-report-actions .btn{font-size:12px;padding:8px 10px}.chat-report-status{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.8}
+
 /* NEXUS OpenAI chat */
 .chat-shell{border:1px solid var(--line);background:var(--panel);border-radius:20px;overflow:hidden;margin:18px 0 28px;box-shadow:var(--shadow)}
 .chat-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 15%,var(--panel)),var(--panel))}
@@ -218,6 +222,14 @@ html,body{max-width:100%;overflow-x:clip}
 </div>
 </div>
 <p class="empty" id="chatRoomStatus" role="status" aria-live="polite">در حال آماده‌سازی گروه چت…</p>
+<div class="panel chat-moderation" id="chatModerationPanel" hidden>
+  <div class="chat-moderation-head">
+    <div><span class="eyebrow">NEXUS / TRUST & SAFETY</span><h2 style="margin:8px 0 4px">مدیریت گزارش‌های چت</h2><p class="empty" style="margin:0">این بخش فقط برای مدیر ثبت‌شده در دیتابیس نمایش داده می‌شود.</p></div>
+    <button class="btn" id="chatModerationRefresh" type="button"><i data-lucide="refresh-cw"></i> تازه‌سازی گزارش‌ها</button>
+  </div>
+  <p class="chat-report-status" id="chatModerationStatus" role="status" aria-live="polite">در حال بررسی دسترسی مدیر…</p>
+  <div class="chat-report-list" id="chatReportList"></div>
+</div>
 </section>
 <section class="page" id="page-settings"><span class="eyebrow">PREFERENCES</span><h1>تنظیمات</h1><p class="muted">شخصی‌سازی تجربه NEXUS</p><div class="panel profileform"><div class="listrow"><span><b>حالت نمایش</b><small>روشن یا تاریک</small></span><button class="btn" id="themeSetting">تغییر پوسته</button></div><div class="listrow"><span><b>ذخیره‌سازی محلی</b><small>اطلاعات روی همین مرورگر باقی می‌ماند.</small></span><i data-lucide="database"></i></div><div class="listrow"><span><b>بازنشانی پیشرفت</b><small>امتیازها و فعالیت‌های ذخیره‌شده حذف می‌شوند.</small></span><button class="btn" id="resetBtn">بازنشانی</button></div><p class="empty">دسترسی‌پذیری: قابل استفاده با صفحه‌کلید، اندازه‌پذیر برای موبایل و پشتیبانی از کاهش حرکت.</p></div></section>
 <section class="page admin-page" id="page-admin" hidden><span class="eyebrow">NEXUS / ADMIN CONTROL</span><h1>پنل مدیریت سایت</h1><p class="muted">مدیریت ظاهری و رنگ‌بندی بخش‌های سایت روی همین مرورگر.</p><div class="panel admin-warning"><i data-lucide="shield-alert"></i><span><b>توجه امنیتی</b><small>این پنل فقط یک قابلیت نمایشی سمت مرورگر است؛ نام admin123admin احراز هویت امن نیست و برای مدیریت واقعی یا داده‌های حساس باید ورود امن سمت سرور اضافه شود.</small></span></div><div class="panel profileform"><h2>رنگ‌بندی اختصاصی بخش‌ها</h2><p class="empty">برای هر بخش رنگ تأکیدی و رنگ پس‌زمینه جداگانه انتخاب کن. تغییرات روی همین مرورگر ذخیره می‌شوند.</p><div id="sectionColorControls" class="section-color-grid"></div><div class="actions"><button class="btn" id="resetSectionColors">بازگردانی رنگ‌های بخش‌ها</button><button class="btn primary" id="saveSectionColors">ذخیره رنگ‌بندی</button></div></div></section>
