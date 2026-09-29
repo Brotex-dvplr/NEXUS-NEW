@@ -1,4 +1,4 @@
-/* NEXUS v1.7.0 · Consistent profile avatars in leaderboard. */
+/* NEXUS v1.8.0 · Cyberpunk permanent XP ranks and profile cosmetics. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -14,6 +14,41 @@
   // the UI use nicknames only; it is never a real inbox and is never displayed.
   const authEmail = alias => cleanAlias(alias) + '@nexus.invalid';
 
+  const RANKS = [
+    { name: 'BRONZE', title: 'شروع مسیر', min: 0, max: 499, color: '#d99a6c', emblem: 'I' },
+    { name: 'SILVER', title: 'بازیکن فعال', min: 500, max: 1499, color: '#c7d6e8', emblem: 'II' },
+    { name: 'GOLD', title: 'بازیکن حرفه‌ای', min: 1500, max: 3499, color: '#ffd166', emblem: 'III' },
+    { name: 'DIAMOND', title: 'الیت', min: 3500, max: 6999, color: '#45d9ff', emblem: 'IV' },
+    { name: 'MASTER', title: 'استاد بازی', min: 7000, max: 11999, color: '#ff5d78', emblem: 'V' },
+    { name: 'NEXUS GOD', title: 'افسانه‌ای', min: 12000, max: Infinity, color: '#ba9bff', emblem: 'VI' }
+  ];
+  function getRank(totalXp) {
+    const xp = Math.max(0, Number(totalXp) || 0);
+    const index = RANKS.findIndex(rank => xp <= rank.max);
+    const currentIndex = index < 0 ? RANKS.length - 1 : index;
+    const rank = RANKS[currentIndex];
+    const next = RANKS[currentIndex + 1] || null;
+    const progress = next ? Math.max(0, Math.min(100, ((xp - rank.min) / (next.min - rank.min)) * 100)) : 100;
+    return { ...rank, xp, next, progress, remaining: next ? Math.max(0, next.min - xp) : 0 };
+  }
+  function rankChip(totalXp) {
+    const rank = getRank(totalXp);
+    return '<small class="rank-chip" style="--rank-color:' + rank.color + '">' + esc(rank.name) + '</small>';
+  }
+  function renderRank(totalXp) {
+    const host = $('sbRankCard');
+    if (!host) return;
+    const rank = getRank(totalXp);
+    host.style.setProperty('--rank-color', rank.color);
+    $('sbRankEmblem').textContent = rank.emblem;
+    $('sbRankName').textContent = rank.name;
+    $('sbRankDescription').textContent = rank.title;
+    $('sbRankXp').textContent = rank.xp.toLocaleString() + ' XP';
+    $('sbRankProgress').style.width = rank.progress + '%';
+    $('sbRankProgressText').textContent = rank.next ? rank.remaining.toLocaleString() + ' XP تا رتبه بعدی' : 'بالاترین رتبه باز شده!';
+    $('sbRankNext').textContent = rank.next ? rank.next.name : 'MAX RANK';
+  }
+
   async function profile(user) {
     const { data, error } = await client.from('nexus_profiles')
       .select('user_id,display_name,total_xp,avatar_url').eq('user_id', user.id).maybeSingle();
@@ -26,6 +61,7 @@
     if ($('sbUserEmail')) $('sbUserEmail').textContent = user ? 'نام مستعار: ' + (p?.display_name || user.user_metadata?.display_name || 'کاربر NEXUS') : '';
     if ($('sbDisplayName')) $('sbDisplayName').value = user ? (p?.display_name || user.user_metadata?.display_name || '') : '';
     renderAvatar(p?.avatar_url || user?.user_metadata?.avatar_url || '');
+    renderRank(p?.total_xp || 0);
     const fileInput = $('sbAvatarFile');
     const chooseFileButton = $('sbAvatarChooseFile');
     const removeButton = $('sbAvatarRemove');
@@ -118,7 +154,7 @@
         return '<div class="listrow"><div class="avatar">' + avatarHtml +
           '</div><span><b>' + esc(r.display_name) + '</b><small>' +
           (Number(r.rank) === 1 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
-          '</small></span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>';
+          '</small>' + rankChip(r.total_xp) + '</span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>';
       }).join('');
     if ($('sbLeaderboardRows')) $('sbLeaderboardRows').innerHTML = rowsHtml;
     if ($('homeLeaderboardRows')) $('homeLeaderboardRows').innerHTML = rowsHtml;
