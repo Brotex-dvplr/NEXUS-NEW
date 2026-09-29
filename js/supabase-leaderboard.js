@@ -1,4 +1,4 @@
-/* NEXUS leaderboard: Supabase Auth accounts keyed by nickname, no email collected. */
+/* NEXUS v1.3.0 · Supabase auth and account avatars. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -16,7 +16,7 @@
 
   async function profile(user) {
     const { data, error } = await client.from('nexus_profiles')
-      .select('user_id,display_name,total_xp').eq('user_id', user.id).maybeSingle();
+      .select('user_id,display_name,total_xp,avatar_url').eq('user_id', user.id).maybeSingle();
     if (error) throw error;
     return data;
   }
@@ -25,8 +25,49 @@
     if ($('sbUserBox')) $('sbUserBox').hidden = !user;
     if ($('sbUserEmail')) $('sbUserEmail').textContent = user ? 'نام مستعار: ' + (p?.display_name || user.user_metadata?.display_name || 'کاربر NEXUS') : '';
     if ($('sbDisplayName')) $('sbDisplayName').value = user ? (p?.display_name || user.user_metadata?.display_name || '') : '';
+    renderAvatar(p?.avatar_url || user?.user_metadata?.avatar_url || '');
+    const fileInput = $('sbAvatarFile');
+    const removeButton = $('sbAvatarRemove');
+    if (fileInput) fileInput.disabled = !user;
+    if (removeButton) removeButton.disabled = !user;
     window.NEXUS_SUPABASE_USER = user || null;
     window.dispatchEvent(new CustomEvent('nexus-auth-change', { detail: { user: user || null } }));
+  }
+  function renderAvatar(url) {
+    const host = $('sbAvatarPreview');
+    if (!host) return;
+    host.innerHTML = url
+      ? '<img src="' + esc(url) + '" alt="عکس پروفایل" referrerpolicy="no-referrer">'
+      : '<i data-lucide="user-round"></i>';
+    if (window.lucide) window.lucide.createIcons({ root: host });
+  }
+  async function uploadAvatar(file) {
+    if (!client || !window.NEXUS_SUPABASE_USER) throw new Error('ابتدا وارد حساب شو.');
+    if (!file) return;
+    if (!['image/jpeg','image/png','image/webp'].includes(file.type)) throw new Error('فقط عکس JPG، PNG یا WebP مجاز است.');
+    if (file.size > 2 * 1024 * 1024) throw new Error('حجم عکس باید حداکثر ۲ مگابایت باشد.');
+    const user = window.NEXUS_SUPABASE_USER;
+    const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg';
+    const path = user.id + '/avatar-' + Date.now() + '.' + ext;
+    status('در حال بارگذاری عکس…');
+    const { error: uploadError } = await client.storage.from('avatars').upload(path, file, {
+      cacheControl: '3600', upsert: true, contentType: file.type
+    });
+    if (uploadError) throw uploadError;
+    const { data } = client.storage.from('avatars').getPublicUrl(path);
+    const url = data?.publicUrl;
+    if (!url) throw new Error('لینک عکس ساخته نشد.');
+    const { error: metaError } = await client.auth.updateUser({ data: { avatar_url: url } });
+    if (metaError) throw metaError;
+    renderAvatar(url);
+    status('عکس پروفایل ذخیره شد! 💜');
+  }
+  async function removeAvatar() {
+    if (!window.NEXUS_SUPABASE_USER) throw new Error('ابتدا وارد حساب شو.');
+    const { error } = await client.auth.updateUser({ data: { avatar_url: null } });
+    if (error) throw error;
+    renderAvatar('');
+    status('عکس پروفایل حذف شد.');
   }
   async function renderLeaderboard() {
     if (!client || (!$('sbLeaderboardRows') && !$('homeLeaderboardRows'))) return;
@@ -50,6 +91,18 @@
     catch (e) { status('پروفایل بارگذاری نشد: ' + e.message, true); }
   }
   function bind() {
+    $('sbAvatarFile')?.addEventListener('change', async e => {
+      const file = e.target.files?.[0];
+      e.target.value = '';
+      if (!file) return;
+      try { await uploadAvatar(file); }
+      catch (err) { status('ذخیره عکس ناموفق: ' + err.message + ' — بررسی کن که در Supabase یک Public Storage bucket با نام avatars ساخته شده باشد.', true); }
+    });
+    $('sbAvatarRemove')?.addEventListener('click', async () => {
+      try { await removeAvatar(); }
+      catch (err) { status('حذف عکس ناموفق: ' + err.message, true); }
+    });
+
     $('sbSignInForm')?.addEventListener('submit', async e => {
       e.preventDefault();
       const alias = cleanAlias($('sbLoginName').value);
