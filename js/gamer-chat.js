@@ -84,6 +84,9 @@
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'nexus_chat_messages' }, payload => {
         appendMessage(payload.new, true);
       })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'nexus_chat_messages' }, payload => {
+        if (payload.old?.id != null) removeMessageFromRoom(payload.old.id);
+      })
       .subscribe(state => {
         if (state === 'SUBSCRIBED') setStatus('آنلاین · پیام‌ها به‌صورت زنده به‌روزرسانی می‌شوند.');
         else if (state === 'CHANNEL_ERROR' || state === 'TIMED_OUT') setStatus('اتصال زنده برقرار نشد؛ دکمه تازه‌سازی را بزن.', true);
@@ -261,6 +264,7 @@
     if (db) db.auth.onAuthStateChange(() => setTimeout(() => {
       authUi();
       if (user()) { loadMessages(); subscribe(); }
+      checkAdminAccess();
     }, 0));
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
