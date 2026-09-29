@@ -132,7 +132,7 @@
       if (error) throw error;
       const result = Array.isArray(data) ? data[0] : data;
       if (result?.status !== 'completed') throw new Error('نتیجه نهایی دریافت نشد.');
-      setStatus('نتیجه ثبت شد! XP تو: +' + Number(result.creator_delta || 0).toLocaleString('fa-IR') + ' · XP دوستت: +' + Number(result.opponent_delta || 0).toLocaleString('fa-IR'));
+      setStatus('نتیجه ثبت شد! بازیکن اول: +' + Number(result.creator_delta || 0).toLocaleString('fa-IR') + ' XP · بازیکن دوم: +' + Number(result.opponent_delta || 0).toLocaleString('fa-IR') + ' XP');
       await refreshChallenges();
     } catch (error) {
       setStatus('ثبت نتیجه ناموفق بود: ' + error.message, true);
