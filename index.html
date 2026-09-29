@@ -294,6 +294,87 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
   .nexus-rank-card[data-rank="nexus-god"] { animation:none; }
 }
 
+
+/* NEXUS v2.1.5 · Royal Crown Rank Redesign */
+.nexus-rank-card {
+  isolation:isolate;
+  border:1px solid color-mix(in srgb,var(--rank-color,#ba9bff) 75%,#ffffff 8%);
+  border-radius:22px;
+  padding:18px;
+  background:
+    radial-gradient(ellipse at 50% -22%,color-mix(in srgb,var(--rank-color,#ba9bff) 24%,transparent),transparent 58%),
+    linear-gradient(145deg,#0b1020 0%,#17152b 48%,#0c1322 100%);
+  box-shadow:0 16px 42px #0005,0 0 28px color-mix(in srgb,var(--rank-color,#ba9bff) 16%,transparent),inset 0 1px #ffffff18;
+}
+.nexus-rank-card:after {
+  inset:0 0 auto;width:100%;height:3px;
+  background:linear-gradient(90deg,transparent,var(--rank-color,#ba9bff),#fff8,var(--rank-color,#ba9bff),transparent);
+}
+.nexus-rank-card:before {
+  content:"♛";
+  position:absolute;z-index:-1;right:13px;top:-35px;
+  font-size:150px;line-height:1;color:var(--rank-color,#ba9bff);
+  opacity:.045;transform:rotate(12deg);pointer-events:none;
+}
+.nexus-rank-top { gap:14px; }
+.nexus-rank-emblem {
+  position:relative;width:68px;height:70px;flex:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;
+  border:1px solid color-mix(in srgb,var(--rank-color,#ba9bff) 82%,white 10%);
+  border-radius:18px 18px 23px 23px;
+  clip-path:polygon(50% 0%,62% 12%,82% 7%,91% 26%,100% 34%,91% 65%,82% 83%,50% 100%,18% 83%,9% 65%,0% 34%,9% 26%,18% 7%,38% 12%);
+  color:var(--rank-color,#ba9bff);
+  background:linear-gradient(145deg,color-mix(in srgb,var(--rank-color,#ba9bff) 28%,#121527),#0b1020 70%);
+  box-shadow:0 0 25px color-mix(in srgb,var(--rank-color,#ba9bff) 28%,transparent),inset 0 0 18px color-mix(in srgb,var(--rank-color,#ba9bff) 20%,transparent);
+  text-shadow:0 0 14px var(--rank-color,#ba9bff);
+}
+.nexus-rank-emblem svg { width:31px;height:25px;overflow:visible;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--rank-color,#ba9bff) 55%,transparent)); }
+.nexus-rank-emblem svg path { fill:var(--rank-color,#ba9bff);stroke:#fff9;stroke-width:.6;stroke-linejoin:round; }
+.nexus-rank-emblem span { font-size:11px;line-height:1;font-weight:1000;letter-spacing:1.5px;margin-top:-1px; }
+.nexus-rank-copy h3 { font-size:20px;letter-spacing:1.8px;text-shadow:0 0 18px color-mix(in srgb,var(--rank-color,#ba9bff) 55%,transparent); }
+.nexus-rank-xp {
+  border-color:color-mix(in srgb,var(--rank-color,#ba9bff) 45%,transparent);
+  color:#fff;background:color-mix(in srgb,var(--rank-color,#ba9bff) 11%,#090d19);
+  box-shadow:inset 0 1px #ffffff10,0 0 16px color-mix(in srgb,var(--rank-color,#ba9bff) 10%,transparent);
+}
+.nexus-rank-track {height:10px;border:1px solid #ffffff12;background:#070a13;border-radius:99px;padding:1px}
+.nexus-rank-track span {height:100%;background:linear-gradient(90deg,color-mix(in srgb,var(--rank-color,#ba9bff) 72%,#fff),var(--rank-color,#ba9bff),#fff);box-shadow:0 0 16px var(--rank-color,#ba9bff)}
+.nexus-rank-foot span:last-child {display:inline-flex;align-items:center;gap:5px}
+.nexus-rank-foot span:last-child:before {content:"♛";font-size:13px}
+.rank-chip {border-radius:999px;padding:3px 9px;box-shadow:0 0 12px color-mix(in srgb,var(--rank-color,#ba9bff) 13%,transparent)}
+.rank-chip:before {content:"♛";font-size:11px;line-height:1}
+.nexus-rank-card[data-rank="bronze"] {--rank-color:#d99a6c;border-color:#d99a6c88}
+.nexus-rank-card[data-rank="silver"] {--rank-color:#c7d6e8;border-color:#c7d6e899}
+.nexus-rank-card[data-rank="gold"] {--rank-color:#ffd166;border-color:#ffd166}
+.nexus-rank-card[data-rank="gold"] .nexus-rank-emblem {box-shadow:0 0 30px #ffd16670,inset 0 0 18px #ffd16633}
+.nexus-rank-card[data-rank="diamond"] {--rank-color:#45d9ff;border-color:#45d9ff;animation:nexusCrownPulse 3s ease-in-out infinite}
+.nexus-rank-card[data-rank="master"] {--rank-color:#ff5d78;border-color:#ff5d78;animation:nexusCrownPulse 2.2s ease-in-out infinite}
+.nexus-rank-card[data-rank="nexus-god"] {
+  --rank-color:#ba9bff;border-color:#ba9bff;
+  background:radial-gradient(ellipse at 50% -15%,#ba9bff38,transparent 58%),linear-gradient(145deg,#1b1032,#0b1020 55%,#1d1232);
+  animation:nexusCrownPulse 2.4s ease-in-out infinite;
+}
+.nexus-rank-card[data-rank="nexus-god"] .nexus-rank-emblem {border-color:#e0d2ff;box-shadow:0 0 24px #ba9bff99,0 0 48px #ba9bff44,inset 0 0 20px #ba9bff33}
+.nexus-rank-card[data-rank="nexus-god"] .nexus-rank-emblem svg path {fill:#e0d2ff}
+#sbRankCard[data-rank="bronze"] ~ .nexus-avatar-editor .nexus-avatar-preview {border-color:#d99a6c;box-shadow:0 0 18px #d99a6c55}
+#sbRankCard[data-rank="silver"] ~ .nexus-avatar-editor .nexus-avatar-preview {border-color:#c7d6e8;box-shadow:0 0 18px #c7d6e855}
+#sbRankCard[data-rank="gold"] ~ .nexus-avatar-editor .nexus-avatar-preview {border-color:#ffd166;box-shadow:0 0 22px #ffd16666}
+#sbRankCard[data-rank="diamond"] ~ .nexus-avatar-editor .nexus-avatar-preview {border-color:#45d9ff;box-shadow:0 0 24px #45d9ff77}
+#sbRankCard[data-rank="master"] ~ .nexus-avatar-editor .nexus-avatar-preview {border-color:#ff5d78;box-shadow:0 0 25px #ff5d7880}
+#sbRankCard[data-rank="nexus-god"] ~ .nexus-avatar-editor .nexus-avatar-preview {border-color:#ba9bff;box-shadow:0 0 18px #ba9bff99,0 0 38px #ba9bff55}
+@keyframes nexusCrownPulse {
+  0%,100% {box-shadow:0 16px 42px #0005,0 0 18px color-mix(in srgb,var(--rank-color) 20%,transparent),inset 0 1px #ffffff18}
+  50% {box-shadow:0 16px 42px #0005,0 0 34px color-mix(in srgb,var(--rank-color) 42%,transparent),inset 0 1px #ffffff28}
+}
+@media(max-width:520px) {
+ .nexus-rank-card {padding:14px;border-radius:18px}
+ .nexus-rank-emblem {width:59px;height:62px}
+ .nexus-rank-copy h3 {font-size:16px}
+}
+@media(prefers-reduced-motion:reduce) {
+ .nexus-rank-card[data-rank="diamond"],.nexus-rank-card[data-rank="master"],.nexus-rank-card[data-rank="nexus-god"] {animation:none}
+}
+
 </style></head>
 <body><div class="layout"><aside class="side"><div class="brand"><div class="logo"><i data-lucide="orbit"></i></div><div><b>NEXUS</b><small style="display:block">PERSONAL OS</small></div></div><div class="navlabel">WORKSPACE</div><nav class="nav" id="nav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>داشبورد</button><button data-page="ai"><i data-lucide="sparkles"></i>AI Hub</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="achievements"><i data-lucide="trophy"></i>دستاوردها</button><button data-page="leaderboard"><i data-lucide="medal"></i>جدول برترین‌ها</button><button data-page="friends"><i data-lucide="swords"></i>چالش دوستانه</button><button data-page="chat"><i data-lucide="messages-square"></i>گروه چت</button><button data-page="settings"><i data-lucide="settings-2"></i>تنظیمات</button><button data-page="admin" id="adminNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>پنل مدیریت</button></nav><div class="sidebottom"><div class="user"><div class="avatar" id="avatar">N</div><div><b id="sideName">Nexus User</b><small id="sideLevel">Level 1 · Explorer</small></div></div></div></aside>
 <main class="main"><header class="top"><div><h2 id="pageTitle">مرکز فرماندهی شخصی</h2><p>مرکز فرماندهی دیجیتال تو؛ سریع‌تر کار کن، بازی کن و پیشرفتت را بساز.</p></div><div class="top-actions"><button class="iconbtn" id="searchBtn" aria-label="جستجو" title="جستجو (Ctrl+K)"><i data-lucide="search"></i></button><button class="iconbtn" id="themeBtn" aria-label="تغییر پوسته"><i data-lucide="sun-moon"></i></button><button class="iconbtn" id="paletteBtn" aria-label="انتخاب رنگ قالب" title="انتخاب رنگ قالب"><i data-lucide="palette"></i></button><div class="palette-menu" id="paletteMenu" hidden><strong>رنگ قالب سایت</strong><div class="swatches"><button class="swatch" style="background:#9b7cff" data-accent="#9b7cff" aria-label="بنفش" aria-pressed="true"></button><button class="swatch" style="background:#3b82f6" data-accent="#3b82f6" aria-label="آبی" aria-pressed="false"></button><button class="swatch" style="background:#10b981" data-accent="#10b981" aria-label="سبز" aria-pressed="false"></button><button class="swatch" style="background:#ec4899" data-accent="#ec4899" aria-label="صورتی" aria-pressed="false"></button><button class="swatch" style="background:#f97316" data-accent="#f97316" aria-label="نارنجی" aria-pressed="false"></button><button class="swatch" style="background:#ef4444" data-accent="#ef4444" aria-label="قرمز" aria-pressed="false"></button><button class="swatch" style="background:#06b6d4" data-accent="#06b6d4" aria-label="فیروزه‌ای" aria-pressed="false"></button><button class="swatch" style="background:#eab308" data-accent="#eab308" aria-label="زرد" aria-pressed="false"></button></div><label class="custom-color">انتخاب رنگ دلخواه<input id="customAccent" type="color" value="#9b7cff" aria-label="انتخاب رنگ دلخواه"></label></div><button class="btn primary wide" data-go="tools"><i data-lucide="plus"></i>شروع سریع</button></div></header>
