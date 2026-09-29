@@ -67,8 +67,6 @@ as $$
 declare
   uid uuid := (select auth.uid());
   challenge_row public.nexus_challenges%rowtype;
-  creator_xp bigint := 0;
-  opponent_xp bigint := 0;
   accepted_time timestamptz := pg_catalog.now();
   expiry_time timestamptz;
 begin
@@ -126,10 +124,13 @@ begin
   if c.expires_at is null or finished_time < c.expires_at then
     raise exception 'Challenge is still active' using errcode = '22023';
   end if;
-  select p.total_xp into creator_xp from public.nexus_profiles p where p.user_id = c.creator_id;
-  select p.total_xp into opponent_xp from public.nexus_profiles p where p.user_id = c.opponent_id;
-  creator_gain := greatest(coalesce(creator_xp, 0) - c.creator_start_xp, 0);
-  opponent_gain := greatest(coalesce(opponent_xp, 0) - coalesce(c.opponent_start_xp, 0), 0);
+  -- Count only server-recorded XP events inside the exact duel window, even if finalized later.
+  select coalesce(sum(e.points), 0) into creator_gain
+    from public.nexus_activity_events e
+    where e.user_id = c.creator_id and e.created_at >= c.accepted_at and e.created_at <= c.expires_at;
+  select coalesce(sum(e.points), 0) into opponent_gain
+    from public.nexus_activity_events e
+    where e.user_id = c.opponent_id and e.created_at >= c.accepted_at and e.created_at <= c.expires_at;
   if creator_gain > opponent_gain then winner := c.creator_id;
   elsif opponent_gain > creator_gain then winner := c.opponent_id;
   end if;
