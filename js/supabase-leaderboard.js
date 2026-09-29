@@ -57,6 +57,9 @@
     const { data } = client.storage.from('avatars').getPublicUrl(path);
     const url = data?.publicUrl;
     if (!url) throw new Error('لینک عکس ساخته نشد.');
+    const { error: profileError } = await client.from('nexus_profiles')
+      .update({ avatar_url: url }).eq('user_id', user.id);
+    if (profileError) throw profileError;
     const { error: metaError } = await client.auth.updateUser({ data: { avatar_url: url } });
     if (metaError) throw metaError;
     renderAvatar(url);
@@ -64,6 +67,10 @@
   }
   async function removeAvatar() {
     if (!window.NEXUS_SUPABASE_USER) throw new Error('ابتدا وارد حساب شو.');
+    const user = window.NEXUS_SUPABASE_USER;
+    const { error: profileError } = await client.from('nexus_profiles')
+      .update({ avatar_url: null }).eq('user_id', user.id);
+    if (profileError) throw profileError;
     const { error } = await client.auth.updateUser({ data: { avatar_url: null } });
     if (error) throw error;
     renderAvatar('');
@@ -71,14 +78,15 @@
   }
   async function renderLeaderboard() {
     if (!client || (!$('sbLeaderboardRows') && !$('homeLeaderboardRows'))) return;
-    const { data, error } = await client.from('nexus_leaderboard')
-      .select('rank,user_id,display_name,total_xp').order('rank', { ascending: true }).limit(3);
+    const { data, error } = await client.rpc('nexus_leaderboard_with_avatars');
     if (error) { status('خطا در دریافت رتبه‌ها: ' + error.message, true); return; }
     const rowsHtml = !data?.length
       ? '<p class="empty">هنوز کسی در لیدربورد ثبت نشده است. اولین نفر باش! 🚀</p>'
       : data.map(r => '<div class="listrow"><div class="avatar">' +
-        (Number(r.rank) <= 3 ? ['🥇','🥈','🥉'][Number(r.rank)-1] : Number(r.rank)) +
-        '</div><span><b>' + esc(r.display_name) + '</b><small>' +
+        (r.avatar_url
+          ? '<img src="' + esc(r.avatar_url) + '" alt="عکس پروفایل" loading="lazy" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:12px">'
+          : (Number(r.rank) <= 3 ? ['🥇','🥈','🥉'][Number(r.rank)-1] : Number(r.rank))) +
+        '</div><span><b>' + esc(r.display_name) + '</b><small>'
         (Number(r.rank) === 1 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
         '</small></span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>').join('');
     if ($('sbLeaderboardRows')) $('sbLeaderboardRows').innerHTML = rowsHtml;
