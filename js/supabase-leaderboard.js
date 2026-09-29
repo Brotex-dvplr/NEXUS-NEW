@@ -1,4 +1,4 @@
-/* NEXUS v1.9.0 · Cyberpunk permanent XP ranks and profile cosmetics. */
+/* NEXUS v2.1.5 · Cyberpunk permanent XP ranks and profile cosmetics. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
