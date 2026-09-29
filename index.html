@@ -138,6 +138,7 @@ $('#aiGrid').innerHTML=aiItems.map(x=>'<article class="card" tabindex="0" data-a
 $$('[data-ai-action]').forEach(card=>{const open=()=>{if(card.dataset.aiAction==='chat'){ $('#chatInput').focus();$('#chatInput').scrollIntoView({behavior:'smooth',block:'center'});}else if(card.dataset.aiAction==='search'){ $('#chatInput').value='درباره موضوع موردنظرم جست‌وجو کن: ';$('#chatInput').focus();$('#chatInput').scrollIntoView({behavior:'smooth',block:'center'});}else{ $('#chatInput').value='موضوع را به زبان ساده و مرحله‌به‌مرحله توضیح بده: ';$('#chatInput').focus();$('#chatInput').scrollIntoView({behavior:'smooth',block:'center'});}};card.onclick=open;card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}}});
 
 const CHAT_HISTORY_KEY='nexus_rulebot_history_v1';
+function withTimeout(promise,ms=8000){let timer;return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('زمان پاسخ منابع تمام شد')),ms)})]).finally(()=>clearTimeout(timer))}
 let chatHistory=[];
 try{chatHistory=JSON.parse(localStorage.getItem(CHAT_HISTORY_KEY)||'[]');if(!Array.isArray(chatHistory))chatHistory=[]}catch{chatHistory=[]}
 function chatStatus(text,ready=true){const el=$('#chatStatus');el.textContent=text;el.classList.toggle('ready',ready)}
@@ -328,7 +329,7 @@ $('#chatForm').onsubmit=async e=>{
    let reply=nexusReply(message);
    if(reply.startsWith('🤔 هنوز قانون یا پاسخ اختصاصی مناسبی')) {
      chatStatus('در حال جست‌وجو در ویکی‌پدیا…',true);
-     try{const results=await Promise.allSettled([searchWikipedia(message),searchAdditionalSources(message)]);const wikiReply=results[0].status==='fulfilled'?results[0].value:'';const extraReply=results[1].status==='fulfilled'?results[1].value:'';reply=[wikiReply,extraReply].filter(Boolean).join('\n\n━━━━━━━━━━━━━━━━\n\n');if(!reply)reply='🌐 در منابع متصل نتیجهٔ مناسبی پیدا نکردم. سؤال را کوتاه‌تر یا با نام دقیق موضوع امتحان کن.'}
+     try{const results=await Promise.allSettled([withTimeout(searchWikipedia(message)),withTimeout(searchAdditionalSources(message))]);const wikiReply=results[0].status==='fulfilled'?results[0].value:'';const extraReply=results[1].status==='fulfilled'?results[1].value:'';reply=[wikiReply,extraReply].filter(Boolean).join('\n\n━━━━━━━━━━━━━━━━\n\n');if(!reply)reply='🌐 در منابع متصل نتیجهٔ مناسبی پیدا نکردم. سؤال را کوتاه‌تر یا با نام دقیق موضوع امتحان کن.'}
      catch{reply+='\n\n🌐 جست‌وجوی ویکی‌پدیا انجام نشد؛ اتصال اینترنت را بررسی کن و دوباره تلاش کن.'}
    }
    await new Promise(resolve=>setTimeout(resolve,180));
