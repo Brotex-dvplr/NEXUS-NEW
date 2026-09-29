@@ -132,6 +132,8 @@
   }
   window.NEXUSLeaderboard = {
     refresh: renderLeaderboard,
+    getClient: () => client,
+    getUser: () => window.NEXUS_SUPABASE_USER || null,
     award: async activityKey => {
       if (!client) throw new Error('Supabase هنوز پیکربندی نشده است.');
       const { data, error } = await client.rpc('nexus_award_activity', { p_activity_key: activityKey });
