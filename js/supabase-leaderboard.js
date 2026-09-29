@@ -41,7 +41,7 @@
     const rank = getRank(totalXp);
     host.dataset.rank = rank.name.toLowerCase().replace(/\s+/g, '-');
     host.style.setProperty('--rank-color', rank.color);
-    $('sbRankEmblem').textContent = rank.emblem;
+    $('sbRankEmblem').innerHTML = '<svg viewBox="0 0 32 25" aria-hidden="true"><path d="M3 6.5 9.3 12 15.9 2.5 22.5 12 29 6.5 26 21H6Z"/><path d="M6 23H26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>' + esc(rank.emblem) + '</span>';
     $('sbRankName').textContent = rank.name;
     $('sbRankDescription').textContent = rank.title;
     $('sbRankXp').textContent = rank.xp.toLocaleString() + ' XP';
