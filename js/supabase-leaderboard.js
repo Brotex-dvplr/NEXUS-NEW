@@ -1,4 +1,4 @@
-/* NEXUS v1.4.2 · Supabase auth, avatars and leaderboard photos. */
+/* NEXUS v1.4.3 · Supabase auth, avatars and leaderboard photos. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -78,14 +78,13 @@
   }
   async function renderLeaderboard() {
     if (!client || (!$('sbLeaderboardRows') && !$('homeLeaderboardRows'))) return;
-    const { data, error } = await client.rpc('nexus_leaderboard_with_avatars');
+    const { data, error } = await client.from('nexus_leaderboard')
+      .select('rank,user_id,display_name,total_xp').order('rank', { ascending: true }).limit(3);
     if (error) { status('خطا در دریافت رتبه‌ها: ' + error.message, true); return; }
     const rowsHtml = !data?.length
       ? '<p class="empty">هنوز کسی در لیدربورد ثبت نشده است. اولین نفر باش! 🚀</p>'
       : data.map(r => '<div class="listrow"><div class="avatar">' +
-        (r.avatar_url
-          ? '<img src="' + esc(r.avatar_url) + '" alt="عکس پروفایل" loading="lazy" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:12px">'
-          : '<i data-lucide="user-round" aria-hidden="true"></i>') +
+        '<i data-lucide="user-round" aria-hidden="true"></i>' +
         '</div><span><b>' + esc(r.display_name) + '</b><small>' +
         (Number(r.rank) === 1 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
         '</small></span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>').join('');
