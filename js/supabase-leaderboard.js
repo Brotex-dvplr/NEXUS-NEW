@@ -1,4 +1,4 @@
-/* NEXUS v2.1.6 · Reliable profile avatars in all leaderboard surfaces. */
+/* NEXUS v2.1.7 · Animated rank flame avatar frames. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -61,7 +61,8 @@
     if ($('sbUserBox')) $('sbUserBox').hidden = !user;
     if ($('sbUserEmail')) $('sbUserEmail').textContent = user ? 'نام مستعار: ' + (p?.display_name || user.user_metadata?.display_name || 'کاربر NEXUS') : '';
     if ($('sbDisplayName')) $('sbDisplayName').value = user ? (p?.display_name || user.user_metadata?.display_name || '') : '';
-    renderAvatar(p?.avatar_url || user?.user_metadata?.avatar_url || '');
+    window.NEXUS_SUPABASE_USER = user || null;
+    renderAvatar(p?.avatar_url || user?.user_metadata?.avatar_url || '', p?.total_xp || 0);
     renderRank(p?.total_xp || 0);
     const fileInput = $('sbAvatarFile');
     const chooseFileButton = $('sbAvatarChooseFile');
@@ -72,8 +73,18 @@
     window.NEXUS_SUPABASE_USER = user || null;
     window.dispatchEvent(new CustomEvent('nexus-auth-change', { detail: { user: user || null } }));
   }
-  function renderAvatar(url) {
+  function applyRankAvatar(element, totalXp) {
+    if (!element) return;
+    const rank = getRank(totalXp);
+    element.classList.add('rank-avatar');
+    RANKS.forEach(item => element.classList.remove('rank-' + item.name.toLowerCase().replace(/\s+/g, '-')));
+    element.classList.add('rank-' + rank.name.toLowerCase().replace(/\s+/g, '-'));
+    element.style.setProperty('--rank-color', rank.color);
+  }
+
+  function renderAvatar(url, totalXp = 0) {
     const host = $('sbAvatarPreview');
+    applyRankAvatar(host, totalXp);
     if (host) {
       host.innerHTML = url
         ? '<img src="' + esc(url) + '" alt="آواتار پروفایل" referrerpolicy="no-referrer">'
@@ -83,6 +94,7 @@
 
     // Keep the signed-in user's avatar consistent in the account preview and sidebar.
     const sideAvatar = $('avatar');
+    applyRankAvatar(sideAvatar, totalXp);
     if (sideAvatar) {
       const user = window.NEXUS_SUPABASE_USER;
       const displayName = user?.user_metadata?.display_name || $('sideName')?.textContent || 'NEXUS';
@@ -171,10 +183,12 @@
       ? '<p class="empty">هنوز کسی در لیدربورد ثبت نشده است. اولین نفر باش! 🚀</p>'
       : data.map((r, index) => {
         const avatarUrl = typeof r.avatar_url === 'string' ? r.avatar_url.trim() : '';
+        const rank = getRank(r.total_xp);
+        const rankClass = 'rank-' + rank.name.toLowerCase().replace(/\s+/g, '-');
         const avatarHtml = avatarUrl
           ? '<img src="' + esc(avatarUrl) + '" alt="تصویر پروفایل ' + esc(r.display_name) + '" loading="lazy" referrerpolicy="no-referrer">'
           : '<i data-lucide="user-round" aria-hidden="true"></i>';
-        return '<div class="listrow"><div class="avatar">' + avatarHtml +
+        return '<div class="listrow"><div class="avatar rank-avatar ' + rankClass + '" style="--rank-color:' + rank.color + '">' + avatarHtml +
           '</div><span><b>' + esc(r.display_name || 'بازیکن NEXUS') + '</b><small>' +
           (index === 0 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
           '</small>' + rankChip(r.total_xp) + '</span><strong>' +
