@@ -1,7 +1,7 @@
 /* NEXUS v2.1.7 · Animated rank flame avatar frames. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
-  let client = null, channel = null;
+  let client = null, channel = null, currentUserXp = 0;
   const $ = id => document.getElementById(id);
   const status = (text, error = false) => {
     const el = $('sbStatus');
@@ -36,9 +36,12 @@
     return '<small class="rank-chip" style="--rank-color:' + rank.color + '">' + esc(rank.name) + '</small>';
   }
   function renderRank(totalXp) {
+    currentUserXp = Number(totalXp) || 0;
     const host = $('sbRankCard');
     if (!host) return;
     const rank = getRank(totalXp);
+    applyRankAvatar($('sbAvatarPreview'), rank.xp);
+    applyRankAvatar($('avatar'), rank.xp);
     host.dataset.rank = rank.name.toLowerCase().replace(/\s+/g, '-');
     host.style.setProperty('--rank-color', rank.color);
     $('sbRankEmblem').innerHTML = '<svg viewBox="0 0 32 25" aria-hidden="true"><path d="M3 6.5 9.3 12 15.9 2.5 22.5 12 29 6.5 26 21H6Z"/><path d="M6 23H26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>' + esc(rank.emblem) + '</span>';
@@ -62,7 +65,8 @@
     if ($('sbUserEmail')) $('sbUserEmail').textContent = user ? 'نام مستعار: ' + (p?.display_name || user.user_metadata?.display_name || 'کاربر NEXUS') : '';
     if ($('sbDisplayName')) $('sbDisplayName').value = user ? (p?.display_name || user.user_metadata?.display_name || '') : '';
     window.NEXUS_SUPABASE_USER = user || null;
-    renderAvatar(p?.avatar_url || user?.user_metadata?.avatar_url || '', p?.total_xp || 0);
+    currentUserXp = Number(p?.total_xp) || 0;
+    renderAvatar(p?.avatar_url || user?.user_metadata?.avatar_url || '', currentUserXp);
     renderRank(p?.total_xp || 0);
     const fileInput = $('sbAvatarFile');
     const chooseFileButton = $('sbAvatarChooseFile');
@@ -82,7 +86,7 @@
     element.style.setProperty('--rank-color', rank.color);
   }
 
-  function renderAvatar(url, totalXp = 0) {
+  function renderAvatar(url, totalXp = currentUserXp) {
     const host = $('sbAvatarPreview');
     applyRankAvatar(host, totalXp);
     if (host) {
