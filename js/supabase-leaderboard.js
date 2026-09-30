@@ -1,4 +1,4 @@
-/* NEXUS v2.2.2 · Crown Ascension rank cosmetics and animated frames. */
+/* NEXUS v2.2.3 · My Pod leaderboard layout and rank frames without crown overlays. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null, currentUserXp = 0;
@@ -192,7 +192,7 @@
         const avatarHtml = avatarUrl
           ? '<img src="' + esc(avatarUrl) + '" alt="تصویر پروفایل ' + esc(r.display_name) + '" loading="lazy" referrerpolicy="no-referrer">'
           : '<i data-lucide="user-round" aria-hidden="true"></i>';
-        return '<div class="listrow podium-place-' + (index + 1) + '" data-medal="' + (index === 0 ? '♛' : index === 1 ? 'Ⅱ' : 'Ⅲ') + '" style="--rank-color:' + rank.color + '">' +
+        return '<div class="listrow podium-place-' + (index + 1) + '" data-medal="' + String(index + 1) + '" style="--rank-color:' + rank.color + '">' +
           '<div class="avatar rank-avatar ' + rankClass + '">' + avatarHtml + '</div>' +
           '<span><b>' + esc(r.display_name || 'بازیکن NEXUS') + '</b><small>' +
           (index === 0 ? 'قهرمان NEXUS' : index === 1 ? 'نایب‌قهرمان' : 'جایگاه سوم') +
@@ -205,6 +205,19 @@
 
     if ($('sbLeaderboardRows')) $('sbLeaderboardRows').innerHTML = rowsHtml;
     if ($('homeLeaderboardRows')) $('homeLeaderboardRows').innerHTML = rowsHtml;
+    if ($('sbCommunityRows')) {
+      const communityHtml = !data?.length ? '<p class="empty">هنوز بازیکنی در جامعه ثبت نشده است.</p>' : data.map((r, index) => {
+        const avatarUrl = typeof r.avatar_url === 'string' ? r.avatar_url.trim() : '';
+        const rank = getRank(r.total_xp);
+        const rankClass = 'rank-' + rank.name.toLowerCase().replace(/\s+/g, '-');
+        const avatarHtml = avatarUrl
+          ? '<img src="' + esc(avatarUrl) + '" alt="تصویر پروفایل ' + esc(r.display_name) + '" loading="lazy" referrerpolicy="no-referrer">'
+          : '<i data-lucide="user-round" aria-hidden="true"></i>';
+        return '<div class="community-row"><div class="avatar rank-avatar ' + rankClass + '" style="--rank-color:' + rank.color + '">' + avatarHtml + '</div><div class="community-player"><strong>' + esc(r.display_name || 'بازیکن NEXUS') + '</strong><small>' + esc(rank.name) + ' · جایگاه ' + (index + 1) + '</small></div><strong class="community-xp">' + Number(r.total_xp || 0).toLocaleString() + ' XP</strong></div>';
+      }).join('');
+      $('sbCommunityRows').innerHTML = communityHtml;
+      if (window.lucide) window.lucide.createIcons({ root: $('sbCommunityRows') });
+    }
     if (window.lucide) {
       if ($('sbLeaderboardRows')) window.lucide.createIcons({ root: $('sbLeaderboardRows') });
       if ($('homeLeaderboardRows')) window.lucide.createIcons({ root: $('homeLeaderboardRows') });
