@@ -1,4 +1,4 @@
-/* NEXUS v2.1.7 · Animated rank flame avatar frames. */
+/* NEXUS v2.1.9 · Rank-colored animated avatar frames. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null, currentUserXp = 0;
