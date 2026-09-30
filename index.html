@@ -514,6 +514,226 @@ html[data-theme=dark] .logo{background:linear-gradient(135deg,#c084fc,#6d28d9);b
 @media(max-width:520px){.nexus-avatar-preview.rank-avatar{width:88px;height:88px;min-width:88px}.rank-avatar::after{inset:-6px!important}}
 @media(prefers-reduced-motion:reduce){.rank-avatar,.rank-avatar::before,.rank-avatar::after{animation:none!important}.nexus-rank-card{animation:none!important}}
 
+
+
+/* NEXUS visual refresh — compatible adaptation of the legacy command-center design.
+   Visual-only layer: keeps the current DOM, IDs, event handlers, and integrations intact. */
+:root{
+ --bg:#060812;--panel:#0f1425;--panel2:#141b30;--line:rgba(151,166,206,.14);
+ --text:#f4f6ff;--muted:#8f99b5;--cyan:#46b8ff;
+ --shadow:0 24px 70px rgba(0,0,0,.34);--accent:#9b7cff;
+}
+html[data-theme=light]{
+ --bg:#eef2fa;--panel:#ffffff;--panel2:#f7f9fd;--line:rgba(30,42,75,.12);
+ --text:#10172a;--muted:#65708b;--shadow:0 18px 50px rgba(48,59,91,.12);
+}
+html,body{min-height:100%;scroll-behavior:smooth}
+body{
+ background:
+  radial-gradient(circle at 80% -10%,rgba(111,79,255,.14),transparent 34%),
+  radial-gradient(circle at 15% 35%,rgba(50,170,255,.07),transparent 28%),var(--bg);
+ color:var(--text);overflow-x:hidden;
+}
+.layout{direction:ltr;grid-template-columns:250px minmax(0,1fr);gap:0}
+.side,.main{direction:rtl}
+.side{
+ border:0;border-right:1px solid var(--line);padding:24px 16px;
+ background:rgba(6,8,18,.78);backdrop-filter:blur(22px);
+ box-shadow:8px 0 35px rgba(0,0,0,.08);z-index:20;
+}
+html[data-theme=light] .side{background:rgba(246,248,253,.88)}
+.brand{gap:11px;padding:2px 8px 28px}
+.logo{
+ width:40px;height:40px;border-radius:12px;
+ border:1px solid color-mix(in srgb,var(--accent) 38%,transparent);
+ background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 22%,transparent),rgba(70,184,255,.08));
+ box-shadow:0 0 25px color-mix(in srgb,var(--accent) 15%,transparent);
+ color:var(--accent);
+}
+.brand b{font-size:19px;letter-spacing:1.7px}
+.brand small{font-size:8px;letter-spacing:1.5px;color:var(--muted)}
+.navlabel{padding:12px 12px 9px;font-size:10px;letter-spacing:1.6px;color:var(--muted)}
+.nav{gap:5px}
+.nav button{
+ min-height:45px;border-radius:12px;padding:0 12px;gap:11px;
+ color:var(--muted);border:1px solid transparent;background:transparent;
+ transition:background .2s,border-color .2s,color .2s,transform .2s;
+}
+.nav button i{width:18px;height:18px}
+.nav button:hover,.nav button.active{
+ color:var(--text);background:color-mix(in srgb,var(--accent) 9%,transparent);
+ border-color:var(--line);
+}
+.nav button.active{box-shadow:inset -3px 0 var(--accent)}
+.nav button.active i{color:var(--accent)}
+.sidebottom{bottom:20px;left:14px;right:14px}
+.user{gap:10px;background:rgba(255,255,255,.025);border-color:var(--line);border-radius:14px;padding:11px}
+.avatar{border-radius:11px;box-shadow:0 8px 25px color-mix(in srgb,var(--accent) 24%,transparent)}
+.main{min-width:0;padding:0 clamp(16px,2.5vw,34px) 52px}
+.top{
+ min-height:78px;margin:0 - clamp(16px,2.5vw,34px) 28px;
+ padding:14px clamp(16px,2.5vw,34px);
+ border-bottom:1px solid var(--line);position:sticky;top:0;z-index:15;
+ background:rgba(6,8,18,.66);backdrop-filter:blur(18px);
+}
+html[data-theme=light] .top{background:rgba(246,248,253,.78)}
+.top h2{font-size:16px;letter-spacing:-.2px}
+.top p{font-size:11px;line-height:1.8}
+.top-actions{gap:8px}
+.iconbtn,.btn{
+ border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.035);
+ color:var(--text);transition:transform .2s,border-color .2s,filter .2s;
+}
+.iconbtn{width:39px;height:39px}
+.iconbtn:hover,.btn:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));transform:translateY(-1px)}
+.btn{padding:10px 15px;font-size:12px}
+.btn.primary{
+ border-color:transparent;color:white;
+ background:linear-gradient(135deg,var(--accent),#4aaef8);
+ box-shadow:0 10px 28px color-mix(in srgb,var(--accent) 22%,transparent);
+}
+.palette-menu{
+ border-color:var(--line);background:var(--panel);border-radius:16px;
+ box-shadow:var(--shadow);backdrop-filter:blur(18px)
+}
+.page{animation:legacyPageIn .28s ease both}
+@keyframes legacyPageIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.hero{
+ border:1px solid var(--line);border-radius:26px;padding:clamp(25px,3.2vw,36px);
+ background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 10%,#1f2543),rgba(11,16,31,.82));
+ box-shadow:var(--shadow);isolation:isolate;
+}
+.hero:after{
+ width:380px;height:380px;border:1px solid color-mix(in srgb,var(--accent) 15%,transparent);
+ right:-120px;left:auto;top:-170px;
+ box-shadow:0 0 0 40px color-mix(in srgb,var(--accent) 3%,transparent),0 0 0 80px color-mix(in srgb,var(--accent) 2%,transparent);
+}
+.eyebrow{font-size:10px;letter-spacing:1.5px;color:var(--accent);font-weight:800}
+.hero h1{font-size:clamp(27px,3.2vw,36px);letter-spacing:-.7px;line-height:1.55}
+.hero p{font-size:13px;line-height:2;color:var(--muted)}
+.actions{gap:9px;margin-top:20px}
+.stats{gap:12px;margin:14px 0 28px}
+.stat,.panel,.card{
+ border:1px solid var(--line);border-radius:17px;
+ background:var(--panel);box-shadow:var(--shadow);
+}
+.stat{padding:17px;min-width:0}
+.stathead{font-size:11px}
+.stathead i{color:var(--accent)}
+.stat strong{font-size:23px;letter-spacing:-.4px}
+.stat small{font-size:10px;color:var(--muted)}
+.sectionhead{margin:29px 0 14px}
+.sectionhead h2{font-size:17px;letter-spacing:-.3px}
+.sectionhead p{font-size:11px;line-height:1.8}
+.grid{gap:12px}
+.card{
+ padding:17px;cursor:pointer;transition:transform .2s,border-color .2s,background .2s;
+ background:linear-gradient(145deg,rgba(255,255,255,.025),transparent 75%),var(--panel);
+}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 42%,var(--line))}
+.cardicon{
+ width:38px;height:38px;border-radius:11px;margin-bottom:12px;
+ background:color-mix(in srgb,var(--accent) 11%,transparent);color:var(--accent)
+}
+.card h3{font-size:14px}
+.card p{font-size:11px;line-height:1.9}
+.tag{border:1px solid var(--line);border-radius:7px;padding:4px 7px;color:var(--muted)}
+.mission-panel{
+ border-color:color-mix(in srgb,var(--accent) 28%,var(--line));
+ background:linear-gradient(110deg,color-mix(in srgb,var(--accent) 9%,transparent),transparent 65%),var(--panel);
+}
+.mission-icon{color:var(--accent);filter:drop-shadow(0 0 8px color-mix(in srgb,var(--accent) 35%,transparent))}
+.progress{background:rgba(255,255,255,.07);border-radius:99px}
+.progress i{background:linear-gradient(90deg,var(--accent),#46b8ff)}
+.field,input.field,textarea.field,select.field{
+ border:1px solid var(--line);border-radius:11px;background:var(--panel2);color:var(--text);
+}
+.field:focus,input:focus,textarea:focus,select:focus{
+ outline:2px solid color-mix(in srgb,var(--accent) 40%,transparent);outline-offset:1px
+}
+.profileform{gap:13px}
+.profileform label{font-size:12px;color:var(--muted)}
+.profileform input{margin-top:6px}
+#page-profile .panel,#page-leaderboard .panel,#page-settings .panel,
+#page-friends .panel,#page-chat .panel,#page-admin .panel{background:var(--panel)}
+#homeLeaderboardRows,#sbLeaderboardRows{gap:12px}
+#homeLeaderboardRows .listrow,#sbLeaderboardRows .listrow{
+ border:1px solid var(--line);border-radius:14px;background:var(--panel2);
+ padding:13px;transition:border-color .2s,transform .2s;
+}
+#homeLeaderboardRows .listrow:hover,#sbLeaderboardRows .listrow:hover{
+ border-color:color-mix(in srgb,var(--accent) 40%,var(--line));transform:translateY(-1px)
+}
+#homeLeaderboardRows .empty,#sbLeaderboardRows .empty{
+ border:1px dashed var(--line);border-radius:13px;padding:18px;background:rgba(255,255,255,.015)
+}
+.nexus-rank-card{border-radius:20px;border-color:var(--line);box-shadow:var(--shadow)}
+.nexus-avatar-editor,.chat-shell,.chat-room-shell,.tool-stage,.game-stage{
+ border-color:var(--line);border-radius:18px;background:var(--panel)
+}
+.chat-shell,.chat-room-shell{box-shadow:var(--shadow)}
+.chat-head{border-bottom:1px solid var(--line)}
+.chat-orb{box-shadow:0 0 28px color-mix(in srgb,var(--accent) 28%,transparent)}
+.chat-messages,.chat-room-messages{background:rgba(0,0,0,.08);border-color:var(--line)}
+.chat-composer,.chat-room-compose{border-color:var(--line);background:var(--panel2);border-radius:14px}
+.chat-send{background:linear-gradient(135deg,var(--accent),#4aaef8);border-radius:11px}
+.tool-stage,.game-stage{padding:18px}
+.toolbar{border-color:var(--line);border-radius:12px}
+.gamewrap{border-color:var(--line);border-radius:16px;background:var(--panel2)}
+.gameboard,.memorygrid,.boardttt,.game2048{border-radius:12px}
+.listrow{border-color:var(--line)}
+.command-overlay{backdrop-filter:blur(12px);background:rgba(2,4,12,.68)}
+.command-box{
+ background:var(--panel);border:1px solid var(--line);border-radius:20px;
+ box-shadow:0 28px 90px rgba(0,0,0,.45)
+}
+.command-search{background:var(--panel2);border-color:var(--line);border-radius:12px}
+.command-result{border-radius:11px}
+.command-result:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.site-version{color:var(--muted);font-size:9px}
+.toast{border:1px solid var(--line);background:var(--panel);border-radius:12px;box-shadow:var(--shadow)}
+.mobilebar{
+ border-top:1px solid var(--line);background:rgba(6,8,18,.88);backdrop-filter:blur(18px)
+}
+html[data-theme=light] .mobilebar{background:rgba(246,248,253,.92)}
+.mobilebar button.active{color:var(--accent)}
+@media(max-width:900px){
+ .layout{grid-template-columns:210px minmax(0,1fr)}
+ .side{padding:20px 12px}
+ .main{padding-left:18px;padding-right:18px}
+ .top{margin-left:-18px;margin-right:-18px;padding-left:18px;padding-right:18px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:680px){
+ .layout{display:block;direction:rtl}
+ .side{display:none}
+ .main{padding:0 13px 86px}
+ .top{margin:0 -13px 20px;padding:12px 13px;min-height:68px}
+ .top h2{font-size:14px}
+ .top p{font-size:10px}
+ .hero{border-radius:20px;padding:22px 19px}
+ .hero h1{font-size:26px}
+ .hero:after{width:220px;height:220px;right:-100px;top:-90px}
+ .stats{gap:9px;margin:12px 0 24px}
+ .stat{padding:13px;border-radius:14px}
+ .stat strong{font-size:21px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .card{padding:13px;border-radius:14px}
+ .card h3{font-size:12px}
+ .card p{font-size:10px}
+ .sectionhead{margin-top:23px}
+ .mobilebar{position:fixed;z-index:50;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:8px 5px calc(8px + env(safe-area-inset-bottom));}
+}
+@media(max-width:420px){
+ .grid{grid-template-columns:1fr}
+ .top-actions{gap:5px}
+ .iconbtn{width:35px;height:35px}
+ .hero h1{font-size:23px}
+}
+@media(prefers-reduced-motion:reduce){
+ .page,.card,.btn,.iconbtn{animation:none!important;transition:none!important}
+}
+
 </style></head>
 <body><div class="layout"><aside class="side"><div class="brand"><div class="logo"><i data-lucide="orbit"></i></div><div><b>NEXUS</b><small style="display:block">PERSONAL OS</small></div></div><div class="navlabel">WORKSPACE</div><nav class="nav" id="nav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>داشبورد</button><button data-page="ai"><i data-lucide="sparkles"></i>AI Hub</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="achievements"><i data-lucide="trophy"></i>دستاوردها</button><button data-page="leaderboard"><i data-lucide="medal"></i>جدول برترین‌ها</button><button data-page="friends"><i data-lucide="swords"></i>چالش دوستانه</button><button data-page="chat"><i data-lucide="messages-square"></i>گروه چت</button><button data-page="settings"><i data-lucide="settings-2"></i>تنظیمات</button><button data-page="admin" id="adminNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>پنل مدیریت</button></nav><div class="sidebottom"><div class="user"><div class="avatar" id="avatar">N</div><div><b id="sideName">Nexus User</b><small id="sideLevel">Level 1 · Explorer</small></div></div></div></aside>
 <main class="main"><header class="top"><div><h2 id="pageTitle">مرکز فرماندهی شخصی</h2><p>مرکز فرماندهی دیجیتال تو؛ سریع‌تر کار کن، بازی کن و پیشرفتت را بساز.</p></div><div class="top-actions"><button class="iconbtn" id="searchBtn" aria-label="جستجو" title="جستجو (Ctrl+K)"><i data-lucide="search"></i></button><button class="iconbtn" id="themeBtn" aria-label="تغییر پوسته"><i data-lucide="sun-moon"></i></button><button class="iconbtn" id="paletteBtn" aria-label="انتخاب رنگ قالب" title="انتخاب رنگ قالب"><i data-lucide="palette"></i></button><div class="palette-menu" id="paletteMenu" hidden><strong>رنگ قالب سایت</strong><div class="swatches"><button class="swatch" style="background:#9b7cff" data-accent="#9b7cff" aria-label="بنفش" aria-pressed="true"></button><button class="swatch" style="background:#3b82f6" data-accent="#3b82f6" aria-label="آبی" aria-pressed="false"></button><button class="swatch" style="background:#10b981" data-accent="#10b981" aria-label="سبز" aria-pressed="false"></button><button class="swatch" style="background:#ec4899" data-accent="#ec4899" aria-label="صورتی" aria-pressed="false"></button><button class="swatch" style="background:#f97316" data-accent="#f97316" aria-label="نارنجی" aria-pressed="false"></button><button class="swatch" style="background:#ef4444" data-accent="#ef4444" aria-label="قرمز" aria-pressed="false"></button><button class="swatch" style="background:#06b6d4" data-accent="#06b6d4" aria-label="فیروزه‌ای" aria-pressed="false"></button><button class="swatch" style="background:#eab308" data-accent="#eab308" aria-label="زرد" aria-pressed="false"></button></div><label class="custom-color">انتخاب رنگ دلخواه<input id="customAccent" type="color" value="#9b7cff" aria-label="انتخاب رنگ دلخواه"></label></div><button class="btn primary wide" data-go="tools"><i data-lucide="plus"></i>شروع سریع</button></div></header>
