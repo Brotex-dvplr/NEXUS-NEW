@@ -396,7 +396,7 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
 @keyframes nexusFlamePulse{0%,100%{filter:drop-shadow(0 0 3px var(--rank-color))}50%{filter:drop-shadow(0 0 9px var(--rank-color)) drop-shadow(0 0 16px #ff6a24)}}
 @media(prefers-reduced-motion:reduce){.rank-avatar,.rank-avatar::before{animation:none!important}}
 
-/* NEXUS v2.2.0 · Cyberpunk violet UI + leaderboard podium */
+/* NEXUS v2.2.0 · Cyberpunk violet UI + leaderboard podium (base styling) */
 :root{--nexus-neon:#c084fc;--nexus-violet:#a78bfa}
 html[data-theme=dark]{--bg:#090713;--panel:#121020;--panel2:#19142b;--line:#302448;--accent:#a78bfa;--cyan:#e879f9;--shadow:0 18px 55px #0006}
 body{background-image:radial-gradient(ellipse at 80% -10%,#8b5cf633,transparent 38%),radial-gradient(ellipse at 8% 65%,#6d28d91a,transparent 34%),linear-gradient(180deg,#080611 0%,var(--bg) 42%,#0a0715 100%)}
@@ -416,6 +416,103 @@ html[data-theme=dark] .logo{background:linear-gradient(135deg,#c084fc,#6d28d9);b
 .rank-progress-wrap{width:100%;text-align:right;margin-top:2px}.rank-progress-label{display:flex;justify-content:space-between;gap:6px;color:var(--muted);font-size:10px;margin-bottom:5px}.rank-progress{height:5px;border-radius:99px;background:#ffffff10;overflow:hidden}.rank-progress span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--rank-color),#e879f9);box-shadow:0 0 10px var(--rank-color)}
 .mission-panel{border-color:#a78bfa45;background:linear-gradient(110deg,#8b5cf418,transparent 65%),var(--panel)}.mission-icon{color:#c084fc;filter:drop-shadow(0 0 9px #a855f766)}.site-version{color:#c4b5fd}
 @media(max-width:680px){#sbLeaderboardRows,#homeLeaderboardRows{grid-template-columns:1fr;gap:15px}#sbLeaderboardRows .listrow,#homeLeaderboardRows .listrow,#sbLeaderboardRows .podium-place-1,#homeLeaderboardRows .podium-place-1{min-height:0;display:grid;grid-template-columns:54px minmax(0,1fr) auto;align-items:center;text-align:right;padding:18px 12px 12px;gap:10px}#sbLeaderboardRows .listrow:before,#homeLeaderboardRows .listrow:before{top:-9px;left:12px;width:27px;height:27px;font-size:13px}#sbLeaderboardRows .listrow .avatar,#homeLeaderboardRows .listrow .avatar{grid-row:1/3;width:42px;height:42px;margin:0}#sbLeaderboardRows .listrow>span,#homeLeaderboardRows .listrow>span{width:auto}#sbLeaderboardRows .listrow>strong,#homeLeaderboardRows .listrow>strong{font-size:14px}#sbLeaderboardRows .rank-progress-wrap,#homeLeaderboardRows .rank-progress-wrap{grid-column:2/4}}
+
+
+/* NEXUS 2.2.0 — CROWN ASCENSION: distinct crown, halo, energy particles and frame for every rank */
+.rank-avatar {
+  --rank-color:#ba9bff;
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+  border:2px solid var(--rank-color)!important;
+  background:
+    radial-gradient(circle at 18% 18%,color-mix(in srgb,var(--rank-color) 35%,transparent) 0 2px,transparent 3px),
+    radial-gradient(circle at 83% 22%,color-mix(in srgb,var(--rank-color) 70%,white) 0 1px,transparent 3px),
+    radial-gradient(circle at 88% 76%,color-mix(in srgb,var(--rank-color) 65%,transparent) 0 2px,transparent 4px),
+    radial-gradient(circle at 10% 78%,color-mix(in srgb,var(--rank-color) 55%,transparent) 0 1px,transparent 3px),
+    var(--panel2,#171525)!important;
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--rank-color) 55%,transparent),0 0 14px color-mix(in srgb,var(--rank-color) 70%,transparent),inset 0 0 9px color-mix(in srgb,var(--rank-color) 22%,transparent)!important;
+  animation:nexusRankEnergy 2.4s ease-in-out infinite!important;
+}
+.rank-avatar::before {
+  content:"♛"!important;
+  position:absolute!important;
+  left:50%!important;
+  top:-.78em!important;
+  transform:translateX(-50%) perspective(30px) rotateX(8deg)!important;
+  z-index:6!important;
+  width:auto!important;height:auto!important;inset-block:auto!important;inset-inline:auto!important;
+  display:block!important;
+  border:0!important;border-radius:0!important;
+  color:var(--rank-color)!important;
+  font-family:Georgia,serif!important;
+  font-size:clamp(11px,2.6vw,19px)!important;
+  font-weight:900!important;line-height:1!important;
+  text-shadow:0 1px 0 #fff8,0 2px 0 color-mix(in srgb,var(--rank-color) 55%,#171126),0 0 7px var(--rank-color),0 0 14px color-mix(in srgb,var(--rank-color) 70%,transparent)!important;
+  filter:drop-shadow(0 3px 2px #0009)!important;
+  pointer-events:none!important;
+  animation:nexusCrownFloat 2.8s ease-in-out infinite!important;
+}
+.rank-avatar::after {
+  content:""!important;
+  position:absolute!important;
+  inset:-8px!important;
+  z-index:4!important;
+  display:block!important;
+  border:2px solid transparent!important;
+  border-top-color:var(--rank-color)!important;
+  border-bottom-color:color-mix(in srgb,var(--rank-color) 65%,white)!important;
+  border-left-color:color-mix(in srgb,var(--rank-color) 55%,transparent)!important;
+  border-right-color:color-mix(in srgb,var(--rank-color) 55%,transparent)!important;
+  border-radius:45% 55% 48% 52%!important;
+  background:
+    radial-gradient(circle at 8% 22%,#fff 0 1px,transparent 2px),
+    radial-gradient(circle at 87% 19%,var(--rank-color) 0 1.5px,transparent 2.5px),
+    radial-gradient(circle at 94% 72%,#fff 0 1px,transparent 2px),
+    radial-gradient(circle at 16% 88%,var(--rank-color) 0 1.5px,transparent 2.5px)!important;
+  box-shadow:0 0 7px color-mix(in srgb,var(--rank-color) 75%,transparent),inset 0 0 7px color-mix(in srgb,var(--rank-color) 30%,transparent)!important;
+  transform:rotate(-18deg)!important;
+  animation:nexusHaloOrbit 5s linear infinite!important;
+  pointer-events:none!important;
+}
+.rank-avatar>img {
+  position:absolute!important;inset:3px!important;
+  width:calc(100% - 6px)!important;height:calc(100% - 6px)!important;
+  display:block!important;z-index:1!important;object-fit:cover!important;border-radius:50%!important;
+}
+.rank-avatar>i {position:relative;z-index:1;display:grid;place-items:center;width:100%;height:100%;color:var(--rank-color);background:var(--panel2,#171525);border-radius:50%!important}
+.listrow .rank-avatar {flex:none;width:46px;height:46px;padding:0!important;overflow:visible!important;border-radius:50%!important}
+#avatar.rank-avatar {width:37px;height:37px;min-width:37px;padding:0!important;overflow:visible!important;color:var(--rank-color);border-radius:50%!important}
+.nexus-avatar-preview.rank-avatar {width:92px;height:92px;min-width:92px;padding:0!important;overflow:visible!important;border-radius:50%!important}
+.rank-bronze{--rank-color:#e49a61}.rank-silver{--rank-color:#d5e6ff}.rank-gold{--rank-color:#ffd34e}.rank-diamond{--rank-color:#37e6ff}.rank-master{--rank-color:#ff557d}.rank-nexus-god{--rank-color:#c084fc}
+.rank-avatar.rank-bronze{border-style:solid!important;box-shadow:0 0 0 2px #e49a6144,0 0 12px #e49a6177!important}
+.rank-avatar.rank-bronze::before{content:"♛"!important}
+.rank-avatar.rank-silver{border-style:double!important;border-width:3px!important}
+.rank-avatar.rank-silver::before{content:"♕"!important}
+.rank-avatar.rank-gold{border-width:3px!important;border-radius:24%!important;box-shadow:0 0 0 2px #ffd34e55,0 0 18px #ffd34e99!important}
+.rank-avatar.rank-gold::before{content:"♔"!important}
+.rank-avatar.rank-diamond{border-radius:28%!important;border-style:double!important;border-width:3px!important;box-shadow:0 0 0 2px #37e6ff66,0 0 20px #37e6ff99!important}
+.rank-avatar.rank-diamond::before{content:"✦"!important;font-size:clamp(13px,3vw,21px)!important}
+.rank-avatar.rank-master{border-radius:28% 28% 42% 42%!important;border-width:3px!important;box-shadow:0 0 0 2px #ff557d66,0 0 20px #ff557d99!important}
+.rank-avatar.rank-master::before{content:"♚"!important}
+.rank-avatar.rank-nexus-god{border-radius:28% 28% 50% 50%!important;border-width:3px!important;border-color:#eadbff!important;box-shadow:0 0 0 3px #c084fc88,0 0 22px #c084fccc,0 0 38px #7c3aed66!important}
+.rank-avatar.rank-nexus-god::before{content:"♛"!important;font-size:clamp(15px,3.4vw,23px)!important;color:#f0dcff!important;text-shadow:0 1px 0 #fff,0 3px 0 #8b5cf6,0 0 10px #c084fc,0 0 22px #a855f7!important}
+.rank-avatar.rank-nexus-god::after{inset:-11px!important;border-width:3px!important;border-top-color:#f0dcff!important;border-bottom-color:#a855f7!important;box-shadow:0 0 12px #c084fc,0 0 24px #7c3aed88,inset 0 0 10px #c084fc55!important}
+.nexus-rank-card{position:relative;overflow:hidden;isolation:isolate;border-color:color-mix(in srgb,var(--rank-color,#ba9bff) 75%,white 8%);background:radial-gradient(ellipse at 50% -10%,color-mix(in srgb,var(--rank-color,#ba9bff) 30%,transparent),transparent 58%),radial-gradient(circle at 12% 35%,color-mix(in srgb,var(--rank-color,#ba9bff) 12%,transparent) 0 2px,transparent 3px),radial-gradient(circle at 88% 62%,color-mix(in srgb,var(--rank-color,#ba9bff) 22%,transparent) 0 2px,transparent 4px),linear-gradient(145deg,#0b1020,#17152b 48%,#0c1322);box-shadow:0 16px 42px #0005,0 0 28px color-mix(in srgb,var(--rank-color,#ba9bff) 22%,transparent),inset 0 1px #ffffff18}
+.nexus-rank-card .nexus-rank-emblem{position:relative;transform:perspective(70px) rotateY(-10deg) rotateX(5deg);border-radius:13px 13px 17px 17px;background:linear-gradient(145deg,color-mix(in srgb,var(--rank-color) 38%,#171126),#0b0b18);filter:drop-shadow(0 5px 3px #0008);text-shadow:0 2px 0 #0008,0 0 12px var(--rank-color)}
+.nexus-rank-card .nexus-rank-emblem svg{filter:drop-shadow(0 0 5px var(--rank-color));transform:scale(1.1)}
+.nexus-rank-card .nexus-rank-emblem svg path{fill:var(--rank-color)}
+.nexus-rank-card[data-rank="bronze"]{--rank-color:#e49a61}
+.nexus-rank-card[data-rank="silver"]{--rank-color:#d5e6ff}
+.nexus-rank-card[data-rank="gold"]{--rank-color:#ffd34e}
+.nexus-rank-card[data-rank="diamond"]{--rank-color:#37e6ff}
+.nexus-rank-card[data-rank="master"]{--rank-color:#ff557d}
+.nexus-rank-card[data-rank="nexus-god"]{--rank-color:#c084fc;box-shadow:0 0 0 1px #eadbff55,0 16px 42px #0005,0 0 32px #c084fc66,inset 0 1px #ffffff25}
+@keyframes nexusHaloOrbit{to{transform:rotate(342deg)}}
+@keyframes nexusCrownFloat{0%,100%{margin-top:0;filter:drop-shadow(0 3px 2px #0009)}50%{margin-top:-3px;filter:drop-shadow(0 3px 5px var(--rank-color))}}
+@keyframes nexusRankEnergy{0%,100%{filter:drop-shadow(0 0 3px color-mix(in srgb,var(--rank-color) 65%,transparent))}50%{filter:drop-shadow(0 0 8px var(--rank-color)) drop-shadow(0 0 14px color-mix(in srgb,var(--rank-color) 35%,transparent))}}
+@media(max-width:520px){.nexus-avatar-preview.rank-avatar{width:88px;height:88px;min-width:88px}.rank-avatar::after{inset:-6px!important}}
+@media(prefers-reduced-motion:reduce){.rank-avatar,.rank-avatar::before,.rank-avatar::after{animation:none!important}.nexus-rank-card{animation:none!important}}
 
 </style></head>
 <body><div class="layout"><aside class="side"><div class="brand"><div class="logo"><i data-lucide="orbit"></i></div><div><b>NEXUS</b><small style="display:block">PERSONAL OS</small></div></div><div class="navlabel">WORKSPACE</div><nav class="nav" id="nav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>داشبورد</button><button data-page="ai"><i data-lucide="sparkles"></i>AI Hub</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="achievements"><i data-lucide="trophy"></i>دستاوردها</button><button data-page="leaderboard"><i data-lucide="medal"></i>جدول برترین‌ها</button><button data-page="friends"><i data-lucide="swords"></i>چالش دوستانه</button><button data-page="chat"><i data-lucide="messages-square"></i>گروه چت</button><button data-page="settings"><i data-lucide="settings-2"></i>تنظیمات</button><button data-page="admin" id="adminNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>پنل مدیریت</button></nav><div class="sidebottom"><div class="user"><div class="avatar" id="avatar">N</div><div><b id="sideName">Nexus User</b><small id="sideLevel">Level 1 · Explorer</small></div></div></div></aside>
@@ -554,7 +651,7 @@ html[data-theme=dark] .logo{background:linear-gradient(135deg,#c084fc,#6d28d9);b
   <div class="command-results" id="commandResults"></div>
   <div class="command-footer"><span>برای اجرا روی نتیجه بزن</span><span><kbd>ESC</kbd> بستن · <kbd>Ctrl K</kbd> بازکردن</span></div>
  </div>
-</div><div class="site-version" aria-label="نسخه سایت">NEXUS v2.2.0</div>
+</div><div class="site-version" aria-label="نسخه سایت">NEXUS v2.2.2</div>
 <nav class="mobilebar" id="mobileNav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>خانه</button><button data-page="friends"><i data-lucide="swords"></i>چالش</button><button data-page="chat"><i data-lucide="messages-square"></i>چت</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="ai"><i data-lucide="sparkles"></i>AI</button><button data-page="leaderboard"><i data-lucide="medal"></i>رتبه‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="admin" id="adminMobileNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>مدیریت</button></nav><div id="toast" class="toast" hidden role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
