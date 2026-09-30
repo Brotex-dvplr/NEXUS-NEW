@@ -514,59 +514,6 @@ html[data-theme=dark] .logo{background:linear-gradient(135deg,#c084fc,#6d28d9);b
 @media(max-width:520px){.nexus-avatar-preview.rank-avatar{width:88px;height:88px;min-width:88px}.rank-avatar::after{inset:-6px!important}}
 @media(prefers-reduced-motion:reduce){.rank-avatar,.rank-avatar::before,.rank-avatar::after{animation:none!important}.nexus-rank-card{animation:none!important}}
 
-
-/* NEXUS v2.2.3 — leaderboard redesign inspired by the My Pod / Community reference */
-.rank-avatar::before,.rank-avatar.rank-bronze::before,.rank-avatar.rank-silver::before,.rank-avatar.rank-gold::before,.rank-avatar.rank-diamond::before,.rank-avatar.rank-master::before,.rank-avatar.rank-nexus-god::before{content:none!important;display:none!important}
-#page-leaderboard .leaderboard-shell{display:grid;grid-template-columns:minmax(235px,.78fr) minmax(0,1.6fr);gap:18px;align-items:start;direction:ltr;margin-top:22px}
-#page-leaderboard .leaderboard-shell>*{direction:rtl;min-width:0}
-#page-leaderboard .leaderboard-community,#page-leaderboard .leaderboard-stage{padding:0;overflow:hidden;border:1px solid #8b5cf44a;background:linear-gradient(145deg,#111020f5,#090914f8);box-shadow:0 18px 45px #0005,inset 0 1px #ffffff08}
-#page-leaderboard .leaderboard-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 22px;border-bottom:1px solid #ffffff12}
-#page-leaderboard .leaderboard-panel-head h2{font-size:clamp(19px,2vw,27px);margin:3px 0 4px}
-#page-leaderboard .leaderboard-panel-head p{margin:0;color:var(--muted);font-size:12px}
-#page-leaderboard .leaderboard-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-#page-leaderboard .leaderboard-tabs{display:flex;gap:4px;padding:4px;border:1px solid #8b5cf44a;border-radius:17px;background:#111126;min-width:0}
-#page-leaderboard .leaderboard-tab{border:1px solid transparent;border-radius:13px;padding:11px 20px;background:transparent;color:var(--muted);font:inherit;cursor:pointer;transition:background .2s,color .2s,box-shadow .2s}
-#page-leaderboard .leaderboard-tab.active{color:#fff;background:linear-gradient(120deg,#6d28d9,#7c3aed 58%,#4c1d95);border-color:#c084fc;box-shadow:0 0 18px #9333ea44}
-#page-leaderboard .leaderboard-shortcuts{display:flex;gap:8px}
-#page-leaderboard .leaderboard-shortcuts .iconbtn{width:48px;height:48px;border:1px solid #8b5cf45c;background:#111126;border-radius:14px}
-#page-leaderboard .leaderboard-shortcuts .flame-shortcut{color:#ffd36e}
-#page-leaderboard .leaderboard-stage{border-radius:25px}
-#page-leaderboard .podium-floor{position:relative;min-height:400px;padding:145px 18px 0;overflow:hidden;background:radial-gradient(ellipse at 50% 100%,#7c3aed26,transparent 55%),linear-gradient(180deg,#090914 0%,#0b0a19 100%)}
-#page-leaderboard .podium-floor:after{content:"";position:absolute;left:0;right:0;bottom:0;height:44px;background:#06060d;border-top:1px solid #a78bfa55;box-shadow:0 -12px 35px #7c3aed1c;pointer-events:none}
-#page-leaderboard .podium-glow{position:absolute;left:8%;right:8%;bottom:20px;height:75px;border:2px solid #7c3aed66;border-radius:50%;filter:blur(1px);box-shadow:0 0 25px #9333ea44,inset 0 0 24px #9333ea2b;pointer-events:none}
-#page-leaderboard #sbLeaderboardRows{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:end;gap:10px;min-height:255px;padding:0 4px 26px}
-#page-leaderboard #sbLeaderboardRows>.empty{grid-column:1/-1;align-self:center}
-#page-leaderboard #sbLeaderboardRows .listrow{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:0;min-width:0;margin:0;padding:0 8px 17px;border:1px solid #a78bfa50;border-top:4px solid #c084fc;border-radius:4px 4px 12px 12px;background:linear-gradient(180deg,#17152d,#0d0c1a 72%);box-shadow:inset 0 1px #fff2,0 12px 30px #0005;text-align:center;overflow:visible}
-#page-leaderboard #sbLeaderboardRows .podium-place-1{order:2;height:250px;border-top-color:#f0cfff;box-shadow:0 0 22px #a855f733,inset 0 1px #fff4}
-#page-leaderboard #sbLeaderboardRows .podium-place-2{order:1;height:185px;border-top-color:#9f70ff}
-#page-leaderboard #sbLeaderboardRows .podium-place-3{order:3;height:160px;border-top-color:#a78bfa}
-#page-leaderboard #sbLeaderboardRows .listrow:before{content:attr(data-medal);position:absolute;top:48%;left:0;right:0;display:block;width:auto;height:auto;border:0;border-radius:0;background:transparent;color:#e8d8ff;font-size:clamp(31px,4vw,46px);font-weight:700;line-height:1;box-shadow:none;text-shadow:0 0 14px #a855f7a8}
-#page-leaderboard #sbLeaderboardRows .listrow .avatar{position:absolute;top:-122px;left:50%;transform:translateX(-50%);width:76px;height:76px;margin:0;background:#151327}
-#page-leaderboard #sbLeaderboardRows .podium-place-2 .avatar{top:-132px;width:66px;height:66px}
-#page-leaderboard #sbLeaderboardRows .podium-place-3 .avatar{top:-128px;width:62px;height:62px}
-#page-leaderboard #sbLeaderboardRows .listrow>span{position:absolute;top:-48px;left:2px;right:2px;display:flex;flex-direction:column;align-items:center;gap:3px;width:auto;overflow:visible;overflow-wrap:anywhere}
-#page-leaderboard #sbLeaderboardRows .listrow>span>b{font-size:14px;color:#f4f0ff;margin:0}
-#page-leaderboard #sbLeaderboardRows .listrow>span>small{font-size:10px;color:#aaa2c3}
-#page-leaderboard #sbLeaderboardRows .rank-chip,#page-leaderboard #sbLeaderboardRows .rank-progress-wrap{display:none}
-#page-leaderboard #sbLeaderboardRows .listrow>strong{position:relative;z-index:1;width:100%;font-size:11px;color:#d8c4ff;overflow-wrap:anywhere;text-shadow:0 0 12px #a855f755}
-#page-leaderboard .leaderboard-footnote{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 20px;color:var(--muted);font-size:11px;border-top:1px solid #ffffff0d}
-#page-leaderboard .leaderboard-footnote span:first-child{display:flex;align-items:center;gap:6px;color:#d8b4fe;letter-spacing:.08em}
-#page-leaderboard .leaderboard-community{border-radius:22px}
-#page-leaderboard .leaderboard-community .leaderboard-panel-head{padding:17px 18px}
-#page-leaderboard .leaderboard-community .leaderboard-panel-head h2{font-size:20px}
-#page-leaderboard #sbCommunityRows{display:flex;flex-direction:column;padding:8px 12px;gap:5px}
-#page-leaderboard #sbCommunityRows>.empty{margin:10px 0}
-#page-leaderboard #sbCommunityRows .community-row{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px 8px;border:1px solid #ffffff12;border-radius:15px;background:linear-gradient(100deg,#a78bfa0a,transparent)}
-#page-leaderboard #sbCommunityRows .community-row .avatar{width:43px;height:43px;margin:0}
-#page-leaderboard #sbCommunityRows .community-row .community-player{min-width:0;display:flex;flex-direction:column;gap:4px}
-#page-leaderboard #sbCommunityRows .community-row .community-player strong{font-size:13px;overflow-wrap:anywhere}
-#page-leaderboard #sbCommunityRows .community-row .community-player small{font-size:11px;color:var(--muted)}
-#page-leaderboard #sbCommunityRows .community-row .community-xp{font-size:11px;color:#d8b4fe;white-space:nowrap}
-#page-leaderboard .leaderboard-social-cta{display:flex;justify-content:center;align-items:center;gap:8px;width:calc(100% - 24px);margin:8px 12px 14px}
-@media(max-width:920px){#page-leaderboard .leaderboard-shell{grid-template-columns:minmax(0,1fr)}#page-leaderboard .leaderboard-community{order:2}#page-leaderboard .leaderboard-main{order:1}}
-@media(max-width:560px){#page-leaderboard .leaderboard-toolbar{align-items:stretch;flex-direction:column}#page-leaderboard .leaderboard-tabs{width:100%}#page-leaderboard .leaderboard-tab{flex:1;padding:10px 12px}#page-leaderboard .leaderboard-shortcuts{justify-content:flex-end}#page-leaderboard .podium-floor{min-height:335px;padding:120px 8px 0}#page-leaderboard #sbLeaderboardRows{gap:6px;min-height:205px;padding:0 2px 22px}#page-leaderboard #sbLeaderboardRows .podium-place-1{height:205px}#page-leaderboard #sbLeaderboardRows .podium-place-2{height:155px}#page-leaderboard #sbLeaderboardRows .podium-place-3{height:135px}#page-leaderboard #sbLeaderboardRows .listrow .avatar{top:-102px;width:59px;height:59px}#page-leaderboard #sbLeaderboardRows .podium-place-2 .avatar,#page-leaderboard #sbLeaderboardRows .podium-place-3 .avatar{top:-108px;width:51px;height:51px}#page-leaderboard #sbLeaderboardRows .listrow>span{top:-40px}#page-leaderboard #sbLeaderboardRows .listrow>span>b{font-size:11px}#page-leaderboard #sbLeaderboardRows .listrow>span>small{font-size:9px}#page-leaderboard #sbLeaderboardRows .listrow>strong{font-size:9px}#page-leaderboard .leaderboard-panel-head{padding:15px}#page-leaderboard .leaderboard-footnote{padding:11px 14px;align-items:flex-start;flex-direction:column}}
-@media(prefers-reduced-motion:reduce){#page-leaderboard .podium-glow{filter:none}}
-
 </style></head>
 <body><div class="layout"><aside class="side"><div class="brand"><div class="logo"><i data-lucide="orbit"></i></div><div><b>NEXUS</b><small style="display:block">PERSONAL OS</small></div></div><div class="navlabel">WORKSPACE</div><nav class="nav" id="nav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>داشبورد</button><button data-page="ai"><i data-lucide="sparkles"></i>AI Hub</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="achievements"><i data-lucide="trophy"></i>دستاوردها</button><button data-page="leaderboard"><i data-lucide="medal"></i>جدول برترین‌ها</button><button data-page="friends"><i data-lucide="swords"></i>چالش دوستانه</button><button data-page="chat"><i data-lucide="messages-square"></i>گروه چت</button><button data-page="settings"><i data-lucide="settings-2"></i>تنظیمات</button><button data-page="admin" id="adminNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>پنل مدیریت</button></nav><div class="sidebottom"><div class="user"><div class="avatar" id="avatar">N</div><div><b id="sideName">Nexus User</b><small id="sideLevel">Level 1 · Explorer</small></div></div></div></aside>
 <main class="main"><header class="top"><div><h2 id="pageTitle">مرکز فرماندهی شخصی</h2><p>مرکز فرماندهی دیجیتال تو؛ سریع‌تر کار کن، بازی کن و پیشرفتت را بساز.</p></div><div class="top-actions"><button class="iconbtn" id="searchBtn" aria-label="جستجو" title="جستجو (Ctrl+K)"><i data-lucide="search"></i></button><button class="iconbtn" id="themeBtn" aria-label="تغییر پوسته"><i data-lucide="sun-moon"></i></button><button class="iconbtn" id="paletteBtn" aria-label="انتخاب رنگ قالب" title="انتخاب رنگ قالب"><i data-lucide="palette"></i></button><div class="palette-menu" id="paletteMenu" hidden><strong>رنگ قالب سایت</strong><div class="swatches"><button class="swatch" style="background:#9b7cff" data-accent="#9b7cff" aria-label="بنفش" aria-pressed="true"></button><button class="swatch" style="background:#3b82f6" data-accent="#3b82f6" aria-label="آبی" aria-pressed="false"></button><button class="swatch" style="background:#10b981" data-accent="#10b981" aria-label="سبز" aria-pressed="false"></button><button class="swatch" style="background:#ec4899" data-accent="#ec4899" aria-label="صورتی" aria-pressed="false"></button><button class="swatch" style="background:#f97316" data-accent="#f97316" aria-label="نارنجی" aria-pressed="false"></button><button class="swatch" style="background:#ef4444" data-accent="#ef4444" aria-label="قرمز" aria-pressed="false"></button><button class="swatch" style="background:#06b6d4" data-accent="#06b6d4" aria-label="فیروزه‌ای" aria-pressed="false"></button><button class="swatch" style="background:#eab308" data-accent="#eab308" aria-label="زرد" aria-pressed="false"></button></div><label class="custom-color">انتخاب رنگ دلخواه<input id="customAccent" type="color" value="#9b7cff" aria-label="انتخاب رنگ دلخواه"></label></div><button class="btn primary wide" data-go="tools"><i data-lucide="plus"></i>شروع سریع</button></div></header>
@@ -641,23 +588,11 @@ html[data-theme=dark] .logo{background:linear-gradient(135deg,#c084fc,#6d28d9);b
 <div class="panel profileform"><label>نام نمایشی<input id="nameInput" class="field" value="Nexus User"></label><label>درباره من<input id="bioInput" class="field" placeholder="چند کلمه درباره خودت"></label><button class="btn primary" id="saveProfile">ذخیره پروفایل</button><p class="empty">اطلاعات این بخش در حافظه محلی همین مرورگر ذخیره می‌شود. نام حساب آنلاین و نام نمایشی محلی می‌توانند متفاوت باشند.</p></div>
 </section>
 <section class="page" id="page-achievements"><span class="eyebrow">MILESTONES</span><h1>دستاوردها</h1><p class="muted">با استفاده از ابزارها و بازی‌ها نشان باز کن.</p><div class="grid" id="achGrid"></div></section>
-<section class="page nexus-leaderboard-page" id="page-leaderboard">
-  <span class="eyebrow">NEXUS GLOBAL RANKING</span><h1>جدول برترین‌های NEXUS</h1>
-  <p class="muted">رقابت زنده بر اساس XP؛ جایگاهت را بساز و در صدر بمان.</p>
-  <div class="leaderboard-shell">
-    <aside class="panel leaderboard-community">
-      <div class="leaderboard-panel-head"><div><h2>Community</h2><p>بازیکنان برتر جامعه</p></div><button class="iconbtn" type="button" data-go="friends" aria-label="رفتن به چالش دوستانه" title="چالش دوستانه"><i data-lucide="user-round-plus"></i></button></div>
-      <div id="sbCommunityRows"><p class="empty">در حال دریافت بازیکنان…</p></div>
-      <button class="btn primary leaderboard-social-cta" type="button" data-go="friends"><i data-lucide="swords"></i> رفتن به Social Arena</button>
-    </aside>
-    <div class="leaderboard-main">
-      <div class="leaderboard-toolbar"><div class="leaderboard-tabs"><button class="leaderboard-tab active" type="button" aria-current="page">My Pod</button><button class="leaderboard-tab" type="button" data-go="friends">Community</button></div>
-        <div class="leaderboard-shortcuts"><button class="iconbtn flame-shortcut" type="button" data-go="games" aria-label="رفتن به بازی‌ها" title="بازی‌ها"><i data-lucide="flame"></i></button><button class="iconbtn" type="button" data-go="friends" aria-label="دوستان" title="دوستان"><i data-lucide="users-round"></i></button></div></div>
-      <div class="panel leaderboard-stage"><div class="leaderboard-panel-head"><div><span class="eyebrow">THE TOP THREE</span><h2>Leaderboard</h2><p>سه بازیکن اول · به‌روزرسانی زنده</p></div><button class="iconbtn" type="button" id="sbRefresh" onclick="window.NEXUSLeaderboard?.refresh()" aria-label="تازه‌سازی جدول" title="تازه‌سازی"><i data-lucide="chevron-left"></i></button></div>
-        <div class="podium-floor"><div class="podium-glow" aria-hidden="true"></div><div id="sbLeaderboardRows"><p class="empty">در حال اتصال به دیتابیس…</p></div></div>
-        <div class="leaderboard-footnote"><span><i data-lucide="zap"></i> XP LIVE</span><span>رتبه‌ها بر اساس امتیاز واقعی حساب‌ها</span></div></div>
-    </div>
-  </div>
+<section class="page" id="page-leaderboard">
+<span class="eyebrow">NEXUS GLOBAL RANKING</span><h1>جدول برترین‌های آنلاین 🏆</h1>
+<p class="muted">رتبه‌بندی جهانی براساس XP فعالیت‌ها و مأموریت‌ها؛ داده‌ها بین دستگاه‌ها همگام می‌شوند.</p>
+<div class="panel" style="margin-top:16px"><div class="sectionhead" style="margin-top:0"><div><h2>رتبه‌بندی جهانی</h2><p>۳ نفر برتر · به‌روزرسانی زنده</p></div><button class="btn" type="button" id="sbRefresh" onclick="window.NEXUSLeaderboard?.refresh()">تازه‌سازی</button></div>
+<div id="sbLeaderboardRows"><p class="empty">در حال اتصال به دیتابیس…</p></div></div>
 </section>
 <section class="page" id="page-friends"><span class="eyebrow">NEXUS SOCIAL ARENA</span><h1>چالش دوستانه 🤝</h1><p class="muted">دوستت را دعوت کن، در یک بازه مشخص XP بیشتری جمع کن و نتیجه را در NEXUS ببین.</p>
 <div class="grid" style="margin:18px 0"><article class="card"><div class="cardicon"><i data-lucide="link-2"></i></div><h3>لینک دعوت اختصاصی</h3><p>یک لینک بساز و برای دوستت بفرست؛ با ورود به حساب می‌تواند به چالش بپیوندد.</p></article><article class="card"><div class="cardicon"><i data-lucide="timer"></i></div><h3>دوئل XP زمان‌دار</h3><p>هر دو نفر از لحظه پذیرش شروع می‌کنند. پس از پایان زمان، XP کسب‌شده در بازه مقایسه می‌شود.</p></article><article class="card"><div class="cardicon"><i data-lucide="shield-check"></i></div><h3>نتیجه سمت دیتابیس</h3><p>زمان شروع، پایان و امتیازها از Supabase خوانده می‌شوند؛ نتیجه با امتیاز دستی وارد نمی‌شود.</p></article></div>
@@ -716,7 +651,7 @@ html[data-theme=dark] .logo{background:linear-gradient(135deg,#c084fc,#6d28d9);b
   <div class="command-results" id="commandResults"></div>
   <div class="command-footer"><span>برای اجرا روی نتیجه بزن</span><span><kbd>ESC</kbd> بستن · <kbd>Ctrl K</kbd> بازکردن</span></div>
  </div>
-</div><div class="site-version" aria-label="نسخه سایت">NEXUS v2.2.3</div>
+</div><div class="site-version" aria-label="نسخه سایت">NEXUS v2.2.2</div>
 <nav class="mobilebar" id="mobileNav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>خانه</button><button data-page="friends"><i data-lucide="swords"></i>چالش</button><button data-page="chat"><i data-lucide="messages-square"></i>چت</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="ai"><i data-lucide="sparkles"></i>AI</button><button data-page="leaderboard"><i data-lucide="medal"></i>رتبه‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="admin" id="adminMobileNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>مدیریت</button></nav><div id="toast" class="toast" hidden role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
