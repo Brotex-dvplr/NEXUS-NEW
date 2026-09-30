@@ -1,4 +1,4 @@
-/* NEXUS v2.2.0 · Cyberpunk podium, rank progression and animated frames. */
+/* NEXUS v2.2.2 · Crown Ascension rank cosmetics and animated frames. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null, currentUserXp = 0;
