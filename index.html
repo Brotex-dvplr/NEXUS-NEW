@@ -398,10 +398,12 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
   content:"";
   position:absolute;
   inset:-6px;
-  z-index:-1;
+  z-index:0;
   pointer-events:none;
   border-radius:50%;
-  background:conic-gradient(#fff0 0deg,var(--rank-color) 24deg,#fff 42deg,var(--rank-color) 66deg,#ff6a24 92deg,#fff0 122deg,#fff0 166deg,var(--rank-color) 196deg,#fff 216deg,var(--rank-color) 240deg,#ff6a24 270deg,#fff0 304deg,#fff0 330deg,var(--rank-color) 350deg);
+  background:conic-gradient(transparent 0deg,var(--rank-color) 24deg,#fff 42deg,var(--rank-color) 66deg,#ff6a24 92deg,transparent 122deg,transparent 166deg,var(--rank-color) 196deg,#fff 216deg,var(--rank-color) 240deg,#ff6a24 270deg,transparent 304deg,transparent 330deg,var(--rank-color) 350deg);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));
+  mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));
   filter:blur(2px);
   animation:nexusFlameSpin 1.7s linear infinite;
 }
