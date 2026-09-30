@@ -80,6 +80,17 @@
         : '<i data-lucide="user-round"></i>';
       if (window.lucide) window.lucide.createIcons({ root: host });
     }
+
+    // Keep the signed-in user's avatar consistent in the account preview and sidebar.
+    const sideAvatar = $('avatar');
+    if (sideAvatar) {
+      const user = window.NEXUS_SUPABASE_USER;
+      const displayName = user?.user_metadata?.display_name || $('sideName')?.textContent || 'NEXUS';
+      sideAvatar.innerHTML = url
+        ? '<img src="' + esc(url) + '" alt="" referrerpolicy="no-referrer">'
+        : esc(String(displayName).trim().charAt(0).toUpperCase() || 'N');
+    }
+
     document.querySelectorAll('[data-avatar-url]').forEach(button => {
       button.setAttribute('aria-pressed', button.dataset.avatarUrl === (url || '') ? 'true' : 'false');
     });
