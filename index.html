@@ -381,77 +381,20 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
 #avatar img{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit}
 
 
-/* NEXUS v2.1.8 · High-visibility animated rank flame frames */
-.rank-avatar{
-  --rank-color:#ba9bff;
-  position:relative!important;
-  isolation:isolate;
-  box-sizing:border-box!important;
-  overflow:visible!important;
-  border:2px solid var(--rank-color)!important;
-  border-radius:50%!important;
-  background:var(--panel2,#171525);
-  box-shadow:0 0 0 2px var(--rank-color),0 0 8px var(--rank-color),0 0 18px var(--rank-color)!important;
-  animation:nexusFlamePulse 1.35s ease-in-out infinite!important;
-}
-.rank-avatar::before{
-  content:"";
-  position:absolute;
-  inset:-6px;
-  z-index:0;
-  pointer-events:none;
-  border-radius:50%;
-  background:conic-gradient(transparent 0deg,var(--rank-color) 24deg,#fff 42deg,var(--rank-color) 66deg,#ff6a24 92deg,transparent 122deg,transparent 166deg,var(--rank-color) 196deg,#fff 216deg,var(--rank-color) 240deg,#ff6a24 270deg,transparent 304deg,transparent 330deg,var(--rank-color) 350deg);
-  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));
-  mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));
-  filter:blur(2px);
-  animation:nexusFlameSpin 1.7s linear infinite;
-}
-.rank-avatar::after{
-  content:"";
-  position:absolute;
-  inset:-3px;
-  z-index:3;
-  pointer-events:none;
-  border:1.5px solid #fff;
-  border-radius:50%;
-  box-shadow:0 0 5px var(--rank-color),inset 0 0 5px var(--rank-color);
-  opacity:.85;
-}
-.rank-avatar>img{
-  position:absolute!important;
-  inset:3px!important;
-  width:calc(100% - 6px)!important;
-  height:calc(100% - 6px)!important;
-  display:block;
-  z-index:1;
-  object-fit:cover;
-  border-radius:50%!important;
-}
-.rank-avatar>i{
-  position:relative;
-  z-index:1;
-  display:grid;
-  place-items:center;
-  width:100%;
-  height:100%;
-  color:var(--rank-color);
-  background:var(--panel2,#171525);
-  border-radius:50%!important;
-}
+/* NEXUS v2.1.9 · Reliable animated rank avatar frame */
+.rank-avatar{--rank-color:#ba9bff;position:relative!important;isolation:isolate!important;box-sizing:border-box!important;overflow:visible!important;border:2px solid var(--rank-color)!important;border-radius:50%!important;background:var(--panel2,#171525);box-shadow:0 0 0 2px var(--rank-color),0 0 9px var(--rank-color),0 0 20px var(--rank-color)!important;animation:nexusFlamePulse 1.25s ease-in-out infinite!important}
+.rank-avatar::before{content:"";position:absolute!important;inset:-6px!important;z-index:2!important;pointer-events:none!important;border:4px solid transparent!important;border-top-color:var(--rank-color)!important;border-right-color:#ff6a24!important;border-bottom-color:var(--rank-color)!important;border-left-color:#ffcf66!important;border-radius:50%!important;box-shadow:0 0 5px var(--rank-color),0 0 12px #ff6a2488;animation:nexusFlameSpin 1.1s linear infinite!important}
+.rank-avatar::after{content:"";position:absolute!important;inset:-2px!important;z-index:3!important;pointer-events:none!important;border:1.5px solid #fff!important;border-radius:50%!important;box-shadow:0 0 5px var(--rank-color),inset 0 0 5px var(--rank-color);opacity:.9}
+.rank-avatar>img{position:absolute!important;inset:3px!important;width:calc(100% - 6px)!important;height:calc(100% - 6px)!important;display:block!important;z-index:1!important;object-fit:cover!important;border-radius:50%!important}
+#avatar.rank-avatar>img{width:calc(100% - 6px)!important;height:calc(100% - 6px)!important}
+.rank-avatar>i{position:relative;z-index:1;display:grid;place-items:center;width:100%;height:100%;color:var(--rank-color);background:var(--panel2,#171525);border-radius:50%!important}
 .listrow .rank-avatar{flex:none;width:46px;height:46px;padding:0!important;overflow:visible!important;border-radius:50%!important}
 #avatar.rank-avatar{width:37px;height:37px;min-width:37px;padding:0!important;overflow:visible!important;color:var(--rank-color);border-radius:50%!important}
 .nexus-avatar-preview.rank-avatar{width:92px;height:92px;min-width:92px;padding:0!important;overflow:visible!important;border-radius:50%!important}
-.rank-bronze{--rank-color:#ff8a3d}
-.rank-silver{--rank-color:#d5e6ff}
-.rank-gold{--rank-color:#ffd34e}
-.rank-diamond{--rank-color:#37e6ff}
-.rank-master{--rank-color:#ff365f}
-.rank-nexus-god{--rank-color:#c084fc}
+.rank-bronze{--rank-color:#ff8a3d}.rank-silver{--rank-color:#d5e6ff}.rank-gold{--rank-color:#ffd34e}.rank-diamond{--rank-color:#37e6ff}.rank-master{--rank-color:#ff365f}.rank-nexus-god{--rank-color:#c084fc}
 @keyframes nexusFlameSpin{to{transform:rotate(360deg)}}
-@keyframes nexusFlamePulse{0%,100%{filter:drop-shadow(0 0 2px var(--rank-color))}50%{filter:drop-shadow(0 0 10px var(--rank-color)) drop-shadow(0 0 16px #ff6a24)}}
+@keyframes nexusFlamePulse{0%,100%{filter:drop-shadow(0 0 3px var(--rank-color))}50%{filter:drop-shadow(0 0 9px var(--rank-color)) drop-shadow(0 0 16px #ff6a24)}}
 @media(prefers-reduced-motion:reduce){.rank-avatar,.rank-avatar::before{animation:none!important}}
-
 </style></head>
 <body><div class="layout"><aside class="side"><div class="brand"><div class="logo"><i data-lucide="orbit"></i></div><div><b>NEXUS</b><small style="display:block">PERSONAL OS</small></div></div><div class="navlabel">WORKSPACE</div><nav class="nav" id="nav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>داشبورد</button><button data-page="ai"><i data-lucide="sparkles"></i>AI Hub</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="achievements"><i data-lucide="trophy"></i>دستاوردها</button><button data-page="leaderboard"><i data-lucide="medal"></i>جدول برترین‌ها</button><button data-page="friends"><i data-lucide="swords"></i>چالش دوستانه</button><button data-page="chat"><i data-lucide="messages-square"></i>گروه چت</button><button data-page="settings"><i data-lucide="settings-2"></i>تنظیمات</button><button data-page="admin" id="adminNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>پنل مدیریت</button></nav><div class="sidebottom"><div class="user"><div class="avatar" id="avatar">N</div><div><b id="sideName">Nexus User</b><small id="sideLevel">Level 1 · Explorer</small></div></div></div></aside>
 <main class="main"><header class="top"><div><h2 id="pageTitle">مرکز فرماندهی شخصی</h2><p>مرکز فرماندهی دیجیتال تو؛ سریع‌تر کار کن، بازی کن و پیشرفتت را بساز.</p></div><div class="top-actions"><button class="iconbtn" id="searchBtn" aria-label="جستجو" title="جستجو (Ctrl+K)"><i data-lucide="search"></i></button><button class="iconbtn" id="themeBtn" aria-label="تغییر پوسته"><i data-lucide="sun-moon"></i></button><button class="iconbtn" id="paletteBtn" aria-label="انتخاب رنگ قالب" title="انتخاب رنگ قالب"><i data-lucide="palette"></i></button><div class="palette-menu" id="paletteMenu" hidden><strong>رنگ قالب سایت</strong><div class="swatches"><button class="swatch" style="background:#9b7cff" data-accent="#9b7cff" aria-label="بنفش" aria-pressed="true"></button><button class="swatch" style="background:#3b82f6" data-accent="#3b82f6" aria-label="آبی" aria-pressed="false"></button><button class="swatch" style="background:#10b981" data-accent="#10b981" aria-label="سبز" aria-pressed="false"></button><button class="swatch" style="background:#ec4899" data-accent="#ec4899" aria-label="صورتی" aria-pressed="false"></button><button class="swatch" style="background:#f97316" data-accent="#f97316" aria-label="نارنجی" aria-pressed="false"></button><button class="swatch" style="background:#ef4444" data-accent="#ef4444" aria-label="قرمز" aria-pressed="false"></button><button class="swatch" style="background:#06b6d4" data-accent="#06b6d4" aria-label="فیروزه‌ای" aria-pressed="false"></button><button class="swatch" style="background:#eab308" data-accent="#eab308" aria-label="زرد" aria-pressed="false"></button></div><label class="custom-color">انتخاب رنگ دلخواه<input id="customAccent" type="color" value="#9b7cff" aria-label="انتخاب رنگ دلخواه"></label></div><button class="btn primary wide" data-go="tools"><i data-lucide="plus"></i>شروع سریع</button></div></header>
@@ -589,7 +532,7 @@ html[data-minecraft="true"] .site-version{color:#e6d8b8}
   <div class="command-results" id="commandResults"></div>
   <div class="command-footer"><span>برای اجرا روی نتیجه بزن</span><span><kbd>ESC</kbd> بستن · <kbd>Ctrl K</kbd> بازکردن</span></div>
  </div>
-</div><div class="site-version" aria-label="نسخه سایت">NEXUS v2.1.8</div>
+</div><div class="site-version" aria-label="نسخه سایت">NEXUS v2.1.9</div>
 <nav class="mobilebar" id="mobileNav"><button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>خانه</button><button data-page="friends"><i data-lucide="swords"></i>چالش</button><button data-page="chat"><i data-lucide="messages-square"></i>چت</button><button data-page="tools"><i data-lucide="wrench"></i>ابزارها</button><button data-page="games"><i data-lucide="gamepad-2"></i>بازی‌ها</button><button data-page="ai"><i data-lucide="sparkles"></i>AI</button><button data-page="leaderboard"><i data-lucide="medal"></i>رتبه‌ها</button><button data-page="profile"><i data-lucide="user-round"></i>حساب کاربری</button><button data-page="admin" id="adminMobileNav" class="admin-nav" hidden><i data-lucide="shield-check"></i>مدیریت</button></nav><div id="toast" class="toast" hidden role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
