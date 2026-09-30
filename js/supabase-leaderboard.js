@@ -216,6 +216,7 @@
         return '<div class="community-row"><div class="avatar rank-avatar ' + rankClass + '" style="--rank-color:' + rank.color + '">' + avatarHtml + '</div><div class="community-player"><strong>' + esc(r.display_name || 'بازیکن NEXUS') + '</strong><small>' + esc(rank.name) + ' · جایگاه ' + (index + 1) + '</small></div><strong class="community-xp">' + Number(r.total_xp || 0).toLocaleString() + ' XP</strong></div>';
       }).join('');
       $('sbCommunityRows').innerHTML = communityHtml;
+      if (window.lucide) window.lucide.createIcons({ root: $('sbCommunityRows') });
     }
     if (window.lucide) {
       if ($('sbLeaderboardRows')) window.lucide.createIcons({ root: $('sbLeaderboardRows') });
