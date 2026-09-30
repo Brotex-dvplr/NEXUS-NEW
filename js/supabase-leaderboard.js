@@ -1,4 +1,4 @@
-/* NEXUS v2.1.9 · Rank-colored animated avatar frames. */
+/* NEXUS v2.2.0 · Cyberpunk podium, rank progression and animated frames. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null, currentUserXp = 0;
@@ -192,11 +192,15 @@
         const avatarHtml = avatarUrl
           ? '<img src="' + esc(avatarUrl) + '" alt="تصویر پروفایل ' + esc(r.display_name) + '" loading="lazy" referrerpolicy="no-referrer">'
           : '<i data-lucide="user-round" aria-hidden="true"></i>';
-        return '<div class="listrow"><div class="avatar rank-avatar ' + rankClass + '" style="--rank-color:' + rank.color + '">' + avatarHtml +
-          '</div><span><b>' + esc(r.display_name || 'بازیکن NEXUS') + '</b><small>' +
-          (index === 0 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
+        return '<div class="listrow podium-place-' + (index + 1) + '" data-medal="' + (index === 0 ? '♛' : index === 1 ? 'Ⅱ' : 'Ⅲ') + '" style="--rank-color:' + rank.color + '">' +
+          '<div class="avatar rank-avatar ' + rankClass + '">' + avatarHtml + '</div>' +
+          '<span><b>' + esc(r.display_name || 'بازیکن NEXUS') + '</b><small>' +
+          (index === 0 ? 'قهرمان NEXUS' : index === 1 ? 'نایب‌قهرمان' : 'جایگاه سوم') +
           '</small>' + rankChip(r.total_xp) + '</span><strong>' +
-          Number(r.total_xp || 0).toLocaleString() + ' XP</strong></div>';
+          Number(r.total_xp || 0).toLocaleString() + ' XP</strong>' +
+          '<div class="rank-progress-wrap"><div class="rank-progress-label"><span>' + esc(rank.name) + '</span><span>' +
+          (rank.next ? rank.remaining.toLocaleString() + ' XP تا ' + esc(rank.next.name) : 'MAX RANK') +
+          '</span></div><div class="rank-progress"><span style="width:' + rank.progress + '%"></span></div></div></div>';
       }).join('');
 
     if ($('sbLeaderboardRows')) $('sbLeaderboardRows').innerHTML = rowsHtml;
