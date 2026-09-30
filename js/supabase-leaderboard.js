@@ -1,4 +1,4 @@
-/* NEXUS v2.1.5 · Cyberpunk permanent XP ranks and profile cosmetics. */
+/* NEXUS v2.1.6 · Reliable profile avatars in all leaderboard surfaces. */
 (() => {
   const cfg = window.NEXUS_SUPABASE_CONFIG;
   let client = null, channel = null;
@@ -141,22 +141,35 @@
   }
   async function renderLeaderboard() {
     if (!client || (!$('sbLeaderboardRows') && !$('homeLeaderboardRows'))) return;
-    const { data, error } = await client.from('nexus_leaderboard')
-      .select('rank,user_id,display_name,total_xp,avatar_url').order('rank', { ascending: true }).limit(3);
-    if (error) { status('خطا در دریافت رتبه‌ها: ' + error.message, true); return; }
-    // The leaderboard view now returns avatar_url with each public profile row.
+
+    // Read the profile table directly instead of relying on a possibly stale
+    // PostgREST schema cache for the nexus_leaderboard view's avatar_url column.
+    const { data, error } = await client.from('nexus_profiles')
+      .select('user_id,display_name,total_xp,avatar_url,updated_at')
+      .order('total_xp', { ascending: false })
+      .order('updated_at', { ascending: true })
+      .order('user_id', { ascending: true })
+      .limit(3);
+
+    if (error) {
+      status('خطا در دریافت رتبه‌ها: ' + error.message, true);
+      return;
+    }
+
     const rowsHtml = !data?.length
       ? '<p class="empty">هنوز کسی در لیدربورد ثبت نشده است. اولین نفر باش! 🚀</p>'
-      : data.map(r => {
-        const avatarUrl = r.avatar_url || '';
+      : data.map((r, index) => {
+        const avatarUrl = typeof r.avatar_url === 'string' ? r.avatar_url.trim() : '';
         const avatarHtml = avatarUrl
-          ? '<img src="' + esc(avatarUrl) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
+          ? '<img src="' + esc(avatarUrl) + '" alt="تصویر پروفایل ' + esc(r.display_name) + '" loading="lazy" referrerpolicy="no-referrer">'
           : '<i data-lucide="user-round" aria-hidden="true"></i>';
         return '<div class="listrow"><div class="avatar">' + avatarHtml +
-          '</div><span><b>' + esc(r.display_name) + '</b><small>' +
-          (Number(r.rank) === 1 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
-          '</small>' + rankChip(r.total_xp) + '</span><strong>' + Number(r.total_xp).toLocaleString() + ' XP</strong></div>';
+          '</div><span><b>' + esc(r.display_name || 'بازیکن NEXUS') + '</b><small>' +
+          (index === 0 ? 'پیشتاز NEXUS' : 'بازیکن جهانی') +
+          '</small>' + rankChip(r.total_xp) + '</span><strong>' +
+          Number(r.total_xp || 0).toLocaleString() + ' XP</strong></div>';
       }).join('');
+
     if ($('sbLeaderboardRows')) $('sbLeaderboardRows').innerHTML = rowsHtml;
     if ($('homeLeaderboardRows')) $('homeLeaderboardRows').innerHTML = rowsHtml;
     if (window.lucide) {
